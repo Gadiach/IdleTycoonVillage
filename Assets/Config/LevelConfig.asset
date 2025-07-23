@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1482a323c10c3e34dbdccf49deffab29, type: 3}
+  m_Name: LevelConfig
+  m_EditorClassIdentifier: 
+  levels:
+  - level: 0
+    xpToNext: 100
+    coinsReward: 0
+    crystalsReward: 0
+  - level: 1
+    xpToNext: 200
+    coinsReward: 5
+    crystalsReward: 0
+  - level: 2
+    xpToNext: 300
+    coinsReward: 5
+    crystalsReward: 0
+  - level: 3
+    xpToNext: 400
+    coinsReward: 5
+    crystalsReward: 0
