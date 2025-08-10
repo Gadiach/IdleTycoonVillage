@@ -3,19 +3,26 @@ using UnityEngine;
 public class WorkerPlaceable : MonoBehaviour, IPlaceable
 {
     private bool placed = false;
-    private PlaceableObject assignedBuilding;
-    private Worker workerData;
+    private BuildingPlaceable assignedBuilding;
+    private WorkerData workerData;
 
     private SpriteRenderer spriteRenderer;
     private Color validColor = Color.white;
     private Color invalidColor = Color.red;
 
     [SerializeField] private LayerMask placeableLayer;
+    [SerializeField] private Sprite workerIcon;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        workerData = GetComponent<Worker>();
+
+        workerData = new WorkerData
+        {
+            type = BusinessType.Farming,
+            available = true,
+            icon = workerIcon
+        };
     }
 
     private void Update()
@@ -29,15 +36,15 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
     public bool CanBePlaced(Vector3 position)
     {
         if (!workerData.available) return false;
-
+ 
         Collider2D hit = Physics2D.OverlapPoint(position, placeableLayer);
         if (hit == null) return false;
-        Debug.Log("Hit object: " + hit.name);
 
-        PlaceableObject building = hit.GetComponent<PlaceableObject>();
+        BuildingPlaceable building = hit.GetComponent<BuildingPlaceable>();
         if (building == null) return false;
 
         if (!building.AcceptsWorkerType(workerData.type)) return false;
+
         if (building.HasWorker()) return false;
 
         assignedBuilding = building;
@@ -65,9 +72,10 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
         placed = true;
         workerData.available = false;
 
-        assignedBuilding.AssignWorker(this);
-        // треба щоб префаб зникав а в placeableObject назначався в картинці працівника цей працівник. Треба ліст в якому будуть картинки і брати звідти
-        //transform.position = assignedBuilding.transform.position + new Vector3(0, 1f, 0);
+        assignedBuilding.AssignWorker(workerData);
+
+        WorkerManager.current.AddWorker(workerData);
+
         Destroy(gameObject);
     }
 

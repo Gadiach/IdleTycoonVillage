@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlaceableObject : MonoBehaviour, IPlaceable
+public class BuildingPlaceable : MonoBehaviour, IPlaceable
 {
     public bool Placed { get; private set; }
 
@@ -15,7 +15,8 @@ public class PlaceableObject : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
-    [SerializeField] private Worker assignedWorker;
+    private WorkerData assignedWorker;
+    [SerializeField] private UnityEngine.UI.Image workerImage;
 
     private int objectPrice;
     private CurrencyType currencyType;
@@ -169,14 +170,14 @@ public class PlaceableObject : MonoBehaviour, IPlaceable
         }       
     }
 
-    // === Worker Logic ===
-
     public bool AcceptsWorkerType(BusinessType type) => type == acceptedBusinessType;
 
     public bool HasWorker() => assignedWorker != null;
 
-    public void AssignWorker(WorkerPlaceable worker)
+    public void AssignWorker(WorkerData worker)
     {
-        assignedWorker = worker.GetComponent<Worker>();
+        assignedWorker = worker;
+        //workerImage.sprite = worker.icon;
+        //workerImage.enabled = true;
     }
 }

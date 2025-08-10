@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class BuildingSystem : MonoBehaviour
 {
-    public static BuildingSystem current; 
+    public static BuildingSystem current;
 
     public GridLayout gridLayout;
     public Tilemap MainTilemap;
@@ -42,7 +42,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     private static void SetTilesBlock(BoundsInt area, TileBase tileBase, Tilemap tilemap)
-    {      
+    {
         TileBase[] tileArray = new TileBase[area.size.x * area.size.y];
         FillTiles(tileArray, tileBase);
         tilemap.SetTilesBlock(area, tileArray);
@@ -75,12 +75,15 @@ public class BuildingSystem : MonoBehaviour
         GameObject obj = Instantiate(building, position, Quaternion.identity);
         obj.gameObject.AddComponent<ObjectDrag>();
 
-        BuildingData data = obj.AddComponent<BuildingData>();
-        data.Initialize(item);
+        if (building.GetComponent<BuildingPlaceable>() != null)
+        {
+            BuildingData data = obj.AddComponent<BuildingData>();
+            data.Initialize(item);
+        }
 
         PanZoom.current.FollowObject(obj.transform);
 
-        PlaceableObject placeable = obj.GetComponent<PlaceableObject>();
+        BuildingPlaceable placeable = obj.GetComponent<BuildingPlaceable>();
         placeable.Initialize(item.Price, item.Currency);
 
     }
@@ -108,3 +111,5 @@ public class BuildingSystem : MonoBehaviour
 
     #endregion
 }
+
+
