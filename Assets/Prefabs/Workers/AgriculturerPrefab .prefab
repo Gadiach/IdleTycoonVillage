@@ -811,6 +811,7 @@ MonoBehaviour:
   placeableLayer:
     serializedVersion: 2
     m_Bits: 64
+  workerIcon: {fileID: 21300000, guid: 320b3088242e796448ced7bf36e52465, type: 3}
 --- !u!1 &3469874923248179893
 GameObject:
   m_ObjectHideFlags: 0

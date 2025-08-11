@@ -14,7 +14,12 @@ public class BuildingData : MonoBehaviour
     public int LevelOfBuilding = 1;
     public int Income;
 
+    public BuildingPlaceable Placeable { get; private set; }
 
+    public void SetPlaceable(BuildingPlaceable placeable)
+    {
+        Placeable = placeable;
+    }
 
     public void Initialize(ShopItem item)
     {

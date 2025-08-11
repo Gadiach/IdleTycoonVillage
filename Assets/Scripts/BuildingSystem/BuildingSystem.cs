@@ -69,22 +69,23 @@ public class BuildingSystem : MonoBehaviour
     {
         pos.z = 0;
         pos.y -= building.GetComponent<SpriteRenderer>().bounds.size.y / 2f;
+
         Vector3Int cellPos = gridLayout.WorldToCell(pos);
         Vector3 position = gridLayout.CellToLocalInterpolated(cellPos);
 
         GameObject obj = Instantiate(building, position, Quaternion.identity);
         obj.gameObject.AddComponent<ObjectDrag>();
 
-        if (building.GetComponent<BuildingPlaceable>() != null)
-        {
-            BuildingData data = obj.AddComponent<BuildingData>();
-            data.Initialize(item);
-        }
-
-        PanZoom.current.FollowObject(obj.transform);
+        BuildingData data = obj.GetComponent<BuildingData>();
+        data.Initialize(item);
 
         BuildingPlaceable placeable = obj.GetComponent<BuildingPlaceable>();
+
         placeable.Initialize(item.Price, item.Currency);
+
+        data.SetPlaceable(placeable);
+
+        PanZoom.current.FollowObject(obj.transform);
 
     }
 

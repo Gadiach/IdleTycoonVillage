@@ -12,7 +12,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI priceText;
     public Image iconImage;
-    public Button upgradeButton;
+    public Button upgradeButton;   
+
+    [Header("Worker UI")]
+    [SerializeField] private Button workerButton;
+    public Sprite defaultWorkerIcon;
+
+    public BuildingPlaceable Placeable { get; private set; }
 
     private BuildingData currentBuilding;
 
@@ -34,6 +40,28 @@ public class UIManager : MonoBehaviour
         buildingPanel.SetActive(true);
 
         UpdateUIForUpgrade();
+
+        workerButton.onClick.RemoveAllListeners();
+
+        if (building.Placeable != null && building.Placeable.HasWorker())
+        {
+            WorkerData worker = building.Placeable.GetAssignedWorker();
+            workerButton.image.sprite = worker.icon;
+
+            workerButton.onClick.AddListener(() =>
+            {
+                WorkerUI.Instance.ShowWorker(worker);
+            });
+        }
+        else
+        {
+            workerButton.image.sprite = defaultWorkerIcon;
+
+            workerButton.onClick.AddListener(() =>
+            {
+                Debug.Log("There is no worker. Please assign one.");
+            });
+        }
     }
 
     public void CloseBuildingPanel()

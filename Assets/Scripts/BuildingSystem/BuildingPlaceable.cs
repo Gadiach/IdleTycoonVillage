@@ -109,6 +109,14 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         }
     }
 
+    public void OnWorkerIconClick()
+    {
+        if (assignedWorker != null)
+        {
+            WorkerUI.Instance.ShowWorker(assignedWorker);
+        }
+    }
+
     public void OnMoveButtonClick()
     {
         //moveButton.SetActive(false); 
@@ -173,6 +181,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     public bool AcceptsWorkerType(BusinessType type) => type == acceptedBusinessType;
 
     public bool HasWorker() => assignedWorker != null;
+
+    public WorkerData GetAssignedWorker() => assignedWorker;
 
     public void AssignWorker(WorkerData worker)
     {
