@@ -65,28 +65,44 @@ public class BuildingSystem : MonoBehaviour
 
     #region Building Placement
 
-    public void InitializeWithObject(GameObject building, Vector3 pos, ShopItem item)
+
+    public void InitializeWithObject(GameObject prefab, Vector3 pos, ShopItem item)
     {
         pos.z = 0;
-        pos.y -= building.GetComponent<SpriteRenderer>().bounds.size.y / 2f;
+        pos.y -= prefab.GetComponent<SpriteRenderer>().bounds.size.y / 2f;
 
         Vector3Int cellPos = gridLayout.WorldToCell(pos);
         Vector3 position = gridLayout.CellToLocalInterpolated(cellPos);
 
-        GameObject obj = Instantiate(building, position, Quaternion.identity);
-        obj.gameObject.AddComponent<ObjectDrag>();
+        GameObject obj = Instantiate(prefab, position, Quaternion.identity);
+        obj.AddComponent<ObjectDrag>();
 
-        BuildingData data = obj.GetComponent<BuildingData>();
-        data.Initialize(item);
+        var placeable = obj.GetComponent<BuildingPlaceable>();
+        if (placeable != null)
+        {
+            var data = obj.GetComponent<BuildingData>();
+            if (data != null)
+            {
+                Debug.Log("Has BuildingData: True");
+                data.Initialize(item);
+                data.SetPlaceable(placeable);
+            }
+            else
+            {
+                Debug.LogError("Building prefab missing BuildingData!");
+            }
 
-        BuildingPlaceable placeable = obj.GetComponent<BuildingPlaceable>();
+            placeable.Initialize(item.Price, item.Currency);
+            PanZoom.current.FollowObject(obj.transform);
+            return;
+        }
 
-        placeable.Initialize(item.Price, item.Currency);
-
-        data.SetPlaceable(placeable);
-
-        PanZoom.current.FollowObject(obj.transform);
-
+        var workerPlaceable = obj.GetComponent<WorkerPlaceable>();
+        if (workerPlaceable != null)
+        {
+            PanZoom.current.FollowObject(obj.transform);
+            return;
+        }
     }
 
     public bool CanTakeArea(BoundsInt area)

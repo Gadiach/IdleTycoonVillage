@@ -11,22 +11,23 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private Text speedBonusText;
     [SerializeField] private Text incomeBonusText;
 
+    [SerializeField] private GameObject workerPanel;
+
     private void Awake()
     {
         Instance = this;
-        gameObject.SetActive(false);
+        workerPanel.SetActive(false);
     }
 
     public void ShowWorker(WorkerData worker)
     {
         if (worker == null) return;
-
         icon.sprite = worker.icon;
-        levelText.text = "Level: " + worker.level;
-        typeText.text = "Type: " + worker.type.ToString();
-        speedBonusText.text = "Speed Bonus: " + worker.speedBonus;
-        incomeBonusText.text = "Income Bonus: " + worker.incomeBonus;
+        //levelText.text = "Level: " + worker.level;
+        //typeText.text = "Type: " + worker.type.ToString();
+        //speedBonusText.text = "Speed Bonus: " + worker.speedBonus;
+        //incomeBonusText.text = "Income Bonus: " + worker.incomeBonus;
 
-        gameObject.SetActive(true);
+        workerPanel.SetActive(true);
     }
 }

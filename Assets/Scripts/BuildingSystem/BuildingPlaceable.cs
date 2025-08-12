@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingPlaceable : MonoBehaviour, IPlaceable
 {
@@ -15,8 +16,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
+    [SerializeField] private Image buildingRoundIconImage;
+
     private WorkerData assignedWorker;
-    [SerializeField] private UnityEngine.UI.Image workerImage;
+    // if assignedWorker.type == farm => WorkerIcons.farmIcon else if assignedWorker.type == Engineering => eng else if assignedWorker.type == Science => sci
 
     private int objectPrice;
     private CurrencyType currencyType;
@@ -187,7 +190,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     public void AssignWorker(WorkerData worker)
     {
         assignedWorker = worker;
-        //workerImage.sprite = worker.icon;
-        //workerImage.enabled = true;
+        buildingRoundIconImage.sprite = worker.roundIcon;
     }
 }

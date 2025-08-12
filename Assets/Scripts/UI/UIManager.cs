@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour
         if (building.Placeable != null && building.Placeable.HasWorker())
         {
             WorkerData worker = building.Placeable.GetAssignedWorker();
+
             workerButton.image.sprite = worker.icon;
 
             workerButton.onClick.AddListener(() =>

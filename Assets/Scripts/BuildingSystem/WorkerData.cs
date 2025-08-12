@@ -8,5 +8,6 @@ public class WorkerData
     public int level = 1;
     public float speedBonus;
     public float incomeBonus;
-    public Sprite icon; 
+    public Sprite roundIcon;
+    public Sprite icon;
 }

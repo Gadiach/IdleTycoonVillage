@@ -7,6 +7,8 @@ public class WorkerManager : MonoBehaviour
 
     public List<WorkerData> allWorkers = new List<WorkerData>();
 
+    [SerializeField] private WorkerIconLibrary iconLibrary;
+
     private void Awake()
     {
         current = this;
@@ -18,5 +20,32 @@ public class WorkerManager : MonoBehaviour
         {
             allWorkers.Add(worker);
         }
+    }
+
+    public WorkerData CreateWorker(BusinessType type)
+    {
+        WorkerData newWorker = new WorkerData
+        {
+            type = type,
+            available = true,
+            icon = iconLibrary.GetIcon(type)
+        };
+
+        AddWorker(newWorker);
+        return newWorker;
+    }
+
+    public WorkerData CreateWorker(BusinessType type, bool register)
+    {
+        var w = new WorkerData
+        {
+            type = type,
+            available = true,
+            roundIcon = iconLibrary.GetRoundIcon(type),
+            icon = iconLibrary.GetIcon(type)
+        };
+
+        if (register) AddWorker(w);
+        return w;
     }
 }

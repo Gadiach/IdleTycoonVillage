@@ -4,7 +4,6 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
 {
     private bool placed = false;
     private BuildingPlaceable assignedBuilding;
-    private WorkerData workerData;
 
     private SpriteRenderer spriteRenderer;
     private Color validColor = Color.white;
@@ -13,16 +12,11 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private LayerMask placeableLayer;
     [SerializeField] private Sprite workerIcon;
 
+    [SerializeField] private BusinessType workerType = BusinessType.Farming;   
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        workerData = new WorkerData
-        {
-            type = BusinessType.Farming,
-            available = true,
-            icon = workerIcon
-        };
     }
 
     private void Update()
@@ -35,15 +29,13 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
 
     public bool CanBePlaced(Vector3 position)
     {
-        if (!workerData.available) return false;
- 
         Collider2D hit = Physics2D.OverlapPoint(position, placeableLayer);
         if (hit == null) return false;
 
         BuildingPlaceable building = hit.GetComponent<BuildingPlaceable>();
         if (building == null) return false;
 
-        if (!building.AcceptsWorkerType(workerData.type)) return false;
+        if (!building.AcceptsWorkerType(workerType)) return false;
 
         if (building.HasWorker()) return false;
 
@@ -70,11 +62,11 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
     public void Place(Vector3 position)
     {
         placed = true;
-        workerData.available = false;
 
-        assignedBuilding.AssignWorker(workerData);
+        WorkerData worker = WorkerManager.current.CreateWorker(workerType, register: true);
+        worker.available = false;
 
-        WorkerManager.current.AddWorker(workerData);
+        assignedBuilding.AssignWorker(worker);
 
         Destroy(gameObject);
     }
