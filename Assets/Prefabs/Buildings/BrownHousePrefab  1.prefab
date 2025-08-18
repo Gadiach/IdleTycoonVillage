@@ -1183,7 +1183,7 @@ GameObject:
   - component: {fileID: 863576713045479790}
   - component: {fileID: -1920402991600211836}
   m_Layer: 6
-  m_Name: 'BrownHousePrefab '
+  m_Name: BrownHousePrefab  1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1248,12 +1248,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cc3d6f5420934f940918a3691c9ca55a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ae689fc1116394e48a383c120f9a0128, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 7.16, y: 7.26}
+  m_Size: {x: 16.4, y: 23.603092}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1340,9 +1340,9 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.25}
-    oldSize: {x: 5.12, y: 5.12}
-    newSize: {x: 7.16, y: 7.26}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 16.4, y: 23.603092}
+    newSize: {x: 16.4, y: 23.603092}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
