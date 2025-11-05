@@ -1460,3 +1460,4 @@ MonoBehaviour:
   PriceToUpgrade: 5
   LevelOfBuilding: 1
   Income: 0
+  LevelOfWorkerNeededForAutomation: 5

@@ -12,7 +12,9 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI priceText;
     public Image iconImage;
-    public Button upgradeButton;   
+    public Button upgradeButton;
+    public TextMeshProUGUI workerLvlNeededText;
+    public TextMeshProUGUI automationStatusText;
 
     [Header("Worker UI")]
     [SerializeField] private Button workerButton;
@@ -34,6 +36,8 @@ public class UIManager : MonoBehaviour
 
         nameText.text = building.Name;
         levelText.text = "Lvl: " + building.LevelOfBuilding;
+        workerLvlNeededText.text = "Need worker lvl " + building.LevelOfWorkerNeededForAutomation.ToString();
+        automationStatusText.text = "Auto OFF";
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
 
@@ -48,6 +52,11 @@ public class UIManager : MonoBehaviour
             WorkerData worker = building.Placeable.GetAssignedWorker();
 
             workerButton.image.sprite = worker.icon;
+
+            if (worker.level < building.LevelOfWorkerNeededForAutomation)
+            {
+                automationStatusText.text = "Auto ON";
+            }
 
             workerButton.onClick.AddListener(() =>
             {

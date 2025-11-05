@@ -13,6 +13,7 @@ public class BuildingData : MonoBehaviour
     public int PriceToUpgrade = 5;
     public int LevelOfBuilding = 1;
     public int Income;
+    public int LevelOfWorkerNeededForAutomation = 5;
 
     public BuildingPlaceable Placeable { get; private set; }
 
@@ -36,7 +37,7 @@ public class BuildingData : MonoBehaviour
 
     public void UpdatePriceToUpgrade()
     {
-        PriceToUpgrade = 5 * LevelOfBuilding;
+        PriceToUpgrade = PriceToUpgrade * LevelOfBuilding;
     }
 
     public void UpdateIncome()

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,9 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private Text typeText;
     [SerializeField] private Text speedBonusText;
     [SerializeField] private Text incomeBonusText;
+    [SerializeField] private TextMeshProUGUI priceForUpgradingText;
+    private int priceToUpgradeWorker = 1;
+    private WorkerData currentWorker;
 
     [SerializeField] private GameObject workerPanel;
 
@@ -21,6 +25,9 @@ public class WorkerUI : MonoBehaviour
 
     public void ShowWorker(WorkerData worker)
     {
+        currentWorker = worker;
+        UpdatePriceToUpgradeWorker(currentWorker);
+
         if (worker == null) return;
         icon.sprite = worker.icon;
         //levelText.text = "Level: " + worker.level;
@@ -29,5 +36,18 @@ public class WorkerUI : MonoBehaviour
         //incomeBonusText.text = "Income Bonus: " + worker.incomeBonus;
 
         workerPanel.SetActive(true);
+    }
+
+    public void UpgradeWorker()
+    {
+        currentWorker.level++;
+        priceForUpgradingText.text = priceToUpgradeWorker.ToString();
+
+        UpdatePriceToUpgradeWorker(currentWorker);
+    }
+
+    private void UpdatePriceToUpgradeWorker(WorkerData worker)
+    {
+        priceToUpgradeWorker = priceToUpgradeWorker * worker.level;
     }
 }

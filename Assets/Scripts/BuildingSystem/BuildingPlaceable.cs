@@ -32,6 +32,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private float time = 0f;
     private Vector3 origin;
 
+    private int lvlNeededForAutoincome = 5; 
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -191,5 +193,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         assignedWorker = worker;
         buildingRoundIconImage.sprite = worker.roundIcon;
+
+        if (worker.level >= lvlNeededForAutoincome)
+        {
+            // change orangeIcon to GreenIcon and turn on automation
+        }
     }
 }
