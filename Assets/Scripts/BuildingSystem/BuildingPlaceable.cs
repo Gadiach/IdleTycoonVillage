@@ -18,6 +18,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     [SerializeField] private Image buildingRoundIconImage;
 
+    [SerializeField] private float autoWorkDurationHours = 8f;   // ск≥льки годин максимум працюЇ авто
+    private float autoWorkTimer = 0f;                            // ск≥льки вже в≥дпрацювала
+    private bool isAutomated = false;
+
     private WorkerData assignedWorker;
     // if assignedWorker.type == farm => WorkerIcons.farmIcon else if assignedWorker.type == Engineering => eng else if assignedWorker.type == Science => sci
 
@@ -37,18 +41,51 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }   
+    }
+
+    //private void Update()
+    //{
+    //    if (!Placed) 
+    //    {
+    //        spriteRenderer.color = CanBePlaced(transform.position) ? validColor : invalidColor;
+    //    }
+
+    //    SetAutoIncomeTimer();
+
+    //    //ReplaceObject(); //TODO Fix the bag
+    //}
 
     private void Update()
     {
-        if (!Placed) 
+        if (!Placed)
         {
             spriteRenderer.color = CanBePlaced(transform.position) ? validColor : invalidColor;
+            return;
         }
 
-        HandleTooltip();
+        // якщо автоматизована Ч в≥дпрацьовуЇ 8 годин реального часу (або ≥грового)
+        if (isAutomated)
+        {
+            autoWorkTimer += Time.deltaTime / 3600f; // конвертуЇмо в години
 
-        //ReplaceObject(); //TODO Fix the bag
+            // якщо таймер дос€гнув меж≥ 8 годин Ч зупин€Їмо
+            if (autoWorkTimer >= autoWorkDurationHours)
+            {
+                StopTimer();
+                isAutomated = false;
+                EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(
+                    GetComponent<BuildingData>(), false)); // в≥дправл€Їмо OFF
+            }
+            else if (!timer.enabled)
+            {
+                // якщо таймер випадково зупинивс€ Ч перезапускаЇмо
+                StartTimer();
+            }
+        }
+        else
+        {
+            SetAutoIncomeTimer(); // тво€ лог≥ка дл€ звичайного таймера
+        }
     }
 
     public void Initialize(int price, CurrencyType currency)
@@ -57,17 +94,15 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         currencyType = currency;
     }
 
-    private void HandleTooltip()
+    private void SetAutoIncomeTimer()
     {
         if(Placed)
         {
-            timer.enabled = true;
-            timerTooltip.enabled = true;
+            StartTimer();
         }   
         else
         {
-            timer.enabled = false;
-            timerTooltip.enabled = false;
+            StopTimer();
         }
     }
 
@@ -118,7 +153,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         if (assignedWorker != null)
         {
-            WorkerUI.Instance.ShowWorker(assignedWorker);
+            WorkerUI.Instance.OpenWorkerPanel(assignedWorker);
         }
     }
 
@@ -199,4 +234,40 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             // change orangeIcon to GreenIcon and turn on automation
         }
     }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+    }
+
+    private void OnAutomationChanged(BuildingAutomationChangedGameEvent evt)
+    {
+        if (evt.Building.Placeable == this)
+        {
+            isAutomated = evt.IsAutomated;
+            autoWorkTimer = 0f; // обнул€Їмо л≥чильник часу
+
+            if (isAutomated)
+                StartTimer();     // запускаЇмо автоматично
+            else
+                StopTimer();      // вимикаЇмо
+        }
+    }
+
+    private void StartTimer()
+    {
+        timer.enabled = true;
+        timerTooltip.enabled = true;
+    }
+
+    private void StopTimer()
+    {
+        timer.enabled = false;
+        timerTooltip.enabled = false;
+    }  
 }

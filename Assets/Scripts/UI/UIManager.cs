@@ -30,6 +30,32 @@ public class UIManager : MonoBehaviour
         buildingPanel.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
+        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
+        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+    }
+
+    private void OnWorkerUpgraded(WorkerUpgradedGameEvent evt)
+    {
+        if (currentBuilding == null || currentBuilding.Placeable == null) return;
+
+        WorkerData assignedWorker = currentBuilding.Placeable.GetAssignedWorker();
+
+        if (assignedWorker == evt.Worker)
+        {
+            workerButton.image.sprite = evt.Worker.icon;
+            currentBuilding.CheckAutomationState();
+            Debug.Log($"[UIManager] worker has been upgraded to lvl {evt.Worker.level}. UI updated.");
+        }
+    }
+
     public void OpenBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
@@ -37,7 +63,6 @@ public class UIManager : MonoBehaviour
         nameText.text = building.Name;
         levelText.text = "Lvl: " + building.LevelOfBuilding;
         workerLvlNeededText.text = "Need worker lvl " + building.LevelOfWorkerNeededForAutomation.ToString();
-        automationStatusText.text = "Auto OFF";
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
 
@@ -53,14 +78,9 @@ public class UIManager : MonoBehaviour
 
             workerButton.image.sprite = worker.icon;
 
-            if (worker.level < building.LevelOfWorkerNeededForAutomation)
-            {
-                automationStatusText.text = "Auto ON";
-            }
-
             workerButton.onClick.AddListener(() =>
             {
-                WorkerUI.Instance.ShowWorker(worker);
+                WorkerUI.Instance.OpenWorkerPanel(worker);
             });
         }
         else
@@ -106,6 +126,15 @@ public class UIManager : MonoBehaviour
         priceText.text = currentBuilding.PriceToUpgrade.ToString();
         EventManager.Instance.QueueEvent(new XPAddedGameEvent(currentBuilding.LevelOfBuilding - 1));
         UpdateUIForUpgrade();
+    }
+
+    private void OnAutomationChanged(BuildingAutomationChangedGameEvent evt)
+    {
+        if (currentBuilding == evt.Building)
+        {
+            automationStatusText.text = evt.IsAutomated ? "Auto ON" : "Auto OFF";
+            Debug.Log($"[UIManager] Automation changed: {(evt.IsAutomated ? "ON" : "OFF")} for {evt.Building.Name}");
+        }
     }
 
     public void QuitGame()

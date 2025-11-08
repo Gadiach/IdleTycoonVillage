@@ -53,5 +53,27 @@ public class LevelChangedGameEvent : GameEvent
     }
 }
 
+public class WorkerUpgradedGameEvent : GameEvent
+{
+    public WorkerData Worker { get; private set; }
+
+    public WorkerUpgradedGameEvent(WorkerData worker)
+    {
+        Worker = worker;
+    }
+}
+
+public class BuildingAutomationChangedGameEvent : GameEvent
+{
+    public BuildingData Building { get; private set; }
+    public bool IsAutomated { get; private set; }
+
+    public BuildingAutomationChangedGameEvent(BuildingData building, bool isAutomated)
+    {
+        Building = building;
+        IsAutomated = isAutomated;
+    }
+}
+
 
 

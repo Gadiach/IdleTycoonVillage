@@ -1461,3 +1461,4 @@ MonoBehaviour:
   LevelOfBuilding: 1
   Income: 0
   LevelOfWorkerNeededForAutomation: 5
+  IsAutomated: 0

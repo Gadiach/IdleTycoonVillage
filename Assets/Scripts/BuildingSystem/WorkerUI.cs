@@ -7,7 +7,7 @@ public class WorkerUI : MonoBehaviour
     public static WorkerUI Instance;
 
     [SerializeField] private Image icon;
-    [SerializeField] private Text levelText;
+    [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Text typeText;
     [SerializeField] private Text speedBonusText;
     [SerializeField] private Text incomeBonusText;
@@ -23,14 +23,14 @@ public class WorkerUI : MonoBehaviour
         workerPanel.SetActive(false);
     }
 
-    public void ShowWorker(WorkerData worker)
+    public void OpenWorkerPanel(WorkerData worker)
     {
         currentWorker = worker;
         UpdatePriceToUpgradeWorker(currentWorker);
 
         if (worker == null) return;
         icon.sprite = worker.icon;
-        //levelText.text = "Level: " + worker.level;
+        UpdateLvlTxt(currentWorker);
         //typeText.text = "Type: " + worker.type.ToString();
         //speedBonusText.text = "Speed Bonus: " + worker.speedBonus;
         //incomeBonusText.text = "Income Bonus: " + worker.incomeBonus;
@@ -44,10 +44,18 @@ public class WorkerUI : MonoBehaviour
         priceForUpgradingText.text = priceToUpgradeWorker.ToString();
 
         UpdatePriceToUpgradeWorker(currentWorker);
+        UpdateLvlTxt(currentWorker);
+
+        EventManager.Instance.QueueEvent(new WorkerUpgradedGameEvent(currentWorker));
     }
 
     private void UpdatePriceToUpgradeWorker(WorkerData worker)
     {
         priceToUpgradeWorker = priceToUpgradeWorker * worker.level;
+    }
+
+    private void UpdateLvlTxt(WorkerData worker)
+    {
+        levelText.text = "Level: " + worker.level;
     }
 }

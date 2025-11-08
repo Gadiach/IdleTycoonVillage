@@ -2965,7 +2965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &246992567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43778,7 +43778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 901411147}
-  levelText: {fileID: 0}
+  levelText: {fileID: 875470327}
   typeText: {fileID: 0}
   speedBonusText: {fileID: 0}
   incomeBonusText: {fileID: 0}

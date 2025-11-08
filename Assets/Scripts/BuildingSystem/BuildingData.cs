@@ -14,6 +14,7 @@ public class BuildingData : MonoBehaviour
     public int LevelOfBuilding = 1;
     public int Income;
     public int LevelOfWorkerNeededForAutomation = 5;
+    public bool IsAutomated;
 
     public BuildingPlaceable Placeable { get; private set; }
 
@@ -50,6 +51,24 @@ public class BuildingData : MonoBehaviour
         if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
         {
             UpdatePriceToUpgrade();
+        }
+    }
+
+    public void CheckAutomationState()
+    {
+        bool newState = false;
+
+        if (Placeable != null && Placeable.HasWorker())
+        {
+            WorkerData worker = Placeable.GetAssignedWorker();
+            newState = worker.level >= LevelOfWorkerNeededForAutomation;
+        }
+
+        // якщо стан зм≥нивс€ Ч оновлюЇмо ≥ шлемо под≥ю
+        if (IsAutomated != newState)
+        {
+            IsAutomated = newState;
+            EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(this, IsAutomated));
         }
     }
 }
