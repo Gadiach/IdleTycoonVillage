@@ -27,8 +27,7 @@ public class WorkerUI : MonoBehaviour
     {
         currentWorker = worker;
         UpdatePriceToUpgradeWorker(currentWorker);
-
-        if (worker == null) return;
+        
         icon.sprite = worker.icon;
         UpdateLvlTxt(currentWorker);
         //typeText.text = "Type: " + worker.type.ToString();

@@ -17,6 +17,7 @@ public class TimerTooltip : MonoBehaviour
         if (timer != null)
         {
             timer.Initialize(finishTime);
+            timer.TimerFinishedEvent.AddListener(OnTimerFinished);
             timer.StartTimer();
         }
 
@@ -29,13 +30,7 @@ public class TimerTooltip : MonoBehaviour
 
     private void Update()
     {
-        float remainingTime = (float)timer.secondsLeft;
-        slider.value = slider.maxValue - remainingTime;
-
-        if (timer.secondsLeft <= 0 && incomeObject != null)
-        {
-            incomeObject.SetActive(true);
-        }
+        UpdateTimerProgress();            
     }
 
     public void ResetTimer()
@@ -58,5 +53,20 @@ public class TimerTooltip : MonoBehaviour
         {
             incomeObject.SetActive(false);
         }
+    }
+
+    private void UpdateTimerProgress()
+    {
+        float remainingTime = (float)timer.secondsLeft;
+        slider.value = slider.maxValue - remainingTime;
+    }
+
+    private void OnTimerFinished()
+    {
+        incomeObject.SetActive(true);
+
+        slider.value = slider.maxValue;
+
+        Debug.Log("[TimerTooltip] Timer finished! Income object activated.");
     }
 }

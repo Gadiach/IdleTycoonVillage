@@ -64,7 +64,6 @@ public class BuildingData : MonoBehaviour
             newState = worker.level >= LevelOfWorkerNeededForAutomation;
         }
 
-        // якщо стан зм≥нивс€ Ч оновлюЇмо ≥ шлемо под≥ю
         if (IsAutomated != newState)
         {
             IsAutomated = newState;

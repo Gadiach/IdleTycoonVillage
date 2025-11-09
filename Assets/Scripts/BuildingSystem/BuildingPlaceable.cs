@@ -18,12 +18,11 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     [SerializeField] private Image buildingRoundIconImage;
 
-    [SerializeField] private float autoWorkDurationHours = 8f;   // ск≥льки годин максимум працюЇ авто
-    private float autoWorkTimer = 0f;                            // ск≥льки вже в≥дпрацювала
+    [SerializeField] private float autoWorkDurationHours = 8f;  
+    private float autoWorkTimer = 0f;                            
     private bool isAutomated = false;
 
     private WorkerData assignedWorker;
-    // if assignedWorker.type == farm => WorkerIcons.farmIcon else if assignedWorker.type == Engineering => eng else if assignedWorker.type == Science => sci
 
     private int objectPrice;
     private CurrencyType currencyType;
@@ -36,55 +35,30 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private float time = 0f;
     private Vector3 origin;
 
-    private int lvlNeededForAutoincome = 5; 
-
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    //private void Update()
-    //{
-    //    if (!Placed) 
-    //    {
-    //        spriteRenderer.color = CanBePlaced(transform.position) ? validColor : invalidColor;
-    //    }
-
-    //    SetAutoIncomeTimer();
-
-    //    //ReplaceObject(); //TODO Fix the bag
-    //}
-
     private void Update()
     {
-        if (!Placed)
-        {
-            spriteRenderer.color = CanBePlaced(transform.position) ? validColor : invalidColor;
-            return;
-        }
-
-        // якщо автоматизована Ч в≥дпрацьовуЇ 8 годин реального часу (або ≥грового)
+        CheckPlacementAndSetColor();
+        
         if (isAutomated)
         {
-            autoWorkTimer += Time.deltaTime / 3600f; // конвертуЇмо в години
+            autoWorkTimer += Time.deltaTime / 3600f; 
 
-            // якщо таймер дос€гнув меж≥ 8 годин Ч зупин€Їмо
             if (autoWorkTimer >= autoWorkDurationHours)
             {
                 StopTimer();
                 isAutomated = false;
                 EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(
-                    GetComponent<BuildingData>(), false)); // в≥дправл€Їмо OFF
-            }
-            else if (!timer.enabled)
-            {
-                // якщо таймер випадково зупинивс€ Ч перезапускаЇмо
-                StartTimer();
+                    GetComponent<BuildingData>(), false)); 
             }
         }
         else
         {
-            SetAutoIncomeTimer(); // тво€ лог≥ка дл€ звичайного таймера
+            CheckPlacedAndSetTimer();
         }
     }
 
@@ -94,7 +68,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         currencyType = currency;
     }
 
-    private void SetAutoIncomeTimer()
+    private void CheckPlacedAndSetTimer()
     {
         if(Placed)
         {
@@ -172,6 +146,15 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         return BuildingSystem.current.CanTakeArea(areaTemp);
     }
 
+    private void CheckPlacementAndSetColor()
+    {
+        if (!Placed)
+        {
+            spriteRenderer.color = CanBePlaced(transform.position) ? validColor : invalidColor;
+            return;
+        }
+    }
+
     public void Place(Vector3 position)
     {
         Vector3Int positionInt = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
@@ -228,11 +211,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         assignedWorker = worker;
         buildingRoundIconImage.sprite = worker.roundIcon;
-
-        if (worker.level >= lvlNeededForAutoincome)
-        {
-            // change orangeIcon to GreenIcon and turn on automation
-        }
     }
 
     private void OnEnable()
@@ -250,12 +228,12 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         if (evt.Building.Placeable == this)
         {
             isAutomated = evt.IsAutomated;
-            autoWorkTimer = 0f; // обнул€Їмо л≥чильник часу
+            autoWorkTimer = 0f; 
 
             if (isAutomated)
-                StartTimer();     // запускаЇмо автоматично
+                StartTimer();    
             else
-                StopTimer();      // вимикаЇмо
+                StopTimer();   
         }
     }
 

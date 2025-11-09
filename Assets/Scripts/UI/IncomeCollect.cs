@@ -18,9 +18,7 @@ public class IncomeCollect : MonoBehaviour
             incomeAmount = 5 * buildingData.LevelOfBuilding; 
             EventManager.Instance.QueueEvent(new CurrencyChangeGameEvent(incomeAmount, CurrencyType.Coins));            
 
-            timerTooltip.ResetTimer();
-
-            
+            timerTooltip.ResetTimer();            
         }
     }
 }
