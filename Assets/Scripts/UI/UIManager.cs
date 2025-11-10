@@ -38,12 +38,17 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        if (EventManager.Instance == null)
+            return;
+
         EventManager.Instance.RemoveListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
-        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
     }
 
     private void OnWorkerUpgraded(WorkerUpgradedGameEvent evt)
     {
+        currentBuilding = evt.Worker.AssignedBuilding;
+
         if (currentBuilding == null || currentBuilding.Placeable == null) return;
 
         WorkerData assignedWorker = currentBuilding.Placeable.GetAssignedWorker();

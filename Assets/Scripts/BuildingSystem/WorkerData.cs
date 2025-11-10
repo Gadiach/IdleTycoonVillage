@@ -10,4 +10,5 @@ public class WorkerData
     public float incomeBonus;
     public Sprite roundIcon;
     public Sprite icon;
+    public BuildingData AssignedBuilding { get; set; }
 }

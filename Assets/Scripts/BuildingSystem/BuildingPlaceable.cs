@@ -23,6 +23,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private bool isAutomated = false;
 
     private WorkerData assignedWorker;
+    public BuildingData buildingData { get; private set; }
 
     private int objectPrice;
     private CurrencyType currencyType;
@@ -38,6 +39,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        buildingData = GetComponent<BuildingData>();
     }
 
     private void Update()
@@ -220,6 +222,9 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     private void OnDisable()
     {
+        if (EventManager.Instance == null)
+            return;
+
         EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
     }
 

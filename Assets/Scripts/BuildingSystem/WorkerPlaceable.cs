@@ -67,6 +67,7 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
         worker.available = false;
 
         assignedBuilding.AssignWorker(worker);
+        worker.AssignedBuilding = assignedBuilding.buildingData;
 
         Destroy(gameObject);
     }
