@@ -737,6 +737,8 @@ MonoBehaviour:
   slider: {fileID: 3947339866814908076}
   timeToEnd: 5
   incomeObject: {fileID: 1837367204515019154}
+  manualColor: {r: 1, g: 0.64, b: 0, a: 1}
+  autoColor: {r: 0.31801677, g: 1, b: 0, a: 1}
 --- !u!1 &7452024471405056485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1281,6 +1283,7 @@ MonoBehaviour:
   buildingType: 0
   acceptedBusinessType: 0
   buildingRoundIconImage: {fileID: 7386149318221317416}
+  autoWorkDurationHours: 8
 --- !u!114 &3354500464093890867
 MonoBehaviour:
   m_ObjectHideFlags: 0
