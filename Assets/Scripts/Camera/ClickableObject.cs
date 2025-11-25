@@ -24,6 +24,6 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
-        UIManager.Instance.OpenBuildingPanel(buildingData);
+        UIManager.Instance.OpenMainBuildingPanel(buildingData);
     }
 }

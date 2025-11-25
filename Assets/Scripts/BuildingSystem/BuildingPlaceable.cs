@@ -130,6 +130,15 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         if (assignedWorker != null)
         {
             WorkerUI.Instance.OpenWorkerPanel(assignedWorker);
+            Debug.Log("Open");
+        }
+    }
+
+    public void OnBuildingIconClick()
+    {
+        if (assignedWorker != null)
+        {
+            BuildingUI.Instance.OpenBuildingPanel(buildingData);
         }
     }
 
@@ -168,6 +177,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         BuildingSystem.current.TakeArea(areaTemp);
 
         PanZoom.current.UnfollowObject();
+
+        BuildingManager.Instance.AddBuildingToList(buildingData);
     }
 
     public void CheckPlacement()

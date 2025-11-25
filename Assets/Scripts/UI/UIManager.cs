@@ -18,6 +18,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Worker UI")]
     [SerializeField] private Button workerButton;
+
+    [Header("Building UI")]
+    [SerializeField] private Button buildingButton;
+
     public Sprite defaultWorkerIcon;
 
     public BuildingPlaceable Placeable { get; private set; }
@@ -61,7 +65,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OpenBuildingPanel(BuildingData building)
+    public void OpenMainBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
 
@@ -97,6 +101,12 @@ public class UIManager : MonoBehaviour
                 Debug.Log("There is no worker. Please assign one.");
             });
         }
+
+        buildingButton.onClick.RemoveAllListeners();
+        buildingButton.onClick.AddListener(() =>
+        {
+            BuildingUI.Instance.OpenBuildingPanel(building);
+        });
     }
 
     public void CloseBuildingPanel()

@@ -16,6 +16,8 @@ public class BuildingData : MonoBehaviour
     public int LevelOfWorkerNeededForAutomation = 5;
     public bool IsAutomated;
     public int TotalIncomeCircles = 0;
+    public Rarities Rarity = Rarities.Primitive;
+    public Tiers tier = Tiers.Tier1;
 
     public BuildingPlaceable Placeable { get; private set; }
 
