@@ -10,7 +10,7 @@ public class ClickableObject : MonoBehaviour
         buildingData = GetComponent<BuildingData>();
     }
 
-    private void OnMouseDown()
+    private void OnMouseUpAsButton()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
