@@ -79,6 +79,7 @@ public class CurrencySystem : MonoBehaviour
 
         UpdateUI();
         ShopManager.current.UpdateShopItems();
+        UIManager.Instance.UpdateUIForUpgrade();
     }
 
     public bool IsEnoughMoneyForUpgrade(CurrencyType currencyType, int amount)

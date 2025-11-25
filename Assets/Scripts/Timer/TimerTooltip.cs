@@ -130,6 +130,8 @@ public class TimerTooltip : MonoBehaviour
         {
             RestartTimerLogic();
             ResetSliderUI();
-        }     
+        }
+
+        buildingData.AddIncomeCircle();
     }
 }

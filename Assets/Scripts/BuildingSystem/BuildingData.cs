@@ -15,6 +15,7 @@ public class BuildingData : MonoBehaviour
     public int Income;
     public int LevelOfWorkerNeededForAutomation = 5;
     public bool IsAutomated;
+    public int TotalIncomeCircles = 0;
 
     public BuildingPlaceable Placeable { get; private set; }
 
@@ -69,5 +70,15 @@ public class BuildingData : MonoBehaviour
             IsAutomated = newState;
             EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(this, IsAutomated));
         }
+    }
+
+    public void AddIncomeCircle()
+    {
+        TotalIncomeCircles++;
+    }
+
+    public void ResetTotalIncomeCircles()
+    {
+        TotalIncomeCircles = 0;
     }
 }
