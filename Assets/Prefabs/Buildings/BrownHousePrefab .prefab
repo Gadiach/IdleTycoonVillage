@@ -1465,3 +1465,6 @@ MonoBehaviour:
   Income: 0
   LevelOfWorkerNeededForAutomation: 5
   IsAutomated: 0
+  TotalIncomeCircles: 0
+  Rarity: 0
+  tier: 1

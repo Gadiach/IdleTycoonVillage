@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI workerLvlNeededText;
     public TextMeshProUGUI automationStatusText;
 
+    [SerializeField] private Image[] colorStars;
+
     [Header("Worker UI")]
     [SerializeField] private Button workerButton;
 
@@ -78,6 +80,7 @@ public class UIManager : MonoBehaviour
         buildingPanel.SetActive(true);
 
         UpdateUIForUpgrade();
+        UpdateStarUI(building);
 
         workerButton.onClick.RemoveAllListeners();
 
@@ -107,6 +110,35 @@ public class UIManager : MonoBehaviour
         {
             BuildingUI.Instance.OpenBuildingPanel(building);
         });
+    }
+
+    private Color GetColorByRarity(Rarities rarity)
+    {
+        return rarity switch
+        {
+            Rarities.Primitive => Color.blue,
+            Rarities.Developed => Color.green,
+            Rarities.Industrial => Color.yellow,
+            Rarities.Modern => new Color(0.5f, 0, 1),
+            Rarities.Futuristic => Color.red,
+            _ => Color.grey
+        };
+    }
+
+    private void UpdateStarUI(BuildingData building)
+    {
+        int tierValue = (int)building.tier;
+        Debug.Log(tierValue);
+        int maxStars = colorStars.Length;
+        Debug.Log(maxStars);
+        Color activeColor = GetColorByRarity(building.Rarity);
+        Color inactiveColor = Color.grey;
+
+        for (int i = 0; i < maxStars; i++)
+        {
+            Debug.Log(i);
+            colorStars[i].color = (i < tierValue) ? activeColor : inactiveColor;
+        }
     }
 
     public void CloseBuildingPanel()

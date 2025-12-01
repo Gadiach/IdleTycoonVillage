@@ -43,7 +43,7 @@ public class BuildingUI : MonoBehaviour
         buildingPanel.SetActive(true);
     }
 
-    public Color GetColorByRarity(Rarities rarity)
+    private Color GetColorByRarity(Rarities rarity)
     {
         return rarity switch
         {
@@ -56,16 +56,18 @@ public class BuildingUI : MonoBehaviour
         };
     }
 
-    public void UpdateStarUI(BuildingData building)
+    private void UpdateStarUI(BuildingData building)
     {
-        int tierValue = (int)building.tier;    
-        int maxStars = colorStars.Length;      
-
+        int tierValue = (int)building.tier;
+        Debug.Log(tierValue);
+        int maxStars = colorStars.Length;
+        Debug.Log(maxStars);
         Color activeColor = GetColorByRarity(building.Rarity);
-        Color inactiveColor = Color.gray;      
+        Color inactiveColor = Color.grey;      
 
         for (int i = 0; i < maxStars; i++)
         {
+            Debug.Log(i);
             colorStars[i].color = (i < tierValue) ? activeColor : inactiveColor;
         }
     }
