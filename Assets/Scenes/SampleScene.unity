@@ -353701,12 +353701,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingIcon: {fileID: 1667363859}
-  buildingNameText: {fileID: 0}
+  buildingNameText: {fileID: 1957833672}
   levelText: {fileID: 0}
   incomeText: {fileID: 0}
   rarityText: {fileID: 0}
   upgradeCostText: {fileID: 0}
   upgradeButton: {fileID: 0}
+  businessType: {fileID: 269689988}
   buildingPanel: {fileID: 1980132718}
 --- !u!1 &2126573183
 GameObject:

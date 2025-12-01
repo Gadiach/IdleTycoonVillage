@@ -14,6 +14,7 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rarityText;
     [SerializeField] private TextMeshProUGUI upgradeCostText;
     [SerializeField] private Button upgradeButton;
+    [SerializeField] private TextMeshProUGUI businessType;
 
     [SerializeField] private GameObject buildingPanel;
 
@@ -28,10 +29,9 @@ public class BuildingUI : MonoBehaviour
     public void OpenBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
-
         buildingIcon.sprite = currentBuilding.Icon;
-
-        //buildingNameText.text = building.Name;
+        buildingNameText.text = building.Name;
+        businessType.text = currentBuilding.BusinessType.ToString();
         //levelText.text = $"Level: {building.LevelOfBuilding}";
         //incomeText.text = $"Income: {building.Income}";
         //rarityText.text = $"Tier: {building.Rarity}";
