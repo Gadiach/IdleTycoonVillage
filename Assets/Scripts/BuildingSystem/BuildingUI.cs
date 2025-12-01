@@ -29,7 +29,8 @@ public class BuildingUI : MonoBehaviour
     {
         currentBuilding = building;
 
-        //buildingIcon.sprite = building.Icon;
+        buildingIcon.sprite = currentBuilding.Icon;
+
         //buildingNameText.text = building.Name;
         //levelText.text = $"Level: {building.LevelOfBuilding}";
         //incomeText.text = $"Income: {building.Income}";
