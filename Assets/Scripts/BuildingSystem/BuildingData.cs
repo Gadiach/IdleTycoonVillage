@@ -51,8 +51,17 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeBuilding()
     {
+        int maxLevel = GetMaxLevel();
+
+        if (LevelOfBuilding >= maxLevel)
+        {
+            Debug.Log("Building is already at MAX level!");
+            return;
+        }
+
         if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
         {
+            LevelOfBuilding++;
             UpdatePriceToUpgrade();
         }
     }
@@ -72,6 +81,31 @@ public class BuildingData : MonoBehaviour
             IsAutomated = newState;
             EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(this, IsAutomated));
         }
+    }
+
+    public int GetMaxLevel()
+    {
+        int baseMax = Rarity switch
+        {
+            Rarities.Primitive => 2,
+            Rarities.Developed => 4,
+            Rarities.Industrial => 6,
+            Rarities.Modern => 8,
+            Rarities.Futuristic => 10,
+            _ => 2
+        };
+
+        int tierBonus = tier switch
+        {
+            Tiers.Tier1 => 0,
+            Tiers.Tier2 => 3,
+            Tiers.Tier3 => 6,
+            Tiers.Tier4 => 9,
+            Tiers.Tier5 => 13,
+            _ => 0
+        };
+
+        return baseMax + tierBonus;
     }
 
     public void AddIncomeCircle()

@@ -134,7 +134,6 @@ public class UIManager : MonoBehaviour
     {
         currentBuilding.UpgradeBuilding();
 
-        currentBuilding.LevelOfBuilding++;
         currentBuilding.PriceToUpgrade += 5;
 
         levelText.text = "Lv: " + currentBuilding.LevelOfBuilding;
