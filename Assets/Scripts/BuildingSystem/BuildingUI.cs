@@ -19,6 +19,7 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private GameObject buildingPanel;
 
     [SerializeField] private Image[] colorStars;
+    [SerializeField] private Image[] nextTierColorStars;
 
     private BuildingData currentBuilding;
 
@@ -56,6 +57,19 @@ public class BuildingUI : MonoBehaviour
         };
     }
 
+    private Rarities GetNextRarity(Rarities current)
+    {
+        switch (current)
+        {
+            case Rarities.Primitive: return Rarities.Developed;
+            case Rarities.Developed: return Rarities.Industrial;
+            case Rarities.Industrial: return Rarities.Modern;
+            case Rarities.Modern: return Rarities.Futuristic;
+            case Rarities.Futuristic: return Rarities.Futuristic; 
+            default: return current;
+        }
+    }
+
     private void UpdateStarUI(BuildingData building)
     {
         int tierValue = (int)building.tier;
@@ -69,6 +83,35 @@ public class BuildingUI : MonoBehaviour
         {
             Debug.Log(i);
             colorStars[i].color = (i < tierValue) ? activeColor : inactiveColor;
+        }
+
+        if (tierValue < maxStars)
+        {
+            int nextTier = tierValue + 1;
+            for (int i = 0; i < maxStars; i++)
+            {
+                nextTierColorStars[i].color = (i < nextTier) ? activeColor : inactiveColor;
+            }
+        }
+
+        else
+        {
+            Rarities nextRarity = GetNextRarity(building.Rarity);
+
+            if (nextRarity == building.Rarity)
+            {
+                for (int i = 0; i < maxStars; i++)
+                    nextTierColorStars[i].color = inactiveColor;
+
+                return;
+            }
+
+            Color nextRarityColor = GetColorByRarity(nextRarity);
+
+            for (int i = 0; i < maxStars; i++)
+            {
+                nextTierColorStars[i].color = (i == 0) ? nextRarityColor : inactiveColor;
+            }
         }
     }
 
