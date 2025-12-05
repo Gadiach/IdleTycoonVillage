@@ -19,14 +19,14 @@ public class GlobalBuildingManager : MonoBehaviour
 
         if (existing != null)
         {
-            existing.Rarity = building.Rarity;
+            existing.Rarity = building.CurrentRarity;
         }
         else
         {
             globalBuildings.Add(new BuildingGlobalData
             {
                 Type = building.Type,
-                Rarity = building.Rarity
+                Rarity = building.CurrentRarity
             });
         }
     }

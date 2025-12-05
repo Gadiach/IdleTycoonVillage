@@ -16,8 +16,9 @@ public class BuildingData : MonoBehaviour
     public int LevelOfWorkerNeededForAutomation = 5;
     public bool IsAutomated;
     public int TotalIncomeCircles = 0;
-    public Rarities Rarity = Rarities.Primitive;
-    public Tiers tier = Tiers.Tier1;
+
+    public Rarities CurrentRarity = Rarities.Primitive;
+    public Tiers CurrentTier = Tiers.Tier1;
 
     public BuildingPlaceable Placeable { get; private set; }
 
@@ -37,6 +38,70 @@ public class BuildingData : MonoBehaviour
         Icon = item.Icon;
 
         UpdatePriceToUpgrade();
+    }
+
+    public Tiers NextTier
+    {
+        get
+        {
+            int current = (int)CurrentTier;
+            int max = System.Enum.GetValues(typeof(Tiers)).Length - 1;
+
+            if (current < max)
+                return (Tiers)(current + 1);
+
+            return Tiers.Tier1;
+        }
+    }
+
+    public Rarities NextRarity
+    {
+        get
+        {
+            int current = (int)CurrentRarity;
+            int max = System.Enum.GetValues(typeof(Rarities)).Length - 1;
+
+            if (current < max)
+                return (Rarities)(current + 1);
+
+            return CurrentRarity;
+        }
+    }
+
+    public StarDisplayInfo GetStarDisplayInfo()
+    {
+        return new StarDisplayInfo
+        {
+            CurrentTier = CurrentTier,
+            NextTierValue = NextTier,
+            CurrentRarity = CurrentRarity,
+            NextRarity = NextRarity
+        };
+    }
+
+    public int GetMaxLevel()
+    {
+        int baseMax = CurrentRarity switch
+        {
+            Rarities.Primitive => 2,
+            Rarities.Developed => 4,
+            Rarities.Industrial => 6,
+            Rarities.Modern => 8,
+            Rarities.Futuristic => 10,
+            _ => 2
+        };
+
+        int tierBonus = CurrentTier switch
+        {
+            Tiers.Tier1 => 0,
+            Tiers.Tier2 => 3,
+            Tiers.Tier3 => 6,
+            Tiers.Tier4 => 9,
+            Tiers.Tier5 => 13,
+            _ => 0
+        };
+
+        return baseMax + tierBonus;
     }
 
     public void UpdatePriceToUpgrade()
@@ -83,31 +148,6 @@ public class BuildingData : MonoBehaviour
         }
     }
 
-    public int GetMaxLevel()
-    {
-        int baseMax = Rarity switch
-        {
-            Rarities.Primitive => 2,
-            Rarities.Developed => 4,
-            Rarities.Industrial => 6,
-            Rarities.Modern => 8,
-            Rarities.Futuristic => 10,
-            _ => 2
-        };
-
-        int tierBonus = tier switch
-        {
-            Tiers.Tier1 => 0,
-            Tiers.Tier2 => 3,
-            Tiers.Tier3 => 6,
-            Tiers.Tier4 => 9,
-            Tiers.Tier5 => 13,
-            _ => 0
-        };
-
-        return baseMax + tierBonus;
-    }
-
     public void AddIncomeCircle()
     {
         TotalIncomeCircles++;
@@ -118,3 +158,4 @@ public class BuildingData : MonoBehaviour
         TotalIncomeCircles = 0;
     }
 }
+

@@ -127,11 +127,11 @@ public class UIManager : MonoBehaviour
 
     private void UpdateStarUI(BuildingData building)
     {
-        int tierValue = (int)building.tier;
+        int tierValue = (int)building.CurrentTier;
         Debug.Log(tierValue);
         int maxStars = colorStars.Length;
         Debug.Log(maxStars);
-        Color activeColor = GetColorByRarity(building.Rarity);
+        Color activeColor = GetColorByRarity(building.CurrentRarity);
         Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)

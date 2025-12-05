@@ -37,7 +37,7 @@ public class BuildingUI : MonoBehaviour
         businessType.text = currentBuilding.BusinessType.ToString();
         levelText.text = $"{building.LevelOfBuilding} / {building.GetMaxLevel()}";
         //incomeText.text = $"Income: {building.Income}";
-        rarityText.text = building.Rarity.ToString();
+        rarityText.text = building.CurrentRarity.ToString();
         //upgradeCostText.text = $"Upgrade cost: {building.PriceToUpgrade}";
         UpdateStarUI(building);
 
@@ -57,61 +57,37 @@ public class BuildingUI : MonoBehaviour
         };
     }
 
-    private Rarities GetNextRarity(Rarities current)
-    {
-        switch (current)
-        {
-            case Rarities.Primitive: return Rarities.Developed;
-            case Rarities.Developed: return Rarities.Industrial;
-            case Rarities.Industrial: return Rarities.Modern;
-            case Rarities.Modern: return Rarities.Futuristic;
-            case Rarities.Futuristic: return Rarities.Futuristic; 
-            default: return current;
-        }
-    }
-
     private void UpdateStarUI(BuildingData building)
     {
-        int tierValue = (int)building.tier;
-        Debug.Log(tierValue);
+        var info = building.GetStarDisplayInfo();
+
+        int currentTier = (int)info.CurrentTier;
+        int nextTier = (int)info.NextTierValue;
+
         int maxStars = colorStars.Length;
-        Debug.Log(maxStars);
-        Color activeColor = GetColorByRarity(building.Rarity);
-        Color inactiveColor = Color.grey;      
+
+        Color activeColor = GetColorByRarity(info.CurrentRarity);
+        Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)
-        {
-            Debug.Log(i);
-            colorStars[i].color = (i < tierValue) ? activeColor : inactiveColor;
-        }
+            colorStars[i].color = (i < currentTier) ? activeColor : inactiveColor;
 
-        if (tierValue < maxStars)
+        if (nextTier > currentTier)
         {
-            int nextTier = tierValue + 1;
             for (int i = 0; i < maxStars; i++)
-            {
                 nextTierColorStars[i].color = (i < nextTier) ? activeColor : inactiveColor;
-            }
+
+            return;
         }
 
-        else
+        if (info.NextRarity != info.CurrentRarity)
         {
-            Rarities nextRarity = GetNextRarity(building.Rarity);
-
-            if (nextRarity == building.Rarity)
-            {
-                for (int i = 0; i < maxStars; i++)
-                    nextTierColorStars[i].color = inactiveColor;
-
-                return;
-            }
-
-            Color nextRarityColor = GetColorByRarity(nextRarity);
+            Color nextColor = GetColorByRarity(info.NextRarity);
 
             for (int i = 0; i < maxStars; i++)
-            {
-                nextTierColorStars[i].color = (i == 0) ? nextRarityColor : inactiveColor;
-            }
+                nextTierColorStars[i].color = (i == 0) ? nextColor : inactiveColor;
+
+            return;
         }
     }
 
