@@ -20,6 +20,8 @@ public class BuildingData : MonoBehaviour
     public Rarities CurrentRarity = Rarities.Primitive;
     public Tiers CurrentTier = Tiers.Tier1;
 
+    [SerializeField] private ProgressionConfig progressionConfig;
+
     public BuildingPlaceable Placeable { get; private set; }
 
     public void SetPlaceable(BuildingPlaceable placeable)
@@ -79,29 +81,24 @@ public class BuildingData : MonoBehaviour
         };
     }
 
-    public int GetMaxLevel()
+    public int CurrentTierMaxLevel
     {
-        int baseMax = CurrentRarity switch
+        get
         {
-            Rarities.Primitive => 2,
-            Rarities.Developed => 4,
-            Rarities.Industrial => 6,
-            Rarities.Modern => 8,
-            Rarities.Futuristic => 10,
-            _ => 2
-        };
+            int baseMax = progressionConfig.GetBaseMaxLevel(CurrentRarity);
+            int tierBonus = progressionConfig.GetTierBonus(CurrentTier);
+            return baseMax + tierBonus;
+        }
+    }
 
-        int tierBonus = CurrentTier switch
+    public int NextTierMaxLevel
+    {
+        get
         {
-            Tiers.Tier1 => 0,
-            Tiers.Tier2 => 3,
-            Tiers.Tier3 => 6,
-            Tiers.Tier4 => 9,
-            Tiers.Tier5 => 13,
-            _ => 0
-        };
-
-        return baseMax + tierBonus;
+            int baseMax = progressionConfig.GetBaseMaxLevel(NextRarity);
+            int tierBonus = progressionConfig.GetTierBonus(NextTier);
+            return baseMax + tierBonus;
+        }
     }
 
     public void UpdatePriceToUpgrade()
@@ -116,9 +113,7 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeBuilding()
     {
-        int maxLevel = GetMaxLevel();
-
-        if (LevelOfBuilding >= maxLevel)
+        if (LevelOfBuilding >= CurrentTierMaxLevel)
         {
             Debug.Log("Building is already at MAX level!");
             return;

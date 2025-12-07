@@ -1466,5 +1466,6 @@ MonoBehaviour:
   LevelOfWorkerNeededForAutomation: 5
   IsAutomated: 0
   TotalIncomeCircles: 0
-  Rarity: 0
-  tier: 1
+  CurrentRarity: 0
+  CurrentTier: 1
+  progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}

@@ -15,11 +15,14 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI upgradeCostText;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TextMeshProUGUI businessType;
+    [SerializeField] private TextMeshProUGUI currentTierMaxLvlTxt;
+    [SerializeField] private TextMeshProUGUI nextTierMaxLvlTxt;
 
     [SerializeField] private GameObject buildingPanel;
 
     [SerializeField] private Image[] colorStars;
     [SerializeField] private Image[] nextTierColorStars;
+
 
     private BuildingData currentBuilding;
 
@@ -35,10 +38,12 @@ public class BuildingUI : MonoBehaviour
         buildingIcon.sprite = currentBuilding.Icon;
         buildingNameText.text = building.Name;
         businessType.text = currentBuilding.BusinessType.ToString();
-        levelText.text = $"{building.LevelOfBuilding} / {building.GetMaxLevel()}";
+        levelText.text = $"{building.LevelOfBuilding}";
         //incomeText.text = $"Income: {building.Income}";
         rarityText.text = building.CurrentRarity.ToString();
         //upgradeCostText.text = $"Upgrade cost: {building.PriceToUpgrade}";
+        currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
+        nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString() ;
         UpdateStarUI(building);
 
         buildingPanel.SetActive(true);
