@@ -18,5 +18,5 @@ MonoBehaviour:
   Price: 10
   Currency: 0
   Type: 0
-  Icon: {fileID: 21300000, guid: dac79dd16f8fe3040bc1bb4ce493ff8d, type: 3}
+  Icon: {fileID: 21300000, guid: 7dd29a7fee08ba34483af45616800d24, type: 3}
   Prefab: {fileID: 9193094272671895835, guid: 09f49a1151b191d47a1738c96fcad0e8, type: 3}
