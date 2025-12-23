@@ -10,7 +10,7 @@ public class TimerTooltip : MonoBehaviour
     [SerializeField] private float timeToEnd;
     [SerializeField] private GameObject incomeObject;
     DateTime finishTime;
-    bool isActiveBusiness = false;
+    bool isBusinessAutomated = false;
     private BuildingData buildingData;
 
     [Header("Slider Colors")]
@@ -57,7 +57,7 @@ public class TimerTooltip : MonoBehaviour
 
     public void ResetTimer()
     {       
-        if(!isActiveBusiness)
+        if(!isBusinessAutomated)
         {
             RestartTimerLogic();
             ResetSliderUI();
@@ -101,9 +101,11 @@ public class TimerTooltip : MonoBehaviour
     {
         if (buildingData == evt.Building)
         {
-            isActiveBusiness = evt.IsAutomated;
-            Debug.Log($"[TimerTooltip] Automation changed for {evt.Building.Name}: {isActiveBusiness}");
+            isBusinessAutomated = evt.IsAutomated;
+            Debug.Log($"[TimerTooltip] Automation changed for {evt.Building.Name}: {isBusinessAutomated}");
             UpdateSliderColor();
+            RestartTimerLogic();
+            ResetSliderUI();
         }
     }
 
@@ -116,7 +118,7 @@ public class TimerTooltip : MonoBehaviour
 
         if (fillImage != null)
         {
-            fillImage.color = isActiveBusiness ? autoColor : manualColor;
+            fillImage.color = isBusinessAutomated ? autoColor : manualColor;
         }
     }
 
@@ -126,7 +128,7 @@ public class TimerTooltip : MonoBehaviour
 
         slider.value = slider.maxValue;
 
-        if (isActiveBusiness)
+        if (isBusinessAutomated)
         {
             RestartTimerLogic();
             ResetSliderUI();
