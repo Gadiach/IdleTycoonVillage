@@ -152,7 +152,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         Vector3Int cellPos = BuildingSystem.current.gridLayout.LocalToCell(position);
         BoundsInt areaTemp = area;
-        areaTemp.position = cellPos;
+        areaTemp.position = cellPos + area.position;
 
         return BuildingSystem.current.CanTakeArea(areaTemp);
     }
@@ -168,9 +168,9 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     public void Place(Vector3 position)
     {
-        Vector3Int positionInt = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
+        Vector3Int cellPos = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
         BoundsInt areaTemp = area;
-        areaTemp.position = positionInt;
+        areaTemp.position = cellPos + area.position;
 
         Placed = true;
 
