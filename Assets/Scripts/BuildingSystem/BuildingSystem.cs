@@ -69,7 +69,6 @@ public class BuildingSystem : MonoBehaviour
     public void InitializeWithObject(GameObject prefab, Vector3 pos, ShopItem item)
     {
         pos.z = 0;
-        pos.y -= prefab.GetComponent<SpriteRenderer>().bounds.size.y / 2f;
 
         Vector3Int cellPos = gridLayout.WorldToCell(pos);
         Vector3 position = gridLayout.CellToLocalInterpolated(cellPos);
