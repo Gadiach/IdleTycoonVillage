@@ -46871,6 +46871,8 @@ MonoBehaviour:
   upgradeButton: {fileID: 243115130}
   workerLvlNeededText: {fileID: 0}
   automationStatusText: {fileID: 1553292974}
+  IsWorkerAssignedText: {fileID: 1821509998}
+  WorkerBonusStatusText: {fileID: 1954322851}
   colorStars:
   - {fileID: 688480385}
   - {fileID: 1913097574}
@@ -60634,7 +60636,7 @@ GameObject:
   - component: {fileID: 1954322852}
   - component: {fileID: 1954322851}
   m_Layer: 5
-  m_Name: NoWorkerBonusWordTxt
+  m_Name: WorkerBonusStatusWordTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -15,20 +15,18 @@ public class UIManager : MonoBehaviour
     public Button upgradeButton;
     public TextMeshProUGUI workerLvlNeededText;
     public TextMeshProUGUI automationStatusText;
+    public TextMeshProUGUI IsWorkerAssignedText;
+    public TextMeshProUGUI WorkerBonusStatusText;
 
     [SerializeField] private Image[] colorStars;
-
-    [Header("Worker UI")]
-    [SerializeField] private Button workerButton;
 
     [Header("Building UI")]
     [SerializeField] private Button buildingButton;
 
-    public Sprite defaultWorkerIcon;
-
     public BuildingPlaceable Placeable { get; private set; }
 
     private BuildingData currentBuilding;
+    
 
     private void Awake()
     {
@@ -61,7 +59,6 @@ public class UIManager : MonoBehaviour
 
         if (assignedWorker == evt.Worker)
         {
-            workerButton.image.sprite = evt.Worker.icon;
             currentBuilding.CheckAutomationState();
             Debug.Log($"[UIManager] worker has been upgraded to lvl {evt.Worker.level}. UI updated.");
         }
@@ -80,6 +77,7 @@ public class UIManager : MonoBehaviour
 
         UpdateUIForUpgrade();
         UpdateStarUI(building);
+        UpdateWorkerAndAutomationUI(building);
 
         buildingButton.onClick.RemoveAllListeners();
         buildingButton.onClick.AddListener(() =>
@@ -150,12 +148,34 @@ public class UIManager : MonoBehaviour
         UpdateUIForUpgrade();
     }
 
+    private void UpdateWorkerAndAutomationUI(BuildingData building)
+    {
+        var placeable = building.Placeable;
+
+        if (placeable != null && placeable.HasWorker())
+        {
+            IsWorkerAssignedText.text = "Worker assigned";
+            WorkerBonusStatusText.text = "ON";
+        }
+        else
+        {
+            IsWorkerAssignedText.text = "No worker assigned";
+            WorkerBonusStatusText.text = "OFF";
+            automationStatusText.text = "OFF";
+            return; 
+        }
+
+        if (building.IsAutomated)
+        {
+            automationStatusText.text = "ON";
+        }
+    }
+
     private void OnAutomationChanged(BuildingAutomationChangedGameEvent evt)
     {
         if (currentBuilding == evt.Building)
         {
-            automationStatusText.text = evt.IsAutomated ? "Auto ON" : "Auto OFF";
-            Debug.Log($"[UIManager] Automation changed: {(evt.IsAutomated ? "ON" : "OFF")} for {evt.Building.Name}");
+            UpdateWorkerAndAutomationUI(currentBuilding);
         }
     }
 
