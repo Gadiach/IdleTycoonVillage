@@ -73,7 +73,6 @@ public class UIManager : MonoBehaviour
 
         nameText.text = building.Name;
         levelText.text = "Lvl: " + building.LevelOfBuilding;
-        workerLvlNeededText.text = "Need worker lvl " + building.LevelOfWorkerNeededForAutomation.ToString();
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
 
@@ -81,29 +80,6 @@ public class UIManager : MonoBehaviour
 
         UpdateUIForUpgrade();
         UpdateStarUI(building);
-
-        workerButton.onClick.RemoveAllListeners();
-
-        if (building.Placeable != null && building.Placeable.HasWorker())
-        {
-            WorkerData worker = building.Placeable.GetAssignedWorker();
-
-            workerButton.image.sprite = worker.icon;
-
-            workerButton.onClick.AddListener(() =>
-            {
-                WorkerUI.Instance.OpenWorkerPanel(worker);
-            });
-        }
-        else
-        {
-            workerButton.image.sprite = defaultWorkerIcon;
-
-            workerButton.onClick.AddListener(() =>
-            {
-                Debug.Log("There is no worker. Please assign one.");
-            });
-        }
 
         buildingButton.onClick.RemoveAllListeners();
         buildingButton.onClick.AddListener(() =>
