@@ -132,6 +132,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             WorkerUI.Instance.OpenWorkerPanel(assignedWorker);
             Debug.Log("Open");
         }
+        else
+        {
+            ShopManager.current.OpenShop(ObjectType.Workers);
+        }
     }
 
     public void OnBuildingIconClick()

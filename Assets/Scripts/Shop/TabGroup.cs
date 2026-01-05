@@ -45,6 +45,17 @@ public class TabGroup : MonoBehaviour
         }
     }
 
+    public void SelectTabByIndex(int index)
+    {
+        if (index < 0 || index >= tabButtons.Count)
+        {
+            Debug.LogWarning($"TabGroup: invalid tab index {index}");
+            return;
+        }
+
+        OnTabSelected(tabButtons[index]);
+    }
+
     public void OnTabSelected(TabButton button)
     {
         selectedTab = button;

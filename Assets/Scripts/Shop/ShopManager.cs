@@ -80,7 +80,7 @@ public class ShopManager : MonoBehaviour
                 ShopItemHolder holder = item.GetComponent<ShopItemHolder>();
                 if (holder != null)
                 {
-                    holder.UpdateItemState(); // <<< Проверяем деньги и обновляем состояние предметов
+                    holder.UpdateItemState();
                 }
             }
         }
@@ -106,17 +106,31 @@ public class ShopManager : MonoBehaviour
 
     public void ShopButton_Click()
     {
+        if (opened)
+            CloseShop();
+        else
+            OpenShop(ObjectType.Buildings); 
+    }
+
+    public void OpenShop(ObjectType tabType)
+    {
         if (!opened)
         {
             gameObject.SetActive(true);
             UpdateShopItems();
             StartCoroutine(MovePanel(openedPos));
+            opened = true;
         }
-        else
-        {
-            StartCoroutine(MovePanel(closedPos, () => gameObject.SetActive(false)));
-        }
-        opened = !opened;
+
+        shopTabs.SelectTabByIndex((int)tabType);
+    }
+
+    public void CloseShop()
+    {
+        if (!opened) return;
+
+        StartCoroutine(MovePanel(closedPos, () => gameObject.SetActive(false)));
+        opened = false;
     }
 
     private IEnumerator MovePanel(Vector2 targetPos, System.Action onComplete = null)
