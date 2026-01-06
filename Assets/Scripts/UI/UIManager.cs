@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
         currentBuilding = building;
 
         nameText.text = building.Name;
-        levelText.text = "Lvl: " + building.LevelOfBuilding;
+        levelText.text = "Lvl: " + building.LevelOfBuilding + " / <color=red>" + building.NextTierMaxLevel + "</color>";
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
 
