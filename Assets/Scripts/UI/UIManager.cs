@@ -69,7 +69,16 @@ public class UIManager : MonoBehaviour
         currentBuilding = building;
 
         nameText.text = building.Name;
-        levelText.text = "Lvl: " + building.LevelOfBuilding + " / <color=red>" + building.NextTierMaxLevel + "</color>";
+
+        if (currentBuilding.LevelOfBuilding == currentBuilding.CurrentTierMaxLevel)
+        {
+            levelText.text = "Lv: <color=red>" + currentBuilding.LevelOfBuilding + " / " + currentBuilding.CurrentTierMaxLevel + "</color>";
+        }
+        else
+        {
+            levelText.text = "Lv: " + currentBuilding.LevelOfBuilding + " / <color=red>" + currentBuilding.CurrentTierMaxLevel + "</color>";
+        }
+
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
 
@@ -124,15 +133,15 @@ public class UIManager : MonoBehaviour
     {
         bool canUpgrade = CurrencySystem.Instance.IsEnoughMoneyForUpgrade(currentBuilding.Currency, currentBuilding.PriceToUpgrade);
 
-        if (!canUpgrade)
-        {
-            priceText.color = Color.red;
-            upgradeButton.interactable = false;
-        }
-        else
+        if (canUpgrade && currentBuilding.LevelOfBuilding < currentBuilding.CurrentTierMaxLevel)
         {
             priceText.color = Color.white;
             upgradeButton.interactable = true;
+        }
+        else
+        {           
+            priceText.color = Color.red;
+            upgradeButton.interactable = false;
         }
     }
 
@@ -142,7 +151,15 @@ public class UIManager : MonoBehaviour
 
         currentBuilding.PriceToUpgrade += 5;
 
-        levelText.text = "Lv: " + currentBuilding.LevelOfBuilding;
+        if(currentBuilding.LevelOfBuilding == currentBuilding.CurrentTierMaxLevel)
+        {
+            levelText.text = "Lv: <color=red>" + currentBuilding.LevelOfBuilding + " / " + currentBuilding.CurrentTierMaxLevel + "</color>";
+        }
+        else
+        {
+            levelText.text = "Lv: " + currentBuilding.LevelOfBuilding + " / <color=red>" + currentBuilding.CurrentTierMaxLevel + "</color>";
+        }
+            
         priceText.text = currentBuilding.PriceToUpgrade.ToString();
         EventManager.Instance.QueueEvent(new XPAddedGameEvent(currentBuilding.LevelOfBuilding - 1));
         UpdateUIForUpgrade();
