@@ -6,6 +6,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    private BuildingUpgradeUIState currentUpgradeState;
+
     [Header("UI Elements")]
     public GameObject buildingPanel;
     public TextMeshProUGUI nameText;
@@ -19,6 +21,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI WorkerBonusStatusText;
 
     [SerializeField] private Image[] colorStars;
+    [SerializeField] private GameObject needAddStarPanel;
 
     [Header("Building UI")]
     [SerializeField] private Button buildingButton;
@@ -70,14 +73,7 @@ public class UIManager : MonoBehaviour
 
         nameText.text = building.Name;
 
-        if (currentBuilding.LevelOfBuilding == currentBuilding.CurrentTierMaxLevel)
-        {
-            levelText.text = "Lv: <color=red>" + currentBuilding.LevelOfBuilding + " / " + currentBuilding.CurrentTierMaxLevel + "</color>";
-        }
-        else
-        {
-            levelText.text = "Lv: " + currentBuilding.LevelOfBuilding + " / <color=red>" + currentBuilding.CurrentTierMaxLevel + "</color>";
-        }
+        EvaluateUpgradeState();
 
         priceText.text = building.PriceToUpgrade.ToString();
         iconImage.sprite = building.Icon;
@@ -93,6 +89,57 @@ public class UIManager : MonoBehaviour
         {
             BuildingUI.Instance.OpenBuildingPanel(building);
         });
+    }
+
+    private void EvaluateUpgradeState()
+    {
+        if (currentBuilding.LevelOfBuilding >= currentBuilding.CurrentTierMaxLevel)
+        {
+            SetUpgradeState(BuildingUpgradeUIState.NeedTierUpgrade);
+        }
+        else
+        {
+            SetUpgradeState(BuildingUpgradeUIState.CanUpgradeLevel);
+        }
+    }
+
+    private void SetUpgradeState(BuildingUpgradeUIState state)
+    {
+        currentUpgradeState = state;
+
+        switch (state)
+        {
+            case BuildingUpgradeUIState.CanUpgradeLevel:
+                ApplyCanUpgradeLevelUI();
+                break;
+
+            case BuildingUpgradeUIState.NeedTierUpgrade:
+                ApplyNeedTierUpgradeUI();
+                break;
+        }
+    }
+
+    private void ApplyCanUpgradeLevelUI()
+    {
+        needAddStarPanel.SetActive(false);
+
+        levelText.text =
+            $"Lv: {currentBuilding.LevelOfBuilding} / " +
+            $"<color=red>{currentBuilding.CurrentTierMaxLevel}</color>";
+
+        UpdateUIForUpgrade(); 
+    }
+
+    private void ApplyNeedTierUpgradeUI()
+    {
+        needAddStarPanel.SetActive(true);
+
+        levelText.text =
+            $"Lv: <color=red>{currentBuilding.LevelOfBuilding} / " +
+            $"{currentBuilding.CurrentTierMaxLevel}</color>";
+
+        upgradeButton.interactable = false;
+        priceText.color = Color.gray;
     }
 
     private Color GetColorByRarity(Rarities rarity)
@@ -151,15 +198,8 @@ public class UIManager : MonoBehaviour
 
         currentBuilding.PriceToUpgrade += 5;
 
-        if(currentBuilding.LevelOfBuilding == currentBuilding.CurrentTierMaxLevel)
-        {
-            levelText.text = "Lv: <color=red>" + currentBuilding.LevelOfBuilding + " / " + currentBuilding.CurrentTierMaxLevel + "</color>";
-        }
-        else
-        {
-            levelText.text = "Lv: " + currentBuilding.LevelOfBuilding + " / <color=red>" + currentBuilding.CurrentTierMaxLevel + "</color>";
-        }
-            
+        EvaluateUpgradeState();
+
         priceText.text = currentBuilding.PriceToUpgrade.ToString();
         EventManager.Instance.QueueEvent(new XPAddedGameEvent(currentBuilding.LevelOfBuilding - 1));
         UpdateUIForUpgrade();
