@@ -12,7 +12,7 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI incomeText;
     [SerializeField] private TextMeshProUGUI rarityText;
-    [SerializeField] private TextMeshProUGUI upgradeCostText;
+    [SerializeField] private TextMeshProUGUI upgradePriceText;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TextMeshProUGUI businessType;
     [SerializeField] private TextMeshProUGUI currentTierMaxLvlTxt;
@@ -45,6 +45,7 @@ public class BuildingUI : MonoBehaviour
         currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
         nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString() ;
         UpdateStarUI(building);
+        UpdateStarUpgradeButton();
         var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
 
         buildingPanel.SetActive(true);
@@ -61,6 +62,14 @@ public class BuildingUI : MonoBehaviour
             Rarities.Futuristic => Color.red, 
             _ => Color.grey
         };
+    }
+
+    private void UpdateStarUpgradeButton()
+    {
+        bool canUpgrade = currentBuilding.CanUpgradeTierOrRarity();
+
+        upgradeButton.interactable = canUpgrade;
+        upgradePriceText.color = canUpgrade ? Color.white : Color.red;
     }
 
     private void UpdateStarUI(BuildingData building)
@@ -107,7 +116,7 @@ public class BuildingUI : MonoBehaviour
     {
         levelText.text = $"Level: {currentBuilding.LevelOfBuilding}";
         incomeText.text = $"Income: {currentBuilding.Income}";
-        upgradeCostText.text = $"Upgrade cost: {currentBuilding.PriceToUpgrade}";
+        //upgradePriceText.text = $"Upgrade cost: {currentBuilding.PriceToUpgrade}";
     }
 
     public void ClosePanel()

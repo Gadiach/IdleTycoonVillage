@@ -49,7 +49,7 @@ public class BuildingData : MonoBehaviour
         get
         {
             int current = (int)CurrentTier;
-            int max = System.Enum.GetValues(typeof(Tiers)).Length - 1;
+            int max = Enum.GetValues(typeof(Tiers)).Length - 1;
 
             if (current < max)
                 return (Tiers)(current + 1);
@@ -63,7 +63,7 @@ public class BuildingData : MonoBehaviour
         get
         {
             int current = (int)CurrentRarity;
-            int max = System.Enum.GetValues(typeof(Rarities)).Length - 1;
+            int max = Enum.GetValues(typeof(Rarities)).Length - 1;
 
             if (current < max)
                 return (Rarities)(current + 1);
@@ -116,6 +116,45 @@ public class BuildingData : MonoBehaviour
         return requirements;
     }
 
+    public bool CanUpgradeTierOrRarity()
+    {
+        var requirements = GetBlueprintRequirementsForNextUpgrade();
+
+        foreach (var req in requirements)
+        {
+            int owned = CurrencySystem.GetCurrencyAmount(req.Key);
+            if (owned < req.Value)
+                return false;
+        }
+
+        return true;
+    }
+
+    public void UpgradeTierOrRarity()
+    {
+        if (!CanUpgradeTierOrRarity())
+            return;
+
+        var requirements = GetBlueprintRequirementsForNextUpgrade();
+
+        foreach (var req in requirements)
+        {
+            CurrencySystem.Instance.TrySpendCurrency(req.Key, req.Value);
+        }
+
+        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
+
+        if ((int)CurrentTier < maxTier)
+        {
+            CurrentTier = NextTier;
+        }
+        else
+        {
+            CurrentTier = Tiers.Tier1;
+            CurrentRarity = NextRarity;
+        }
+    }
+
     public int CurrentTierMaxLevel
     {
         get
@@ -130,8 +169,25 @@ public class BuildingData : MonoBehaviour
     {
         get
         {
-            int baseMax = progressionConfig.GetBaseMaxLevel(NextRarity);
-            int tierBonus = progressionConfig.GetTierBonus(NextTier);
+            int maxTier = (int)Tiers.Tier5;
+
+            Rarities targetRarity;
+            Tiers targetTier;
+
+            if ((int)CurrentTier < maxTier)
+            {
+                targetRarity = CurrentRarity;
+                targetTier = NextTier;
+            }
+            else
+            {
+                targetRarity = NextRarity;
+                targetTier = Tiers.Tier1;
+            }
+
+            int baseMax = progressionConfig.GetBaseMaxLevel(targetRarity);
+            int tierBonus = progressionConfig.GetTierBonus(targetTier);
+
             return baseMax + tierBonus;
         }
     }

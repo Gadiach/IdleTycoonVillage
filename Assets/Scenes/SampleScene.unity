@@ -62970,7 +62970,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1980132719
 RectTransform:
   m_ObjectHideFlags: 0
@@ -64122,8 +64122,8 @@ MonoBehaviour:
   levelText: {fileID: 1677316057}
   incomeText: {fileID: 0}
   rarityText: {fileID: 1492772798}
-  upgradeCostText: {fileID: 0}
-  upgradeButton: {fileID: 0}
+  upgradePriceText: {fileID: 1637869337}
+  upgradeButton: {fileID: 1487377942}
   businessType: {fileID: 269689988}
   currentTierMaxLvlTxt: {fileID: 407140096}
   nextTierMaxLvlTxt: {fileID: 878696130}
