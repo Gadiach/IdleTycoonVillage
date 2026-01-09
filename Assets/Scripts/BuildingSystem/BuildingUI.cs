@@ -45,6 +45,7 @@ public class BuildingUI : MonoBehaviour
         currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
         nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString() ;
         UpdateStarUI(building);
+        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
 
         buildingPanel.SetActive(true);
     }

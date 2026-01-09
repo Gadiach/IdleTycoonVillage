@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingData : MonoBehaviour
@@ -79,6 +81,39 @@ public class BuildingData : MonoBehaviour
             CurrentRarity = CurrentRarity,
             NextRarity = NextRarity
         };
+    }
+
+    public Dictionary<CurrencyType, int> GetBlueprintRequirementsForNextUpgrade()
+    {
+        Dictionary<CurrencyType, int> requirements = new();
+
+        int currentRarityIndex = (int)CurrentRarity;
+        int currentTierIndex = (int)CurrentTier;
+
+        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
+
+        if (currentTierIndex < maxTier)
+        {
+            CurrencyType blueprint =
+                CurrencyHelper.GetBlueprintCurrency(CurrentRarity);
+
+            requirements[blueprint] = currentTierIndex + 1;
+            return requirements;
+        }
+
+        for (int r = 0; r <= currentRarityIndex; r++)
+        {
+            Rarities rarity = (Rarities)r;
+            CurrencyType blueprint =
+                CurrencyHelper.GetBlueprintCurrency(rarity);
+
+            if (r < currentRarityIndex)
+                requirements[blueprint] = maxTier;
+            else
+                requirements[blueprint] = 1; 
+        }
+
+        return requirements;
     }
 
     public int CurrentTierMaxLevel

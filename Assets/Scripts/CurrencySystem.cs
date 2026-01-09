@@ -125,6 +125,12 @@ public class CurrencySystem : MonoBehaviour
 public enum CurrencyType
 {
     Coins,
-    Crystals
+    Crystals,
+
+    Blueprint_Primitive,
+    Blueprint_Developed,
+    Blueprint_Industrial,
+    Blueprint_Modern,
+    Blueprint_Futuristic
 }
 
