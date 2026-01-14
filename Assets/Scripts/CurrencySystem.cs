@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
 public class CurrencySystem : MonoBehaviour
 {
     public static CurrencySystem Instance;
@@ -13,6 +14,8 @@ public class CurrencySystem : MonoBehaviour
 
     private Dictionary<CurrencyType, TextMeshProUGUI> currencyTexts = new Dictionary<CurrencyType, TextMeshProUGUI> ();
 
+    [SerializeField] private CurrencyStartConfig startConfig;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,6 +25,11 @@ public class CurrencySystem : MonoBehaviour
         else
         {
             Instance = this;
+        }
+
+        foreach (CurrencyType type in Enum.GetValues(typeof(CurrencyType)))
+        {
+            CurrencyAmounts[type] = 0;
         }
 
         for (int i = 0; i < texts.Count; i++)
@@ -37,12 +45,27 @@ public class CurrencySystem : MonoBehaviour
     }
     private void Start()
     {
-        CurrencyAmounts[CurrencyType.Coins] = 50;
-        CurrencyAmounts[CurrencyType.Crystals] = 10;
+        ApplyStartConfig();
+        
         UpdateUI();
 
         EventManager.Instance.AddListener<CurrencyChangeGameEvent>(OnCurrencyChange);
         EventManager.Instance.AddListener<NotEnoughCurrencyGameEvent>(OnNotEnough);
+    }
+
+    private void ApplyStartConfig()
+    {
+        if (startConfig == null)
+        {
+            Debug.LogWarning("CurrencyStartConfig not assigned!");
+            return;
+        }
+
+        foreach (var entry in startConfig.startAmounts)
+        {
+            CurrencyAmounts[entry.currencyType] = entry.amount;
+        }
+        
     }
 
     public static int GetCurrencyAmount(CurrencyType currencyType)

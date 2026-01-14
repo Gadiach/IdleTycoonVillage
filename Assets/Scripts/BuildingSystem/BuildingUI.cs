@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,8 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI incomeText;
     [SerializeField] private TextMeshProUGUI rarityText;
-    [SerializeField] private TextMeshProUGUI upgradePriceText;
+    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
+
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TextMeshProUGUI businessType;
     [SerializeField] private TextMeshProUGUI currentTierMaxLvlTxt;
@@ -46,6 +48,7 @@ public class BuildingUI : MonoBehaviour
         nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString() ;
         UpdateStarUI(building);
         UpdateStarUpgradeButton();
+        UpdateStarUpgradeCostText();
         var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
 
         buildingPanel.SetActive(true);
@@ -69,7 +72,51 @@ public class BuildingUI : MonoBehaviour
         bool canUpgrade = currentBuilding.CanUpgradeTierOrRarity();
 
         upgradeButton.interactable = canUpgrade;
-        upgradePriceText.color = canUpgrade ? Color.white : Color.red;
+        upgradePriceTexts[0].color = canUpgrade ? Color.white : Color.red;       
+    }
+
+    public void OnAddStarButtonClicked()
+    {
+        currentBuilding.UpgradeTierOrRarity();
+
+        UpdateStarUI(currentBuilding);
+        UpdateStarUpgradeCostText();
+        UpdateStarUpgradeButton();
+
+        currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
+        nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString();
+    }
+
+    private void UpdateStarUpgradeCostText()
+    {
+        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
+
+        int currentRarityIndex = (int)currentBuilding.CurrentRarity;
+
+        for (int r = 0; r < upgradePriceTexts.Length; r++)
+        {
+            var text = upgradePriceTexts[r];
+
+            if (r > currentRarityIndex)
+            {
+                text.gameObject.SetActive(false);
+                continue;
+            }
+
+            text.gameObject.SetActive(true);
+
+            Rarities rarity = (Rarities)r;
+            CurrencyType blueprint =
+                CurrencyHelper.GetBlueprintCurrency(rarity);
+
+            int owned = CurrencySystem.GetCurrencyAmount(blueprint);
+            int required = requirements.TryGetValue(blueprint, out int val)
+                ? val
+                : 0;
+
+            text.text = $"{owned}/{required}";
+            text.color = owned >= required ? Color.white : Color.red;
+        }
     }
 
     private void UpdateStarUI(BuildingData building)
