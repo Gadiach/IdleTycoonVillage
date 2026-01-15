@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
     {
         EventManager.Instance.AddListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
         EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+        EventManager.Instance.AddListener<BuildingTierOrRarityChangedGameEvent>(OnBuildingTierOrRarityChanged);
     }
 
     private void OnDisable()
@@ -50,6 +51,7 @@ public class UIManager : MonoBehaviour
 
         EventManager.Instance.RemoveListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
         EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedGameEvent>(OnBuildingTierOrRarityChanged);
     }
 
     private void OnWorkerUpgraded(WorkerUpgradedGameEvent evt)
@@ -65,6 +67,19 @@ public class UIManager : MonoBehaviour
             currentBuilding.CheckAutomationState();
             Debug.Log($"[UIManager] worker has been upgraded to lvl {evt.Worker.level}. UI updated.");
         }
+    }
+    private void OnBuildingTierOrRarityChanged(BuildingTierOrRarityChangedGameEvent evt)
+    {
+        if (currentBuilding != evt.Building)
+            return;
+
+        EvaluateUpgradeState();
+        UpdateStarUI(currentBuilding);
+        UpdateUIForUpgrade();
+
+        levelText.text =
+            $"Lv: {currentBuilding.LevelOfBuilding} / " +
+            $"{currentBuilding.CurrentTierMaxLevel}";
     }
 
     public void OpenMainBuildingPanel(BuildingData building)

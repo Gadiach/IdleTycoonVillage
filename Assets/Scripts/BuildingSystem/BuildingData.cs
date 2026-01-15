@@ -153,6 +153,8 @@ public class BuildingData : MonoBehaviour
             CurrentTier = Tiers.Tier1;
             CurrentRarity = NextRarity;
         }
+
+        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedGameEvent(this));
     }
 
     public int CurrentTierMaxLevel

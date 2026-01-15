@@ -28,6 +28,16 @@ public class NotEnoughCurrencyGameEvent : GameEvent
     }
 }
 
+public class BuildingTierOrRarityChangedGameEvent : GameEvent
+{
+    public BuildingData Building { get; private set; }
+
+    public BuildingTierOrRarityChangedGameEvent(BuildingData building)
+    {
+        Building = building;
+    }
+}
+
 public class EnoughCurrencyGameEvent : GameEvent
 {
 
