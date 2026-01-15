@@ -79,25 +79,25 @@ public class CurrencySystem : MonoBehaviour
 
     private void OnCurrencyChange(CurrencyChangeGameEvent info)
     {
-        if(info.amount < 0)
+        if (info.amount < 0)
         {
-            if (CurrencyAmounts[info.currencyType] < Math.Abs(info.amount))
-                {
-                EventManager.Instance.QueueEvent(new NotEnoughCurrencyGameEvent(info.amount, info.currencyType));
+            if (!CurrencyAmounts.ContainsKey(info.currencyType) ||
+                CurrencyAmounts[info.currencyType] < Mathf.Abs(info.amount))
+            {
+                EventManager.Instance.QueueEvent(
+                    new NotEnoughCurrencyGameEvent(info.amount, info.currencyType)
+                );
                 return;
             }
+
             EventManager.Instance.QueueEvent(new EnoughCurrencyGameEvent());
         }
 
-        if (CurrencyAmounts.ContainsKey(info.currencyType))
-        {
-            CurrencyAmounts[info.currencyType] += info.amount;
+        CurrencyAmounts[info.currencyType] += info.amount;
 
-            currencyTexts[info.currencyType].text = CurrencyAmounts[info.currencyType].ToString();
-        }
-        else
+        if (currencyTexts.TryGetValue(info.currencyType, out var text))
         {
-            Debug.LogError($"Currency type {info.currencyType} not found in dictionary!");
+            text.text = CurrencyAmounts[info.currencyType].ToString();
         }
 
         UpdateUI();
@@ -115,20 +115,21 @@ public class CurrencySystem : MonoBehaviour
 
     public bool TrySpendCurrency(CurrencyType currencyType, int amount)
     {
-        if (CurrencyAmounts.ContainsKey(currencyType) && CurrencyAmounts[currencyType] >= amount)
+        if (!CurrencyAmounts.ContainsKey(currencyType))
+            return false;
+
+        if (CurrencyAmounts[currencyType] < amount)
+            return false;
+
+        CurrencyAmounts[currencyType] -= amount;
+
+        if (currencyTexts.TryGetValue(currencyType, out var text))
         {
-            CurrencyAmounts[currencyType] -= amount;
-
-            currencyTexts[currencyType].text = CurrencyAmounts[currencyType].ToString();
-
-            UpdateUI();
-
-            return true;
+            text.text = CurrencyAmounts[currencyType].ToString();
         }
-        else
-        {
-            return false; 
-        }
+
+        UpdateUI();
+        return true;
     }
 
     private void OnNotEnough(NotEnoughCurrencyGameEvent info)
@@ -138,9 +139,9 @@ public class CurrencySystem : MonoBehaviour
 
     private void UpdateUI()
     {
-        for(int i = 0; i < texts.Count; i++)
+        foreach (var pair in currencyTexts)
         {
-            currencyTexts[(CurrencyType)i].text = CurrencyAmounts[(CurrencyType)i].ToString();
+            pair.Value.text = CurrencyAmounts[pair.Key].ToString();
         }
     }
 }
