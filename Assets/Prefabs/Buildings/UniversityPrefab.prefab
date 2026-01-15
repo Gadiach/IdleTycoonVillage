@@ -847,6 +847,7 @@ GameObject:
   - component: {fileID: 6783849216738458132}
   - component: {fileID: 6628751881383948204}
   - component: {fileID: -4291529041422641763}
+  - component: {fileID: -2049082942195353331}
   m_Layer: 0
   m_Name: UniversityPrefab
   m_TagString: Untagged
@@ -1142,6 +1143,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9934d8d8b06e64086c9441226c062f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2049082942195353331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517490117210488018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56266aa670e9add46a575fac30be8ed3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: 
+  Description: 
+  Level: 0
+  Price: 0
+  Currency: 0
+  Type: 0
+  BusinessType: 2
+  Icon: {fileID: 0}
+  PriceToUpgrade: 5
+  LevelOfBuilding: 1
+  Income: 0
+  LevelOfWorkerNeededForAutomation: 5
+  IsAutomated: 0
+  TotalIncomeCircles: 0
+  CurrentRarity: 0
+  CurrentTier: 1
+  progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
 --- !u!1 &8215024100667684284
 GameObject:
   m_ObjectHideFlags: 0

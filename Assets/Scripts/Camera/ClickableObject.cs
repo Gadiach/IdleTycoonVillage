@@ -24,6 +24,13 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
-        UIManager.Instance.OpenMainBuildingPanel(buildingData);
+        if(buildingData.BusinessType == BusinessType.Science)
+        {
+            UniversityUI.Instance.OpenUniversityPanel();
+        }
+        else
+        {
+            UIManager.Instance.OpenMainBuildingPanel(buildingData);
+        }           
     }
 }
