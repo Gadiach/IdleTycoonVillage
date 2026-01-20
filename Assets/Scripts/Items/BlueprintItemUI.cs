@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class BlueprintItemUI : MonoBehaviour
 {
-    [SerializeField] private Rarities rarity;
-
     [Header("UI")]
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI ownedText;
@@ -13,5 +11,15 @@ public class BlueprintItemUI : MonoBehaviour
     [SerializeField] private Button studyButton;
     [SerializeField] private TextMeshProUGUI studyPriceText;
 
-    
+    private BlueprintItem item;
+
+    public void Initialize(BlueprintItem blueprintItem)
+    {
+        item = blueprintItem;
+
+        icon.sprite = item.icon;
+        ownedText.text = $"Owned: {item.owned}";
+        timeText.text = $"{item.studyTime}s";
+        studyPriceText.text = item.studyCost.ToString();
+    }
 }
