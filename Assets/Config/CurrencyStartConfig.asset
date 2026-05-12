@@ -20,7 +20,7 @@ MonoBehaviour:
   - currencyType: 2
     amount: 2
   - currencyType: 3
-    amount: 0
+    amount: 17
   - currencyType: 4
     amount: 0
   - currencyType: 5

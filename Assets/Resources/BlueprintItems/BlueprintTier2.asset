@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b77bc2fcd83da44bf1878bbaaf3b6d, type: 3}
   m_Name: BlueprintTier2
   m_EditorClassIdentifier: 
-  BlueprintName: Developed Blueprint
+  blueprintName: Developed blueprint
   Rarity: 1
   studyCost: 0
   studyTime: 0

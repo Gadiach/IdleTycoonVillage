@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b77bc2fcd83da44bf1878bbaaf3b6d, type: 3}
   m_Name: BlueprintTier3
   m_EditorClassIdentifier: 
-  BlueprintName: Industrial Blueprint
+  blueprintName: Industrial blueprint
   Rarity: 2
   studyCost: 0
   studyTime: 0

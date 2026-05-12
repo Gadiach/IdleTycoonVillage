@@ -3713,6 +3713,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedText: {fileID: 1144502007}
   studyPriceText: {fileID: 175758292}
+  studyTimeText: {fileID: 1984263949}
+  blueprintName: {fileID: 49014911}
 --- !u!1 &233590808
 GameObject:
   m_ObjectHideFlags: 0
@@ -6953,8 +6955,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.9, y: -13.1}
-  m_SizeDelta: {x: -329.5948, y: -48.5051}
+  m_AnchoredPosition: {x: -64.086, y: -13.1}
+  m_SizeDelta: {x: -319.97, y: -48.5051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &430082723
 MonoBehaviour:
@@ -7010,7 +7012,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -46176,6 +46178,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedText: {fileID: 430082723}
   studyPriceText: {fileID: 1971972260}
+  studyTimeText: {fileID: 2030951984}
+  blueprintName: {fileID: 802392429}
 --- !u!1 &716742766
 GameObject:
   m_ObjectHideFlags: 0
@@ -46346,6 +46350,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedText: {fileID: 854049115}
   studyPriceText: {fileID: 1108303460}
+  studyTimeText: {fileID: 1346466894}
+  blueprintName: {fileID: 1316848580}
 --- !u!1 &735154170
 GameObject:
   m_ObjectHideFlags: 0
@@ -47333,8 +47339,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.9, y: -13.1}
-  m_SizeDelta: {x: -329.5948, y: -48.5051}
+  m_AnchoredPosition: {x: -64.086, y: -13.1}
+  m_SizeDelta: {x: -319.97, y: -48.5051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &805135040
 MonoBehaviour:
@@ -47390,7 +47396,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -48162,8 +48168,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.9, y: -13.1}
-  m_SizeDelta: {x: -329.5948, y: -48.5051}
+  m_AnchoredPosition: {x: -64.086, y: -13.1}
+  m_SizeDelta: {x: -319.97, y: -48.5051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &854049115
 MonoBehaviour:
@@ -48219,7 +48225,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -52219,6 +52225,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedText: {fileID: 1306758335}
   studyPriceText: {fileID: 496727084}
+  studyTimeText: {fileID: 1575440252}
+  blueprintName: {fileID: 1082074536}
 --- !u!1 &1144502005
 GameObject:
   m_ObjectHideFlags: 0
@@ -52253,8 +52261,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.9, y: -13.1}
-  m_SizeDelta: {x: -329.5948, y: -48.5051}
+  m_AnchoredPosition: {x: -64.086, y: -13.1}
+  m_SizeDelta: {x: -319.97, y: -48.5051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1144502007
 MonoBehaviour:
@@ -52310,7 +52318,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -54101,8 +54109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -68.9, y: -13.1}
-  m_SizeDelta: {x: -329.5948, y: -48.5051}
+  m_AnchoredPosition: {x: -64.086, y: -13.1}
+  m_SizeDelta: {x: -319.97, y: -48.5051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1306758335
 MonoBehaviour:
@@ -54159,7 +54167,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -58618,7 +58626,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -72827,6 +72835,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedText: {fileID: 805135040}
   studyPriceText: {fileID: 1146100745}
+  studyTimeText: {fileID: 2013405330}
+  blueprintName: {fileID: 1596532861}
 --- !u!1 &2089644560
 GameObject:
   m_ObjectHideFlags: 0
