@@ -45,7 +45,7 @@ public class WorkerUI : MonoBehaviour
         UpdatePriceToUpgradeWorker(currentWorker);
         UpdateLvlTxt(currentWorker);
 
-        EventManager.Instance.QueueEvent(new WorkerUpgradedGameEvent(currentWorker));
+        EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(currentWorker));
     }
 
     private void UpdatePriceToUpgradeWorker(WorkerData worker)

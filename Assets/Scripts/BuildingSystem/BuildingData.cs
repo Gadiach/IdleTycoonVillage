@@ -154,7 +154,7 @@ public class BuildingData : MonoBehaviour
             CurrentRarity = NextRarity;
         }
 
-        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedGameEvent(this));
+        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
     }
 
     public int CurrentTierMaxLevel
@@ -232,7 +232,7 @@ public class BuildingData : MonoBehaviour
         if (IsAutomated != newState)
         {
             IsAutomated = newState;
-            EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(this, IsAutomated));
+            EventManager.Instance.QueueEvent(new BuildingAutomationChangedEvent(this, IsAutomated));
         }
     }
 

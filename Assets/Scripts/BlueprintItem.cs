@@ -5,10 +5,12 @@ using UnityEngine;
     menuName = "University/Blueprint Item")]
 public class BlueprintItem : ScriptableObject
 {
-    public string name;
-    public Sprite icon;
-    public Rarities rarity;
-    public int owned;
-    public int studyCost;
-    public float studyTime;
+    [SerializeField] private string BlueprintName;
+    [SerializeField] private Rarities Rarity;
+    [SerializeField] private int studyCost;
+    [SerializeField] private float studyTime;
+    [SerializeField] private CurrencyType type;
+
+    public CurrencyType Type => type;
+    public int StudyCost => studyCost;
 }

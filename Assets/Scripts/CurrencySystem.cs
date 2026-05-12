@@ -42,15 +42,15 @@ public class CurrencySystem : MonoBehaviour
 
             currencyTexts.Add(currencyType, texts[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>());
         }
+
+        ApplyStartConfig();
     }
     private void Start()
-    {
-        ApplyStartConfig();
-        
+    {   
         UpdateUI();
 
-        EventManager.Instance.AddListener<CurrencyChangeGameEvent>(OnCurrencyChange);
-        EventManager.Instance.AddListener<NotEnoughCurrencyGameEvent>(OnNotEnough);
+        EventManager.Instance.AddListener<RequestCurrencyChangeEvent>(HandleCurrencyChangeRequest);
+        EventManager.Instance.AddListener<NotEnoughCurrencyEvent>(OnNotEnough);
     }
 
     private void ApplyStartConfig()
@@ -77,7 +77,7 @@ public class CurrencySystem : MonoBehaviour
         return 0;
     }
 
-    private void OnCurrencyChange(CurrencyChangeGameEvent info)
+    private void HandleCurrencyChangeRequest(RequestCurrencyChangeEvent info)
     {
         if (info.amount < 0)
         {
@@ -85,15 +85,15 @@ public class CurrencySystem : MonoBehaviour
                 CurrencyAmounts[info.currencyType] < Mathf.Abs(info.amount))
             {
                 EventManager.Instance.QueueEvent(
-                    new NotEnoughCurrencyGameEvent(info.amount, info.currencyType)
+                    new NotEnoughCurrencyEvent(info.amount, info.currencyType)
                 );
                 return;
             }
 
-            EventManager.Instance.QueueEvent(new EnoughCurrencyGameEvent());
+            EventManager.Instance.QueueEvent(new EnoughCurrencyEvent());
         }
 
-        CurrencyAmounts[info.currencyType] += info.amount;
+        AddCurrency(info.currencyType, info.amount);
 
         if (currencyTexts.TryGetValue(info.currencyType, out var text))
         {
@@ -102,6 +102,19 @@ public class CurrencySystem : MonoBehaviour
 
         UpdateUI();
         ShopManager.current.UpdateShopItems();
+
+        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(info.currencyType));
+    }
+
+
+    private void AddCurrency(CurrencyType currencyType, int amount)
+    {
+        CurrencyAmounts[currencyType] += amount;
+    }
+
+    private void SubtractCurrency(CurrencyType currencyType, int amount)
+    {
+        CurrencyAmounts[currencyType] -= amount;
     }
 
     public bool IsEnoughMoneyForUpgrade(CurrencyType currencyType, int amount)
@@ -121,7 +134,7 @@ public class CurrencySystem : MonoBehaviour
         if (CurrencyAmounts[currencyType] < amount)
             return false;
 
-        CurrencyAmounts[currencyType] -= amount;
+        SubtractCurrency (currencyType, amount);
 
         if (currencyTexts.TryGetValue(currencyType, out var text))
         {
@@ -132,7 +145,7 @@ public class CurrencySystem : MonoBehaviour
         return true;
     }
 
-    private void OnNotEnough(NotEnoughCurrencyGameEvent info)
+    private void OnNotEnough(NotEnoughCurrencyEvent info)
     {
         Debug.Log(message: $"You don't have enough of {info.amount} {info.currencyType}");
     }

@@ -54,7 +54,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             {
                 StopTimer();
                 isAutomated = false;
-                EventManager.Instance.QueueEvent(new BuildingAutomationChangedGameEvent(
+                EventManager.Instance.QueueEvent(new BuildingAutomationChangedEvent(
                     GetComponent<BuildingData>(), false)); 
             }
         }
@@ -232,7 +232,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+        EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
     private void OnDisable()
@@ -240,10 +240,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
-    private void OnAutomationChanged(BuildingAutomationChangedGameEvent evt)
+    private void OnAutomationChanged(BuildingAutomationChangedEvent evt)
     {
         if (evt.Building.Placeable == this)
         {

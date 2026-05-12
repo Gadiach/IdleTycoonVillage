@@ -1,27 +1,35 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UniversityManager : MonoBehaviour
 {
-    [SerializeField] private Transform content;
-    [SerializeField] private GameObject blueprintItemPrefab;
-    [SerializeField] private List<BlueprintItem> blueprints;
-
-    public void Initialize()
+    [System.Serializable]
+    private class BlueprintBinding
     {
-        Clear();
+        public BlueprintItem Item;
+        public BlueprintItemUI UI;
+    }
 
-        foreach (var bp in blueprints)
+    [SerializeField]
+    private BlueprintBinding[] bindings;
+
+    private void Start()
+    {
+        EventManager.Instance.AddListener<CurrencyChangedEvent>(UpdateUI);
+
+        foreach (var binding in bindings)
         {
-            Instantiate(blueprintItemPrefab, content)
-                .GetComponent<BlueprintItemUI>()
-                .Initialize(bp);
+            binding.UI.Initialize(binding.Item);
         }
     }
 
-    private void Clear()
+    private void UpdateUI(CurrencyChangedEvent info)
     {
-        for (int i = content.childCount - 1; i >= 0; i--)
-            Destroy(content.GetChild(i).gameObject);
+        foreach (var binding in bindings)
+        {
+            if (binding.Item.Type == info.CurrencyType)
+            {
+                binding.UI.UpdateUI();
+            }
+        }
     }
 }

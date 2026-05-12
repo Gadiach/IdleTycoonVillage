@@ -39,9 +39,9 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
-        EventManager.Instance.AddListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
-        EventManager.Instance.AddListener<BuildingTierOrRarityChangedGameEvent>(OnBuildingTierOrRarityChanged);
+        EventManager.Instance.AddListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
+        EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.AddListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
     }
 
     private void OnDisable()
@@ -49,12 +49,12 @@ public class UIManager : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<WorkerUpgradedGameEvent>(OnWorkerUpgraded);
-        EventManager.Instance.RemoveListener<BuildingAutomationChangedGameEvent>(OnAutomationChanged);
-        EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedGameEvent>(OnBuildingTierOrRarityChanged);
+        EventManager.Instance.RemoveListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
     }
 
-    private void OnWorkerUpgraded(WorkerUpgradedGameEvent evt)
+    private void OnWorkerUpgraded(WorkerUpgradedEvent evt)
     {
         currentBuilding = evt.Worker.AssignedBuilding;
 
@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
             Debug.Log($"[UIManager] worker has been upgraded to lvl {evt.Worker.level}. UI updated.");
         }
     }
-    private void OnBuildingTierOrRarityChanged(BuildingTierOrRarityChangedGameEvent evt)
+    private void OnBuildingTierOrRarityChanged(BuildingTierOrRarityChangedEvent evt)
     {
         if (currentBuilding != evt.Building)
             return;
@@ -216,7 +216,7 @@ public class UIManager : MonoBehaviour
         EvaluateUpgradeState();
 
         priceText.text = currentBuilding.PriceToUpgrade.ToString();
-        EventManager.Instance.QueueEvent(new XPAddedGameEvent(currentBuilding.LevelOfBuilding - 1));
+        EventManager.Instance.QueueEvent(new XPAddedEvent(currentBuilding.LevelOfBuilding - 1));
         UpdateUIForUpgrade();
     }
 
@@ -243,7 +243,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void OnAutomationChanged(BuildingAutomationChangedGameEvent evt)
+    private void OnAutomationChanged(BuildingAutomationChangedEvent evt)
     {
         if (currentBuilding == evt.Building)
         {

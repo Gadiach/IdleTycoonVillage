@@ -1,84 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public abstract class GameEvent { }
 
-public class CurrencyChangeGameEvent : GameEvent
+public class RequestCurrencyChangeEvent : GameEvent
 {
     public int amount;
     public CurrencyType currencyType;
 
-    public CurrencyChangeGameEvent(int amount, CurrencyType currencyType)
+    public RequestCurrencyChangeEvent(int amount, CurrencyType currencyType)
     {
         this.amount = amount;
         this.currencyType = currencyType;
     }
 }
 
-public class NotEnoughCurrencyGameEvent : GameEvent
+public class CurrencyChangedEvent : GameEvent
+{
+    public CurrencyType CurrencyType;
+
+    public CurrencyChangedEvent(
+        CurrencyType currencyType)
+    {
+        CurrencyType = currencyType;
+    }
+}
+
+public class NotEnoughCurrencyEvent : GameEvent
 {
     public int amount;
     public CurrencyType currencyType;
 
-    public NotEnoughCurrencyGameEvent(int amount, CurrencyType currencyType)
+    public NotEnoughCurrencyEvent(int amount, CurrencyType currencyType)
     {
         this.amount = amount;
         this.currencyType = currencyType;
     }
 }
 
-public class BuildingTierOrRarityChangedGameEvent : GameEvent
+public class BuildingTierOrRarityChangedEvent : GameEvent
 {
     public BuildingData Building { get; private set; }
 
-    public BuildingTierOrRarityChangedGameEvent(BuildingData building)
+    public BuildingTierOrRarityChangedEvent(BuildingData building)
     {
         Building = building;
     }
 }
 
-public class EnoughCurrencyGameEvent : GameEvent
+public class EnoughCurrencyEvent : GameEvent
 {
 
 }
 
-public class XPAddedGameEvent : GameEvent
+public class XPAddedEvent : GameEvent
 {
     public int amount;
 
-    public XPAddedGameEvent(int amount)
+    public XPAddedEvent(int amount)
     {
         this.amount = amount;
     }
 }
 
-public class LevelChangedGameEvent : GameEvent
+public class LevelChangedEvent : GameEvent
 {
     public int newLvl;
 
-    public LevelChangedGameEvent(int currLvl)
+    public LevelChangedEvent(int currLvl)
     {
         newLvl = currLvl;
     }
 }
 
-public class WorkerUpgradedGameEvent : GameEvent
+public class WorkerUpgradedEvent : GameEvent
 {
     public WorkerData Worker { get; private set; }
 
-    public WorkerUpgradedGameEvent(WorkerData worker)
+    public WorkerUpgradedEvent(WorkerData worker)
     {
         Worker = worker;
     }
 }
 
-public class BuildingAutomationChangedGameEvent : GameEvent
+public class BuildingAutomationChangedEvent : GameEvent
 {
     public BuildingData Building { get; private set; }
     public bool IsAutomated { get; private set; }
 
-    public BuildingAutomationChangedGameEvent(BuildingData building, bool isAutomated)
+    public BuildingAutomationChangedEvent(BuildingData building, bool isAutomated)
     {
         Building = building;
         IsAutomated = isAutomated;

@@ -42,8 +42,8 @@ public class LevelSystem : MonoBehaviour
     private void Start()
     {
         Debug.Log("LevelSystem Start() called");
-        EventManager.Instance.AddListener<XPAddedGameEvent>(OnXPAdded);
-        EventManager.Instance.AddListener<LevelChangedGameEvent>(OnLevelChanged);
+        EventManager.Instance.AddListener<XPAddedEvent>(OnXPAdded);
+        EventManager.Instance.AddListener<LevelChangedEvent>(OnLevelChanged);
 
         UpdateUI();
     }
@@ -55,7 +55,7 @@ public class LevelSystem : MonoBehaviour
         xpText.text = XPNow + "/" + xpToNext;
     }
 
-    private void OnXPAdded(XPAddedGameEvent info)
+    private void OnXPAdded(XPAddedEvent info)
     {
         XPNow += info.amount;
         UpdateUI();
@@ -68,7 +68,7 @@ public class LevelSystem : MonoBehaviour
             {
                 XPNow -= xpToNext;
                 xpToNext = data.xpToNext;
-                LevelChangedGameEvent levelChange = new LevelChangedGameEvent(Level);
+                LevelChangedEvent levelChange = new LevelChangedEvent(Level);
                 EventManager.Instance.QueueEvent(levelChange);
             }
             else
@@ -78,7 +78,7 @@ public class LevelSystem : MonoBehaviour
         }
     }
 
-    private void OnLevelChanged(LevelChangedGameEvent info)
+    private void OnLevelChanged(LevelChangedEvent info)
     {
         if (!levelDataDict.TryGetValue(info.newLvl, out LevelConfig.LevelData data))
         {
@@ -98,7 +98,7 @@ public class LevelSystem : MonoBehaviour
             Destroy(window);
         });
 
-        EventManager.Instance.QueueEvent(new CurrencyChangeGameEvent(data.coinsReward, CurrencyType.Coins));
-        EventManager.Instance.QueueEvent(new CurrencyChangeGameEvent(data.crystalsReward, CurrencyType.Crystals));
+        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(data.coinsReward, CurrencyType.Coins));
+        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(data.crystalsReward, CurrencyType.Crystals));
     }
 }

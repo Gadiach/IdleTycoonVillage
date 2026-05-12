@@ -31,7 +31,7 @@ public class ShopManager : MonoBehaviour
         closedPos = prt.anchoredPosition;
         openedPos = closedPos + new Vector2(rt.sizeDelta.x, 0);
 
-        EventManager.Instance.AddListener<LevelChangedGameEvent>(OnLevelChanged);
+        EventManager.Instance.AddListener<LevelChangedEvent>(OnLevelChanged);
     }
 
     private void Start()
@@ -86,7 +86,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private void OnLevelChanged(LevelChangedGameEvent info)
+    private void OnLevelChanged(LevelChangedEvent info)
     {
         for(int i = 0; i < shopItems.Keys.Count; i++)
         {
