@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprintName: Futuristic blueprint
   Rarity: 4
-  studyCost: 0
+  studyCost: 100
   studyTime: 0
   type: 6

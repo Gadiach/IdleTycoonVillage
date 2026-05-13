@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprintName: Primitive blueprint
   Rarity: 0
-  studyCost: 20
+  studyCost: 30
   studyTime: 15
   type: 2

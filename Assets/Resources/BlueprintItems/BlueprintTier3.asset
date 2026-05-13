@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprintName: Industrial blueprint
   Rarity: 2
-  studyCost: 0
+  studyCost: 70
   studyTime: 0
   type: 4

@@ -140,7 +140,7 @@ public class CurrencySystem : MonoBehaviour
         {
             text.text = CurrencyAmounts[currencyType].ToString();
         }
-
+        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(currencyType));
         UpdateUI();
         return true;
     }

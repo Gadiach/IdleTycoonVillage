@@ -26,9 +26,9 @@ public class UniversityManager : MonoBehaviour
     {
         foreach (var binding in bindings)
         {
-            if (binding.Item.Type == info.CurrencyType)
+            if (binding.Item.StudyCurrency == info.CurrencyType)
             {
-                binding.UI.UpdateUI();
+                binding.UI.Refresh();
             }
         }
     }
