@@ -8,9 +8,23 @@ public class UniversityManager : MonoBehaviour
         public BlueprintItem Item;
         public BlueprintItemUI UI;
     }
+    public static UniversityManager Instance;
+
+    private BuildingProductionController activeProduction;
 
     [SerializeField]
     private BlueprintBinding[] bindings;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -32,4 +46,26 @@ public class UniversityManager : MonoBehaviour
             }
         }
     }
+
+    public void RegisterProduction(
+    BuildingProductionController production)
+    {
+        activeProduction = production;
+    }
+
+    public void StartStudy(BlueprintItem item)
+    {
+        bool success =
+            CurrencySystem.Instance.TrySpendCurrency(
+                item.StudyCurrency,
+                item.StudyCost
+            );
+
+        if (!success)
+            return;
+
+        activeProduction.StartProduction();
+    }
+
+
 }

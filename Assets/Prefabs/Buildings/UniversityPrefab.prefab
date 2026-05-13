@@ -88,9 +88,9 @@ GameObject:
   - component: {fileID: 349572702383049829}
   - component: {fileID: 3665660377678829542}
   - component: {fileID: 3210747981759197872}
-  - component: {fileID: 3677677069883412556}
+  - component: {fileID: 2010577593812120203}
   m_Layer: 5
-  m_Name: IncomeBtn
+  m_Name: RewardObjBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6a090b5407b187b45a276e31e0643030, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8f9cc250901ec6c4ebb9a80722647a1d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3677677069883412556}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: IncomeCollect, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amplitude: 0.5
   speed: 2
---- !u!114 &3677677069883412556
+--- !u!114 &2010577593812120203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,11 +232,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1286772948864659358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d72e14aad34576a44897ce10bfc4458b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e5a5e84edc0d694c9220613799f7949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisHouseObject: {fileID: 7517490117210488018}
-  timerTooltip: {fileID: 1104664870726647945}
+  productionController: {fileID: 0}
   audioSource: {fileID: 7368591311320151823}
 --- !u!1 &2856641657207223681
 GameObject:
@@ -718,6 +717,8 @@ GameObject:
   - component: {fileID: 922387774801903634}
   - component: {fileID: 5269680982033990650}
   - component: {fileID: 1104664870726647945}
+  - component: {fileID: 3543448518283104345}
+  - component: {fileID: 598023031958499906}
   m_Layer: 5
   m_Name: TimerTooltip
   m_TagString: Untagged
@@ -831,6 +832,37 @@ MonoBehaviour:
   slider: {fileID: 922387774801903634}
   timeToEnd: 5
   incomeObject: {fileID: 1286772948864659358}
+  manualColor: {r: 1, g: 0.64, b: 0, a: 1}
+  autoColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &3543448518283104345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485959451326103054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b50ee4b97e796a408a7f2b395027643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: {fileID: 5269680982033990650}
+  timerUI: {fileID: 598023031958499906}
+  rewardObject: {fileID: 1286772948864659358}
+--- !u!114 &598023031958499906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485959451326103054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779c189b59be9244387274f8f81ac990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: {fileID: 5269680982033990650}
+  slider: {fileID: 922387774801903634}
   manualColor: {r: 1, g: 0.64, b: 0, a: 1}
   autoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &7517490117210488018
@@ -1171,6 +1203,8 @@ MonoBehaviour:
   TotalIncomeCircles: 0
   CurrentRarity: 0
   CurrentTier: 1
+  startProductionOnPlace: 0
+  productionDuration: 10
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
 --- !u!1 &8215024100667684284
 GameObject:

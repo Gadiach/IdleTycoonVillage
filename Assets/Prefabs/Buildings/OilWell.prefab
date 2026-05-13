@@ -1557,4 +1557,5 @@ MonoBehaviour:
   TotalIncomeCircles: 0
   CurrentRarity: 0
   CurrentTier: 1
+  productionDuration: 8
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}

@@ -72,10 +72,13 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     private void CheckPlacedAndSetTimer()
     {
-        if(Placed)
+        if (!buildingData.StartProductionOnPlace)
+            return;
+
+        if (Placed)
         {
             StartTimer();
-        }   
+        }
         else
         {
             StopTimer();
