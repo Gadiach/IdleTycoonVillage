@@ -56,10 +56,21 @@ public class TimerUI : MonoBehaviour
         if (timer == null || slider == null)
             return;
 
+        if (!timer.isRunning)
+            return;
+
         float remainingTime =
             (float)timer.secondsLeft;
 
         slider.value =
             slider.maxValue - remainingTime;
+    }
+
+    public void ResetUI()
+    {
+        if (slider == null)
+            return;
+
+        slider.value = 0f;
     }
 }

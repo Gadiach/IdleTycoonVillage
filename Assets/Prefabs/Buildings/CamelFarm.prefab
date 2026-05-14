@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 1624569599701294545}
   - component: {fileID: 8531229917923270971}
   m_Layer: 6
-  m_Name: IncomeBtn (2)
+  m_Name: RewardObjBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisHouseObject: {fileID: 9193094272671895835}
-  timerTooltip: {fileID: 3243077269841531506}
+  productionController: {fileID: 3089235239481483196}
   audioSource: {fileID: 7979416346430321622}
 --- !u!1 &1852522769249408974
 GameObject:
@@ -622,9 +622,10 @@ GameObject:
   - component: {fileID: 6357173986921383371}
   - component: {fileID: 3947339866814908076}
   - component: {fileID: 8706903682574910408}
-  - component: {fileID: 3243077269841531506}
+  - component: {fileID: 3089235239481483196}
+  - component: {fileID: 5449429290865376071}
   m_Layer: 6
-  m_Name: TimerTooltip
+  m_Name: BuildingProductionController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -721,7 +722,7 @@ MonoBehaviour:
   TimerFinishedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3243077269841531506
+--- !u!114 &3089235239481483196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -730,15 +731,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 5447528750229770548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20ee909027db62742adeeed85bcfdd81, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b50ee4b97e796a408a7f2b395027643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: {fileID: 8706903682574910408}
+  timerUI: {fileID: 5449429290865376071}
+  rewardObject: {fileID: 1837367204515019154}
+--- !u!114 &5449429290865376071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447528750229770548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779c189b59be9244387274f8f81ac990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timer: {fileID: 8706903682574910408}
   slider: {fileID: 3947339866814908076}
-  timeToEnd: 5
-  incomeObject: {fileID: 1837367204515019154}
   manualColor: {r: 1, g: 0.64, b: 0, a: 1}
-  autoColor: {r: 0.31801677, g: 1, b: 0, a: 1}
+  autoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &7452024471405056485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,7 +1293,8 @@ MonoBehaviour:
   moveButton: {fileID: 7525114669239369101}
   timeToOpenDragBtn: 0
   timer: {fileID: 8706903682574910408}
-  timerTooltip: {fileID: 3243077269841531506}
+  timerUI: {fileID: 0}
+  productionController: {fileID: 0}
   buildingType: 0
   acceptedBusinessType: 0
   buildingRoundIconImage: {fileID: 7386149318221317416}
@@ -1507,5 +1522,6 @@ MonoBehaviour:
   TotalIncomeCircles: 0
   CurrentRarity: 0
   CurrentTier: 1
+  startProductionOnPlace: 1
   productionDuration: 6
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}

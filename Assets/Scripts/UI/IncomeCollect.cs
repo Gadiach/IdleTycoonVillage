@@ -4,7 +4,7 @@ public class IncomeCollect : MonoBehaviour
 {
     private int incomeAmount;
     [SerializeField] private GameObject thisHouseObject;
-    [SerializeField] private TimerTooltip timerTooltip;
+    [SerializeField] private BuildingProductionController productionController;
     [SerializeField] private AudioSource audioSource;
 
     public void OnClick()
@@ -17,8 +17,8 @@ public class IncomeCollect : MonoBehaviour
         {
             incomeAmount = 5 * buildingData.LevelOfBuilding * buildingData.TotalIncomeCircles;
             buildingData.ResetTotalIncomeCircles();
-            EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(incomeAmount, CurrencyType.Coins));            
-            timerTooltip.ResetTimer();   
+            EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(incomeAmount, CurrencyType.Coins));
+            productionController.ResetProduction();
         }
     }
 }

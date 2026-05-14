@@ -3716,6 +3716,7 @@ MonoBehaviour:
   studyTimeText: {fileID: 1984263949}
   blueprintName: {fileID: 49014911}
   studyButton: {fileID: 1850010249}
+  productionController: {fileID: 0}
 --- !u!1 &233590808
 GameObject:
   m_ObjectHideFlags: 0
@@ -46182,6 +46183,7 @@ MonoBehaviour:
   studyTimeText: {fileID: 2030951984}
   blueprintName: {fileID: 802392429}
   studyButton: {fileID: 1448237602}
+  productionController: {fileID: 0}
 --- !u!1 &716742766
 GameObject:
   m_ObjectHideFlags: 0
@@ -46355,6 +46357,7 @@ MonoBehaviour:
   studyTimeText: {fileID: 1346466894}
   blueprintName: {fileID: 1316848580}
   studyButton: {fileID: 224669385}
+  productionController: {fileID: 0}
 --- !u!1 &735154170
 GameObject:
   m_ObjectHideFlags: 0
@@ -52231,6 +52234,7 @@ MonoBehaviour:
   studyTimeText: {fileID: 1575440252}
   blueprintName: {fileID: 1082074536}
   studyButton: {fileID: 2144925704}
+  productionController: {fileID: 0}
 --- !u!1 &1144502005
 GameObject:
   m_ObjectHideFlags: 0
@@ -72842,6 +72846,7 @@ MonoBehaviour:
   studyTimeText: {fileID: 2013405330}
   blueprintName: {fileID: 1596532861}
   studyButton: {fileID: 691571322}
+  productionController: {fileID: 0}
 --- !u!1 &2089644560
 GameObject:
   m_ObjectHideFlags: 0
@@ -73587,7 +73592,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2144925705}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1143271573}
+        m_TargetAssemblyTypeName: BlueprintItemUI, Assembly-CSharp
+        m_MethodName: OnStudyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2144925705
 MonoBehaviour:
   m_ObjectHideFlags: 0

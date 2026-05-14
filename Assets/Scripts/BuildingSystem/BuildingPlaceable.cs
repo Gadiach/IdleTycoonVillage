@@ -11,7 +11,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private float timeToOpenDragBtn = 0f;
 
     [SerializeField] private Timer timer;
-    [SerializeField] private TimerTooltip timerTooltip;
+    [SerializeField] private TimerUI timerUI;
+    [SerializeField] private BuildingProductionController productionController;
 
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
@@ -58,74 +59,12 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
                     GetComponent<BuildingData>(), false)); 
             }
         }
-        else
-        {
-            CheckPlacedAndSetTimer();
-        }
     }
 
     public void Initialize(int price, CurrencyType currency)
     {
         objectPrice = price;
         currencyType = currency;
-    }
-
-    private void CheckPlacedAndSetTimer()
-    {
-        if (!buildingData.StartProductionOnPlace)
-            return;
-
-        if (Placed)
-        {
-            StartTimer();
-        }
-        else
-        {
-            StopTimer();
-        }
-    }
-
-    private void ReplaceObject()
-    {
-        if (!touching && Placed)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                time = 0f;
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                time += Time.deltaTime;
-
-                if (time > timeToOpenDragBtn)
-                {
-                    ShowMoveButton();
-
-                    touching = true;
-                    gameObject.AddComponent<ObjectDrag>();
-
-                    Vector3Int positionInt = BuildingSystem.current.gridLayout.WorldToCell(transform.position);
-                    BoundsInt areaTemp = area;
-                    areaTemp.position = positionInt;
-
-                    BuildingSystem.current.ClearArea(areaTemp, BuildingSystem.current.MainTilemap);
-                }
-            }
-        }
-
-        if (touching && Input.GetMouseButtonUp(0))
-        {
-            touching = false;
-        }
-    }
-
-    private void ShowMoveButton()
-    {
-        if (moveButton != null)
-        {
-            moveButton.SetActive(true); 
-            moveButton.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1, 0));
-        }
     }
 
     public void OnWorkerIconClick()
@@ -151,7 +90,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     public void OnMoveButtonClick()
     {
-        //moveButton.SetActive(false); 
         gameObject.AddComponent<ObjectDrag>(); 
     }
 
@@ -262,13 +200,13 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     private void StartTimer()
     {
-        timer.enabled = true;
-        timerTooltip.enabled = true;
+        timer.StartTimer();
     }
 
     private void StopTimer()
     {
-        timer.enabled = false;
-        timerTooltip.enabled = false;
-    }  
+        timer.StopTimer();
+
+        timerUI.ResetUI();
+    }
 }

@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5a5e84edc0d694c9220613799f7949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productionController: {fileID: 0}
+  productionController: {fileID: 3543448518283104345}
   audioSource: {fileID: 7368591311320151823}
 --- !u!1 &2856641657207223681
 GameObject:
@@ -716,11 +716,10 @@ GameObject:
   - component: {fileID: 3500440185404916860}
   - component: {fileID: 922387774801903634}
   - component: {fileID: 5269680982033990650}
-  - component: {fileID: 1104664870726647945}
   - component: {fileID: 3543448518283104345}
   - component: {fileID: 598023031958499906}
   m_Layer: 5
-  m_Name: TimerTooltip
+  m_Name: BuildingProductionController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,7 +807,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7485959451326103054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 192eb5e7fad66054fba0f47567527668, type: 3}
   m_Name: 
@@ -816,24 +815,6 @@ MonoBehaviour:
   TimerFinishedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1104664870726647945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7485959451326103054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20ee909027db62742adeeed85bcfdd81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 5269680982033990650}
-  slider: {fileID: 922387774801903634}
-  timeToEnd: 5
-  incomeObject: {fileID: 1286772948864659358}
-  manualColor: {r: 1, g: 0.64, b: 0, a: 1}
-  autoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &3543448518283104345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,7 +956,8 @@ MonoBehaviour:
   moveButton: {fileID: 5444220169212174871}
   timeToOpenDragBtn: 0
   timer: {fileID: 5269680982033990650}
-  timerTooltip: {fileID: 1104664870726647945}
+  timerUI: {fileID: 0}
+  productionController: {fileID: 0}
   buildingType: 0
   acceptedBusinessType: 0
   buildingRoundIconImage: {fileID: 0}
