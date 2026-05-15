@@ -21,29 +21,23 @@ public class BlueprintItemUI : MonoBehaviour
         studyPriceText.text = item.StudyCost.ToString();
         studyTimeText.text = "Time: " + item.StudyTime.ToString();
         blueprintName.text = item.BlueprintName.ToString();
-
-        Refresh();
-    }
-
-    public void Refresh()
-    {
         UpdateOwnedText();
         UpdateStudyButtonState();
     }
 
     public void OnStudyClicked()
     {
-        UniversityManager.Instance.StartStudy(item);
+        productionController.StartStudy(item);
     }
 
-    private void UpdateOwnedText()
+    public void UpdateOwnedText()
     {
         int owned = CurrencySystem.GetCurrencyAmount(item.Type);
 
         ownedText.text = "Owned: " + owned;
     }
 
-    private void UpdateStudyButtonState()
+    public void UpdateStudyButtonState()
     {
         bool canAfford = CurrencySystem.Instance.IsEnoughMoneyForUpgrade(item.StudyCurrency,item.StudyCost);
 

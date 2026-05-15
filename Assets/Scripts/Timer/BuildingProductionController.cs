@@ -10,6 +10,9 @@ public class BuildingProductionController : MonoBehaviour
     [Header("Income UI")]
     [SerializeField] private GameObject rewardObject;
 
+    [SerializeField] private BlueprintItem currentBlueprint;
+    public BlueprintItem CurrentBlueprint => currentBlueprint;
+
     private DateTime finishTime;
 
     private bool isBusinessAutomated;
@@ -21,8 +24,6 @@ public class BuildingProductionController : MonoBehaviour
         buildingData = GetComponentInParent<BuildingData>();
 
         timer.TimerFinishedEvent.AddListener(OnTimerFinished);
-
-        UniversityManager.Instance.RegisterProduction(this);
 
         if (buildingData.StartProductionOnPlace)
         {
@@ -43,14 +44,21 @@ public class BuildingProductionController : MonoBehaviour
         EventManager.Instance.RemoveListener <BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
-    public void ResetProduction()
+    public void CollectReward()
     {
+        SetIncomeButton(false);
+
         if (!isBusinessAutomated)
         {
             StartProduction();
-        }
+        }  
+    }
 
+    public void HideReward()
+    {
         SetIncomeButton(false);
+
+        timerUI.ResetUI();
     }
 
     public void StartProduction()
@@ -62,6 +70,13 @@ public class BuildingProductionController : MonoBehaviour
         timer.StartTimer();
 
         timerUI.Initialize(buildingData.ProductionDuration);
+    }
+
+    public void StartProduction(BlueprintItem blueprintItem)
+    {
+        currentBlueprint = blueprintItem;
+
+        StartProduction();
     }
 
     private void SetIncomeButton(bool state)
@@ -79,6 +94,16 @@ public class BuildingProductionController : MonoBehaviour
         timerUI.SetAutomationVisual(isBusinessAutomated);
 
         StartProduction();
+    }
+
+    public void StartStudy(BlueprintItem item)
+    {
+        bool success = CurrencySystem.Instance.TrySpendCurrency(item.StudyCurrency, item.StudyCost);
+
+        if (!success)
+            return;
+
+        StartProduction(item);
     }
 
     private void OnTimerFinished()

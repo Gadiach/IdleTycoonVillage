@@ -1,26 +1,19 @@
 using UnityEngine;
 
 public class BlueprintRewardCollect : MonoBehaviour
-{  
-    private BlueprintItem blueprintItem;
+{
+    [SerializeField] private BuildingProductionController productionController;
 
-    [SerializeField]
-    private BuildingProductionController productionController;
-
-    [SerializeField]
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
 
     public void OnClick()
     {
         audioSource.Play();
 
-        EventManager.Instance.QueueEvent(
-            new RequestCurrencyChangeEvent(
-                1,
-                blueprintItem.Type
-            )
-        );
+        BlueprintItem blueprint = productionController.CurrentBlueprint;
 
-        productionController.ResetProduction();
+        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(1,blueprint.Type));
+
+        productionController.HideReward();
     }
 }

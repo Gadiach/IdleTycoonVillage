@@ -10,8 +10,6 @@ public class UniversityManager : MonoBehaviour
     }
     public static UniversityManager Instance;
 
-    private BuildingProductionController activeProduction;
-
     [SerializeField]
     private BlueprintBinding[] bindings;
 
@@ -42,30 +40,13 @@ public class UniversityManager : MonoBehaviour
         {
             if (binding.Item.StudyCurrency == info.CurrencyType)
             {
-                binding.UI.Refresh();
+                binding.UI.UpdateStudyButtonState();
+            }
+
+            if (binding.Item.Type == info.CurrencyType)
+            {
+                binding.UI.UpdateOwnedText();
             }
         }
     }
-
-    public void RegisterProduction(
-    BuildingProductionController production)
-    {
-        activeProduction = production;
-    }
-
-    public void StartStudy(BlueprintItem item)
-    {
-        bool success =
-            CurrencySystem.Instance.TrySpendCurrency(
-                item.StudyCurrency,
-                item.StudyCost
-            );
-
-        if (!success)
-            return;
-
-        activeProduction.StartProduction();
-    }
-
-
 }
