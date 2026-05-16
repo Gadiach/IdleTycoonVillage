@@ -29,6 +29,10 @@ public class BuildingProductionController : MonoBehaviour
         {
             StartProduction();
         }
+        else
+        {
+            UniversityManager.Instance.RegisterProduction(this);
+        }
     }
 
     private void OnEnable()
@@ -56,6 +60,8 @@ public class BuildingProductionController : MonoBehaviour
 
     public void HideReward()
     {
+        timer.StopTimer();
+
         SetIncomeButton(false);
 
         timerUI.ResetUI();

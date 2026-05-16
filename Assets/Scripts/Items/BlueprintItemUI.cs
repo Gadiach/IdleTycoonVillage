@@ -10,7 +10,7 @@ public class BlueprintItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI studyTimeText;
     [SerializeField] private TextMeshProUGUI blueprintName;
     [SerializeField] private Button studyButton;
-    [SerializeField] private BuildingProductionController productionController;
+
 
     private BlueprintItem item;
 
@@ -27,7 +27,7 @@ public class BlueprintItemUI : MonoBehaviour
 
     public void OnStudyClicked()
     {
-        productionController.StartStudy(item);
+        UniversityManager.Instance.StartStudy(item);
     }
 
     public void UpdateOwnedText()

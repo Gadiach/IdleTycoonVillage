@@ -22,17 +22,13 @@ public class BuildingData : MonoBehaviour
     public Rarities CurrentRarity = Rarities.Primitive;
     public Tiers CurrentTier = Tiers.Tier1;
 
-    [SerializeField]
-    private bool startProductionOnPlace = true;
+    [SerializeField] private bool startProductionOnPlace = true;
 
-    public bool StartProductionOnPlace =>
-        startProductionOnPlace;
+    public bool StartProductionOnPlace => startProductionOnPlace;
 
-    [SerializeField]
-    private float productionDuration = 10f;
+    [SerializeField] private float productionDuration = 10f;
 
-    public float ProductionDuration =>
-    productionDuration;
+    public float ProductionDuration => productionDuration;
 
     [SerializeField] private ProgressionConfig progressionConfig;
 

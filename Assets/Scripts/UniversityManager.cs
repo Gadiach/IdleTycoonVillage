@@ -10,8 +10,10 @@ public class UniversityManager : MonoBehaviour
     }
     public static UniversityManager Instance;
 
-    [SerializeField]
-    private BlueprintBinding[] bindings;
+    [SerializeField] private BlueprintBinding[] bindings;
+
+    private BuildingProductionController activeProduction;
+
 
     private void Awake()
     {
@@ -32,6 +34,22 @@ public class UniversityManager : MonoBehaviour
         {
             binding.UI.Initialize(binding.Item);
         }
+    }
+
+    public void RegisterProduction(BuildingProductionController production)
+    {
+        activeProduction = production;
+    }
+
+    public void StartStudy(BlueprintItem item)
+    {
+        if (activeProduction == null)
+        {
+            Debug.LogWarning("No active university production!");
+            return;
+        }
+
+        activeProduction.StartStudy(item);
     }
 
     private void UpdateUI(CurrencyChangedEvent info)
