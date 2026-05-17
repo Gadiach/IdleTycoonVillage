@@ -33,8 +33,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private Color validColor = Color.white;
     private Color invalidColor = Color.red;
 
-    private bool touching;
-    private float time = 0f;
     private Vector3 origin;
 
     private void Start()
@@ -136,6 +134,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
                 origin = transform.position;
 
                 CurrencySystem.Instance.TrySpendCurrency(CurrencyType.Coins, objectPrice);
+                EventManager.Instance.QueueEvent(new BuildingPlacedEvent(buildingData));
             }
             else
             {

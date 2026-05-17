@@ -93,5 +93,15 @@ public class BuildingAutomationChangedEvent : GameEvent
     }
 }
 
+public class BuildingPlacedEvent : GameEvent
+{
+    public BuildingData Building { get; private set; }
+
+    public BuildingPlacedEvent(BuildingData building)
+    {
+        Building = building;
+    }
+}
+
 
 

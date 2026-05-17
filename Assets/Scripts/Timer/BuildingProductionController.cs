@@ -19,25 +19,10 @@ public class BuildingProductionController : MonoBehaviour
 
     private BuildingData buildingData;
 
-    private void Start()
-    {
-        buildingData = GetComponentInParent<BuildingData>();
-
-        timer.TimerFinishedEvent.AddListener(OnTimerFinished);
-
-        if (buildingData.StartProductionOnPlace)
-        {
-            StartProduction();
-        }
-        else
-        {
-            UniversityManager.Instance.RegisterProduction(this);
-        }
-    }
-
     private void OnEnable()
     {
-        EventManager.Instance.AddListener <BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
+        EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
     private void OnDisable()
@@ -45,7 +30,24 @@ public class BuildingProductionController : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener <BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+    }
+
+    private void Awake()
+    {
+        buildingData = GetComponentInParent<BuildingData>();
+    }
+
+    private void Start()
+    {
+
+        timer.TimerFinishedEvent.AddListener(OnTimerFinished);
+
+        if (!buildingData.StartProductionOnPlace)       
+        {
+            UniversityManager.Instance.RegisterProduction(this);
+        }
     }
 
     public void CollectReward()
@@ -56,6 +58,17 @@ public class BuildingProductionController : MonoBehaviour
         {
             StartProduction();
         }  
+    }
+
+    private void OnBuildingPlaced(BuildingPlacedEvent evt)
+    {
+        if (evt.Building != buildingData)
+            return;
+
+        if (buildingData.StartProductionOnPlace)
+        {
+            StartProduction();
+        }
     }
 
     public void HideReward()
