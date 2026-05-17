@@ -14,6 +14,10 @@ public class BlueprintRewardCollect : MonoBehaviour
 
         EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(1,blueprint.Type));
 
+        productionController.ClearCurrentBlueprint();
+
+        UniversityManager.Instance.FinishStudy();
+
         productionController.HideReward();
     }
 }

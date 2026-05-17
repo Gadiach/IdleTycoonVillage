@@ -14,6 +14,8 @@ public class UniversityManager : MonoBehaviour
 
     private BuildingProductionController activeProduction;
 
+    public bool IsStudyInProgress => activeProduction != null && activeProduction.HasActiveStudy;
+
 
     private void Awake()
     {
@@ -36,6 +38,19 @@ public class UniversityManager : MonoBehaviour
         }
     }
 
+    private void RefreshStudyButtons()
+    {
+        foreach (var binding in bindings)
+        {
+            binding.UI.UpdateStudyButtonState();
+        }
+    }
+
+    public void FinishStudy()
+    {
+        RefreshStudyButtons();
+    }
+
     public void RegisterProduction(BuildingProductionController production)
     {
         activeProduction = production;
@@ -49,7 +64,12 @@ public class UniversityManager : MonoBehaviour
             return;
         }
 
+        if (IsStudyInProgress)
+            return;
+
         activeProduction.StartStudy(item);
+
+        RefreshStudyButtons();
     }
 
     private void UpdateUI(CurrencyChangedEvent info)
@@ -67,4 +87,6 @@ public class UniversityManager : MonoBehaviour
             }
         }
     }
+
+
 }

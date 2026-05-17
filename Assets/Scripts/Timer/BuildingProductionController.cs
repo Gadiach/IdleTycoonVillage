@@ -19,6 +19,8 @@ public class BuildingProductionController : MonoBehaviour
 
     private BuildingData buildingData;
 
+    public bool HasActiveStudy => currentBlueprint != null;
+
     private void OnEnable()
     {
         EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
@@ -123,6 +125,11 @@ public class BuildingProductionController : MonoBehaviour
             return;
 
         StartProduction(item);
+    }
+
+    public void ClearCurrentBlueprint()
+    {
+        currentBlueprint = null;
     }
 
     private void OnTimerFinished()
