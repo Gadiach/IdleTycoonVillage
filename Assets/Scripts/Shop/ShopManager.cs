@@ -12,6 +12,7 @@ public class ShopManager : MonoBehaviour
 
     private RectTransform rt;
     private RectTransform prt;
+    private bool isAnimating;
     private bool opened;
     private Vector2 closedPos;
     private Vector2 openedPos;
@@ -114,6 +115,9 @@ public class ShopManager : MonoBehaviour
 
     public void OpenShop(ObjectType tabType)
     {
+        if (isAnimating)
+            return;
+
         if (!opened)
         {
             gameObject.SetActive(true);
@@ -127,7 +131,7 @@ public class ShopManager : MonoBehaviour
 
     public void CloseShop()
     {
-        if (!opened) return;
+        if (!opened || isAnimating) return;
 
         StartCoroutine(MovePanel(closedPos, () => gameObject.SetActive(false)));
         opened = false;
@@ -135,6 +139,8 @@ public class ShopManager : MonoBehaviour
 
     private IEnumerator MovePanel(Vector2 targetPos, System.Action onComplete = null)
     {
+        isAnimating = true;
+
         float elapsedTime = 0f;
         Vector2 startPos = prt.anchoredPosition;
 
@@ -147,6 +153,8 @@ public class ShopManager : MonoBehaviour
 
         prt.anchoredPosition = targetPos;
         onComplete?.Invoke();
+
+        isAnimating = false;
     }
 
     private bool dragging;
