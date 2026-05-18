@@ -11,7 +11,6 @@ public class BlueprintItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI blueprintName;
     [SerializeField] private Button studyButton;
 
-
     private BlueprintItem item;
 
 

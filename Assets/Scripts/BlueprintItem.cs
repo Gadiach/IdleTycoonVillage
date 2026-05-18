@@ -11,6 +11,9 @@ public class BlueprintItem : ScriptableObject
     private CurrencyType studyCurrency = CurrencyType.Coins;
     [SerializeField] private float studyTime;
     [SerializeField] private CurrencyType type;
+    [SerializeField] private Sprite icon;
+
+    public Sprite Icon => icon;
 
     public CurrencyType Type => type;
     public int StudyCost => studyCost;

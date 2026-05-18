@@ -829,7 +829,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 5269680982033990650}
   timerUI: {fileID: 598023031958499906}
+  rewardIconImage: {fileID: 349572702383049829}
   rewardObject: {fileID: 1286772948864659358}
+  currentBlueprint: {fileID: 0}
 --- !u!114 &598023031958499906
 MonoBehaviour:
   m_ObjectHideFlags: 0

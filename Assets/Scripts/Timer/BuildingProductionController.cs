@@ -1,5 +1,7 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingProductionController : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class BuildingProductionController : MonoBehaviour
     [SerializeField] private TimerUI timerUI;
 
     [Header("Income UI")]
+    [SerializeField] private Image rewardIconImage;
     [SerializeField] private GameObject rewardObject;
 
     [SerializeField] private BlueprintItem currentBlueprint;
@@ -96,6 +99,8 @@ public class BuildingProductionController : MonoBehaviour
     public void StartProduction(BlueprintItem blueprintItem)
     {
         currentBlueprint = blueprintItem;
+
+        rewardIconImage.sprite = blueprintItem.Icon;
 
         StartProduction();
     }

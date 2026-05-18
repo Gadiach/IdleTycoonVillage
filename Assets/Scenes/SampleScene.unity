@@ -3581,7 +3581,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 224669386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 720129432}
+        m_TargetAssemblyTypeName: BlueprintItemUI, Assembly-CSharp
+        m_MethodName: OnStudyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &224669386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45705,7 +45717,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 691571323}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2085248537}
+        m_TargetAssemblyTypeName: BlueprintItemUI, Assembly-CSharp
+        m_MethodName: OnStudyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &691571323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56287,7 +56311,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1448237603}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 715673955}
+        m_TargetAssemblyTypeName: BlueprintItemUI, Assembly-CSharp
+        m_MethodName: OnStudyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1448237603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69145,7 +69181,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1850010250}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 225540585}
+        m_TargetAssemblyTypeName: BlueprintItemUI, Assembly-CSharp
+        m_MethodName: OnStudyClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1850010250
 MonoBehaviour:
   m_ObjectHideFlags: 0
