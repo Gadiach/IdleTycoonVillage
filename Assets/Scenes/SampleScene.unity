@@ -4140,7 +4140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &246992567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4165,7 +4165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 10.239288, y: 187.9155}
+  m_AnchoredPosition: {x: 10.239258, y: 187.9155}
   m_SizeDelta: {x: -360.47864, y: 285}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &246992568
@@ -47500,7 +47500,9 @@ MonoBehaviour:
   speedBonusText: {fileID: 0}
   incomeBonusText: {fileID: 0}
   priceForUpgradingText: {fileID: 327169886}
+  baseUpgradePrice: 10
   workerPanel: {fileID: 246992566}
+  upgradeButton: {fileID: 1589301809}
 --- !u!4 &807662332
 Transform:
   m_ObjectHideFlags: 0
@@ -68232,7 +68234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 10.239296, y: 187.9155}
+  m_AnchoredPosition: {x: 10.239319, y: 187.9155}
   m_SizeDelta: {x: -360.47858, y: 285}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1781255410
