@@ -12,10 +12,11 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private Text speedBonusText;
     [SerializeField] private Text incomeBonusText;
     [SerializeField] private TextMeshProUGUI priceForUpgradingText;
-    private int priceToUpgradeWorker = 1;
     private WorkerData currentWorker;
+    [SerializeField] private int baseUpgradePrice = 10;
 
     [SerializeField] private GameObject workerPanel;
+    [SerializeField] private Button upgradeButton;
 
     private void Awake()
     {
@@ -26,35 +27,57 @@ public class WorkerUI : MonoBehaviour
     public void OpenWorkerPanel(WorkerData worker)
     {
         currentWorker = worker;
-        UpdatePriceToUpgradeWorker(currentWorker);
-        
+
+        UpdateUpgradeButtonState();
+
         icon.sprite = worker.icon;
+
         UpdateLvlTxt(currentWorker);
-        //typeText.text = "Type: " + worker.type.ToString();
-        //speedBonusText.text = "Speed Bonus: " + worker.speedBonus;
-        //incomeBonusText.text = "Income Bonus: " + worker.incomeBonus;
+
+        priceForUpgradingText.text = GetUpgradePrice(currentWorker).ToString();
 
         workerPanel.SetActive(true);
     }
 
-    public void UpgradeWorker()
+    private void UpdateUpgradeButtonState()
     {
-        currentWorker.level++;
-        priceForUpgradingText.text = priceToUpgradeWorker.ToString();
+        int price = GetUpgradePrice(currentWorker);
 
-        UpdatePriceToUpgradeWorker(currentWorker);
-        UpdateLvlTxt(currentWorker);
+        bool canAfford =
+            CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
+                CurrencyType.Coins,
+                price);
 
-        EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(currentWorker));
+        upgradeButton.interactable = canAfford;
     }
 
-    private void UpdatePriceToUpgradeWorker(WorkerData worker)
+    public void UpgradeWorker()
     {
-        priceToUpgradeWorker = priceToUpgradeWorker * worker.level;
+        int price = GetUpgradePrice(currentWorker);
+
+        bool success = CurrencySystem.Instance.TrySpendCurrency(CurrencyType.Coins, price);
+
+        if (!success)
+            return;
+
+        currentWorker.level++;
+
+        priceForUpgradingText.text = GetUpgradePrice(currentWorker).ToString();
+
+        UpdateLvlTxt(currentWorker);
+
+        UpdateUpgradeButtonState();
+
+        EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(currentWorker));
     }
 
     private void UpdateLvlTxt(WorkerData worker)
     {
         levelText.text = "Level: " + worker.level;
+    }
+
+    private int GetUpgradePrice(WorkerData worker)
+    {
+        return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(1.25f, worker.level));
     }
 }
