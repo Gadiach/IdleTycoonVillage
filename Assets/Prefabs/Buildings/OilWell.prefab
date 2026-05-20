@@ -752,7 +752,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 8706903682574910408}
   timerUI: {fileID: 5982168231713689835}
+  rewardIconImage: {fileID: 0}
   rewardObject: {fileID: 1837367204515019154}
+  currentBlueprint: {fileID: 0}
 --- !u!1 &7452024471405056485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1296,7 @@ MonoBehaviour:
   timeToOpenDragBtn: 0
   timer: {fileID: 8706903682574910408}
   timerUI: {fileID: 0}
-  productionController: {fileID: 0}
+  productionController: {fileID: 1214927713397149555}
   buildingType: 1
   acceptedBusinessType: 1
   buildingRoundIconImage: {fileID: 7386149318221317416}

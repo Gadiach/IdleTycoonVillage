@@ -26,7 +26,6 @@ public class BuildingProductionController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -35,7 +34,6 @@ public class BuildingProductionController : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -63,17 +61,6 @@ public class BuildingProductionController : MonoBehaviour
         {
             StartProduction();
         }  
-    }
-
-    private void OnBuildingPlaced(BuildingPlacedEvent evt)
-    {
-        if (evt.Building != buildingData)
-            return;
-
-        if (buildingData.StartProductionOnPlace)
-        {
-            StartProduction();
-        }
     }
 
     public void HideReward()
