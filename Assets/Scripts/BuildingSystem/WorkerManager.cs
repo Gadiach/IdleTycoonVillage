@@ -28,7 +28,7 @@ public class WorkerManager : MonoBehaviour
         {
             type = type,
             available = true,
-            icon = iconLibrary.GetIcon(type)
+            Icon = iconLibrary.GetIcon(type)
         };
 
         AddWorker(newWorker);
@@ -42,7 +42,7 @@ public class WorkerManager : MonoBehaviour
             type = type,
             available = true,
             roundIcon = iconLibrary.GetRoundIcon(type),
-            icon = iconLibrary.GetIcon(type)
+            Icon = iconLibrary.GetIcon(type)
         };
 
         if (register) AddWorker(w);

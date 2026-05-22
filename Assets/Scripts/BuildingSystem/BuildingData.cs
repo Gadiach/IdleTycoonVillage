@@ -13,7 +13,7 @@ public class BuildingData : MonoBehaviour
     public BusinessType BusinessType;
     public Sprite Icon;// { get;  set; }
     public int PriceToUpgrade = 5;
-    public int LevelOfBuilding = 1;
+    public int CurrentLevel = 1;
     public int Income;
     public int LevelOfWorkerNeededForAutomation = 5;
     public bool IsAutomated;
@@ -204,17 +204,17 @@ public class BuildingData : MonoBehaviour
 
     public void UpdatePriceToUpgrade()
     {
-        PriceToUpgrade = PriceToUpgrade * LevelOfBuilding;
+        PriceToUpgrade = PriceToUpgrade * CurrentLevel;
     }
 
     public void UpdateIncome()
     {
-        Income = 5 * LevelOfBuilding;
+        Income = 5 * CurrentLevel;
     }
 
     public void UpgradeBuilding()
     {
-        if (LevelOfBuilding >= CurrentTierMaxLevel)
+        if (CurrentLevel >= CurrentTierMaxLevel)
         {
             Debug.Log("Building is already at MAX level!");
             return;
@@ -222,7 +222,7 @@ public class BuildingData : MonoBehaviour
 
         if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
         {
-            LevelOfBuilding++;
+            CurrentLevel++;
             UpdatePriceToUpgrade();
         }
     }

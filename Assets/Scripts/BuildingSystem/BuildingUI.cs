@@ -1,4 +1,3 @@
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +39,7 @@ public class BuildingUI : MonoBehaviour
         buildingIcon.sprite = currentBuilding.Icon;
         buildingNameText.text = building.Name;
         businessType.text = currentBuilding.BusinessType.ToString();
-        levelText.text = $"{building.LevelOfBuilding}";
+        levelText.text = $"{building.CurrentLevel}";
         //incomeText.text = $"Income: {building.Income}";
         rarityText.text = building.CurrentRarity.ToString();
         //upgradeCostText.text = $"Upgrade cost: {building.PriceToUpgrade}";
@@ -161,7 +160,7 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        levelText.text = $"Level: {currentBuilding.LevelOfBuilding}";
+        levelText.text = $"Level: {currentBuilding.CurrentLevel}";
         incomeText.text = $"Income: {currentBuilding.Income}";
         //upgradePriceText.text = $"Upgrade cost: {currentBuilding.PriceToUpgrade}";
     }

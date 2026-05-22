@@ -8,27 +8,30 @@ public class UIManager : MonoBehaviour
 
     [Header("Common UI Elements")]
     public GameObject buildingPanel;
-    public TextMeshProUGUI nameText;
     public TextMeshProUGUI automationStatusText;
-    [SerializeField] private Image[] colorStars;
 
     [Header("Building UI Elements")]
 
-    public TextMeshProUGUI BuildinglevelText;
+    public TextMeshProUGUI BuildingLevelText;
     public TextMeshProUGUI BuildingUpgradePriceText;
     public Image BuildingImage;
     public Button BuildingUpgradeButton;
+    [SerializeField] private Image[] colorStarsBuilding;
 
     [Header("Worker UI Elements")]
 
-    public TextMeshProUGUI WorkerCurrentlevelText;
+    public TextMeshProUGUI WorkerLevelText;
     public TextMeshProUGUI WorkerUpgradePriceText;
+    public Image WorkerImage;
+    public Button WorkerUpgradeButton;
+    [SerializeField] private Image[] colorStarsWorker;
 
     [Header("Building UI")]
     [SerializeField] private Button buildingButton;
 
     private BuildingData currentBuilding;
-    
+    private WorkerData currentWorker;
+
 
     private void Awake()
     {
@@ -71,24 +74,30 @@ public class UIManager : MonoBehaviour
         if (currentBuilding != evt.Building)
             return;
 
-        EvaluateUpgradeState();
-        UpdateStarUI(currentBuilding);
+        EvaluateBuildingUpgradeState();
+        UpdateBuildingStarUI(currentBuilding);
     }
 
     public void OpenMainBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
 
-        nameText.text = building.Name;
+        currentWorker = building.Placeable.GetAssignedWorker();
 
         BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
         BuildingImage.sprite = building.Icon;
 
-        EvaluateUpgradeState();
+        WorkerUpgradePriceText.text = currentWorker.PriceToUpgrade.ToString();
+        WorkerImage.sprite = currentWorker.Icon;
+
+        EvaluateBuildingUpgradeState();
+        EvaluateWorkerUpgradeState();
 
         buildingPanel.SetActive(true);
 
-        UpdateStarUI(building);
+        UpdateBuildingStarUI(building);
+        UpdateWorkerStarUI(currentWorker);
+
         UpdateAutomationUI(building);
 
         buildingButton.onClick.RemoveAllListeners();
@@ -98,37 +107,85 @@ public class UIManager : MonoBehaviour
         });
     }
 
-    private void EvaluateUpgradeState()
+    private void EvaluateBuildingUpgradeState()
     {
-        if (currentBuilding.LevelOfBuilding >= currentBuilding.CurrentTierMaxLevel)
+        if (currentBuilding.CurrentLevel >= currentBuilding.CurrentTierMaxLevel)
         {
-            SetUpgradeState(BuildingUpgradeUIState.NeedTierUpgrade);
+            SetBuildingUpgradeState(UpgradeUIState.NeedTierUpgrade);
         }
         else
         {
-            SetUpgradeState(BuildingUpgradeUIState.CanUpgradeLevel);
+            SetBuildingUpgradeState(UpgradeUIState.CanUpgradeLevel);
         }
     }
 
-    private void SetUpgradeState(BuildingUpgradeUIState state)
+    private void EvaluateWorkerUpgradeState()
+    {
+        if (currentWorker.CurrentLevel >= currentWorker.CurrentTierMaxLevel)
+        {
+            SetWorkerUpgradeState(UpgradeUIState.NeedTierUpgrade);
+        }
+        else
+        {
+            SetWorkerUpgradeState(UpgradeUIState.CanUpgradeLevel);
+        }
+    }
+
+    private void SetWorkerUpgradeState (UpgradeUIState state)
     {
         switch (state)
         {
-            case BuildingUpgradeUIState.CanUpgradeLevel:
-                ApplyCanUpgradeLevelUI();
+            case UpgradeUIState.CanUpgradeLevel:
+                ApplyCanUpgradeWorkerLevelUI();
                 break;
 
-            case BuildingUpgradeUIState.NeedTierUpgrade:
-                ApplyNeedTierUpgradeUI();
+            case UpgradeUIState.NeedTierUpgrade:
+                ApplyNeedWorkerTierUpgradeUI();
                 break;
         }
     }
 
-    private void ApplyCanUpgradeLevelUI()
+    private void ApplyNeedWorkerTierUpgradeUI()
+    {
+        SetWorkerLevelTextMaxed();
+
+        WorkerUpgradeButton.interactable = false;
+        WorkerUpgradePriceText.color = Color.gray;
+
+    }
+
+    private void ApplyCanUpgradeWorkerLevelUI()
+    {
+        SetWorkerLevelTextWithRedMaxLevel();
+
+        bool canAfford = CanAffordWorkerUpgrade();
+
+        WorkerUpgradePriceText.color =
+            canAfford ? Color.white : Color.red;
+
+        WorkerUpgradeButton.interactable =
+            canAfford;
+    }
+
+    private void SetBuildingUpgradeState(UpgradeUIState state)
+    {
+        switch (state)
+        {
+            case UpgradeUIState.CanUpgradeLevel:
+                ApplyCanUpgradeBuildingLevelUI();
+                break;
+
+            case UpgradeUIState.NeedTierUpgrade:
+                ApplyNeedBuildingTierUpgradeUI();
+                break;
+        }
+    }
+
+    private void ApplyCanUpgradeBuildingLevelUI()
     {
         SetBuildingLevelTextWithRedMaxLevel();
 
-        bool canAfford = CanAffordUpgrade();
+        bool canAfford = CanAffordBuildingUpgrade();
 
         BuildingUpgradePriceText.color =
             canAfford ? Color.white : Color.red;
@@ -139,12 +196,19 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextWithRedMaxLevel()
     {
-        BuildinglevelText.text =
-            $"Lv: {currentBuilding.LevelOfBuilding} / " +
+        BuildingLevelText.text =
+            $"Lv: {currentBuilding.CurrentLevel} / " +
             $"<color=red>{currentBuilding.CurrentTierMaxLevel}</color>";
     }
 
-    private void ApplyNeedTierUpgradeUI()
+    private void SetWorkerLevelTextWithRedMaxLevel()
+    {
+        WorkerLevelText.text =
+            $"Lv: {currentWorker.CurrentLevel} / " +
+            $"<color=red>{currentWorker.CurrentTierMaxLevel}</color>";
+    }
+
+    private void ApplyNeedBuildingTierUpgradeUI()
     {
         SetBuildingLevelTextMaxed();
 
@@ -155,9 +219,16 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextMaxed()
     {
-        BuildinglevelText.text =
-            $"Lv: <color=red>{currentBuilding.LevelOfBuilding} / " +
+        BuildingLevelText.text =
+            $"Lv: <color=red>{currentBuilding.CurrentLevel} / " +
             $"{currentBuilding.CurrentTierMaxLevel}</color>";
+    }
+
+    private void SetWorkerLevelTextMaxed()
+    {
+        WorkerLevelText.text =
+            $"Lv: <color=red>{currentWorker.CurrentLevel} / " +
+            $"{currentWorker.CurrentTierMaxLevel}</color>";
     }
 
     private Color GetColorByRarity(Rarities rarity)
@@ -173,16 +244,29 @@ public class UIManager : MonoBehaviour
         };
     }
 
-    private void UpdateStarUI(BuildingData building)
+    private void UpdateWorkerStarUI(WorkerData worker)
+    {
+        int tierValue = (int)worker.CurrentTier;
+        int maxStars = colorStarsWorker.Length;
+        Color activeColor = GetColorByRarity(worker.CurrentRarity);
+        Color inactiveColor = Color.grey;
+
+        for (int i = 0; i < maxStars; i++)
+        {
+            colorStarsWorker[i].color = (i < tierValue) ? activeColor : inactiveColor;
+        }
+    }
+
+    private void UpdateBuildingStarUI(BuildingData building)
     {
         int tierValue = (int)building.CurrentTier;
-        int maxStars = colorStars.Length;
+        int maxStars = colorStarsBuilding.Length;
         Color activeColor = GetColorByRarity(building.CurrentRarity);
         Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)
         {
-            colorStars[i].color = (i < tierValue) ? activeColor : inactiveColor;
+            colorStarsBuilding[i].color = (i < tierValue) ? activeColor : inactiveColor;
         }
     }
 
@@ -191,16 +275,16 @@ public class UIManager : MonoBehaviour
         buildingPanel.SetActive(false);
     }
 
-    public void UpgradeBuilding()
+    public void OnUpgradeBuildingClicked()
     {
         currentBuilding.UpgradeBuilding();
 
         currentBuilding.PriceToUpgrade += 5;
 
-        EvaluateUpgradeState();
+        EvaluateBuildingUpgradeState();
 
         BuildingUpgradePriceText.text = currentBuilding.PriceToUpgrade.ToString();
-        EventManager.Instance.QueueEvent(new XPAddedEvent(currentBuilding.LevelOfBuilding - 1));
+        EventManager.Instance.QueueEvent(new XPAddedEvent(currentBuilding.CurrentLevel - 1));
     }
 
     private void UpdateAutomationUI(BuildingData building)
@@ -223,11 +307,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private bool CanAffordUpgrade()
+    private bool CanAffordBuildingUpgrade()
     {
         return CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
             currentBuilding.Currency,
             currentBuilding.PriceToUpgrade);
+    }
+
+    private bool CanAffordWorkerUpgrade()
+    {
+        return CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
+            currentWorker.Currency,
+            currentWorker.PriceToUpgrade);
     }
 
     public void QuitGame()

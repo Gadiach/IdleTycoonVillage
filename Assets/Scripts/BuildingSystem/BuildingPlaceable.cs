@@ -39,6 +39,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         buildingData = GetComponent<BuildingData>();
+        buildingData.SetPlaceable(this);
     }
 
     private void Update()

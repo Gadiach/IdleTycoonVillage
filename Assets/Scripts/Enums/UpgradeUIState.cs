@@ -1,4 +1,4 @@
-public enum BuildingUpgradeUIState
+public enum UpgradeUIState
 {
     CanUpgradeLevel,   
     NeedTierUpgrade    

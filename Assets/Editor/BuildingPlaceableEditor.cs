@@ -29,7 +29,7 @@ public class BuildingPlaceableEditor : Editor
             EditorGUILayout.Toggle("Available", worker.available);
             EditorGUILayout.FloatField("Speed Bonus", worker.speedBonus);
             EditorGUILayout.FloatField("Income Bonus", worker.incomeBonus);
-            EditorGUILayout.ObjectField("Icon", worker.icon, typeof(Sprite), false);
+            EditorGUILayout.ObjectField("Icon", worker.Icon, typeof(Sprite), false);
         }
     }
 }

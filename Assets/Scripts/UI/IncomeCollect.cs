@@ -15,7 +15,7 @@ public class IncomeCollect : MonoBehaviour
 
         if (buildingData != null)
         {
-            incomeAmount = 5 * buildingData.LevelOfBuilding * buildingData.TotalIncomeCircles;
+            incomeAmount = 5 * buildingData.CurrentLevel * buildingData.TotalIncomeCircles;
             buildingData.ResetTotalIncomeCircles();
             EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(incomeAmount, CurrencyType.Coins));
             productionController.CollectReward();

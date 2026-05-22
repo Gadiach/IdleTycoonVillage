@@ -46,6 +46,16 @@ public class BuildingTierOrRarityChangedEvent : GameEvent
     }
 }
 
+public class WorkerTierOrRarityChangedEvent : GameEvent
+{
+    public WorkerData Worker { get; private set; }
+
+    public WorkerTierOrRarityChangedEvent(WorkerData worker)
+    {
+        Worker = worker;
+    }
+}
+
 public class EnoughCurrencyEvent : GameEvent
 {
 

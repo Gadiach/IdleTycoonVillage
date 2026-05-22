@@ -30,7 +30,7 @@ public class WorkerUI : MonoBehaviour
 
         UpdateUpgradeButtonState();
 
-        icon.sprite = worker.icon;
+        icon.sprite = worker.Icon;
 
         UpdateLvlTxt(currentWorker);
 
