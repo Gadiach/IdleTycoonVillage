@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [Header("Common UI Elements")]
     public GameObject buildingPanel;
     public TextMeshProUGUI automationStatusText;
+    [SerializeField] private GameObject workerPanel;
+    [SerializeField] private GameObject noWorkerPanel;
 
     [Header("Building UI Elements")]
 
@@ -20,11 +22,11 @@ public class UIManager : MonoBehaviour
 
     [Header("Worker UI Elements")]
 
-    public TextMeshProUGUI WorkerLevelText;
-    public TextMeshProUGUI WorkerUpgradePriceText;
-    public Image WorkerImage;
-    public Button WorkerUpgradeButton;
-    [SerializeField] private Image[] colorStarsWorker;
+    public TextMeshProUGUI WorkerLevelText;             
+    public TextMeshProUGUI WorkerUpgradePriceText;      
+    public Image WorkerImage;                           
+    public Button WorkerUpgradeButton;                  
+    [SerializeField] private Image[] colorStarsWorker;  
 
     [Header("Building UI")]
     [SerializeField] private Button buildingButton;
@@ -78,25 +80,42 @@ public class UIManager : MonoBehaviour
         UpdateBuildingStarUI(currentBuilding);
     }
 
+    public void OpenWorkerShop()
+    {
+        buildingPanel.SetActive(false);
+
+        ShopManager.current.OpenShop(ObjectType.Workers);
+    }
+
     public void OpenMainBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
-
         currentWorker = building.Placeable.GetAssignedWorker();
-
         BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
         BuildingImage.sprite = building.Icon;
-
-        WorkerUpgradePriceText.text = currentWorker.PriceToUpgrade.ToString();
-        WorkerImage.sprite = currentWorker.Icon;
-
         EvaluateBuildingUpgradeState();
-        EvaluateWorkerUpgradeState();
+
+        if (HasWorker())
+        {
+            workerPanel.SetActive(true);
+            noWorkerPanel.SetActive(false);
+
+            UpdateWorkerUpgradePriceText();
+            UpdateWorkerImage();
+            EvaluateWorkerUpgradeState();
+
+            UpdateWorkerStarUI(currentWorker);
+        }
+        else
+        {
+            workerPanel.SetActive(false);
+            noWorkerPanel.SetActive(true);
+        }
+                                                                                
 
         buildingPanel.SetActive(true);
 
-        UpdateBuildingStarUI(building);
-        UpdateWorkerStarUI(currentWorker);
+        UpdateBuildingStarUI(building);                                    
 
         UpdateAutomationUI(building);
 
@@ -105,6 +124,17 @@ public class UIManager : MonoBehaviour
         {
             BuildingUI.Instance.OpenBuildingPanel(building);
         });
+    }
+
+    private void UpdateWorkerImage()
+    {
+        WorkerImage.sprite = currentWorker.Icon;
+    }
+
+    private void UpdateWorkerUpgradePriceText()
+    {
+        WorkerUpgradePriceText.text =
+            currentWorker.PriceToUpgrade.ToString();
     }
 
     private void EvaluateBuildingUpgradeState()
@@ -312,6 +342,11 @@ public class UIManager : MonoBehaviour
         return CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
             currentBuilding.Currency,
             currentBuilding.PriceToUpgrade);
+    }
+
+    private bool HasWorker()
+    {
+        return currentWorker != null;
     }
 
     private bool CanAffordWorkerUpgrade()

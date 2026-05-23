@@ -18,18 +18,19 @@ public class WorkerData
     public int CurrentLevel = 1;
     public CurrencyType Currency;
     [SerializeField]
-    private ProgressionConfig progressionConfig;
+    public ProgressionConfig ProgressionConfig;
     public BuildingData AssignedBuilding { get; set; }
+
 
     public int CurrentTierMaxLevel
     {
         get
         {
             int baseMax =
-                progressionConfig.GetBaseMaxLevel(CurrentRarity);
+                ProgressionConfig.GetBaseMaxLevel(CurrentRarity);
 
             int tierBonus =
-                progressionConfig.GetTierBonus(CurrentTier);
+                ProgressionConfig.GetTierBonus(CurrentTier);
 
             return baseMax + tierBonus;
         }

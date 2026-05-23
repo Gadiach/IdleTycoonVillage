@@ -9,6 +9,8 @@ public class WorkerManager : MonoBehaviour
 
     [SerializeField] private WorkerIconLibrary iconLibrary;
 
+    [SerializeField] private ProgressionConfig progressionConfig;
+
     private void Awake()
     {
         current = this;
@@ -22,27 +24,28 @@ public class WorkerManager : MonoBehaviour
         }
     }
 
-    public WorkerData CreateWorker(BusinessType type)
-    {
-        WorkerData newWorker = new WorkerData
-        {
-            type = type,
-            available = true,
-            Icon = iconLibrary.GetIcon(type)
-        };
-
-        AddWorker(newWorker);
-        return newWorker;
-    }
-
     public WorkerData CreateWorker(BusinessType type, bool register)
     {
         var w = new WorkerData
         {
             type = type,
             available = true,
+
+            CurrentLevel = 1,
+
+            CurrentTier = Tiers.Tier1,
+
+            CurrentRarity = Rarities.Primitive,
+
+            Currency = CurrencyType.Coins,
+
+            PriceToUpgrade = 3,
+
+            Icon = iconLibrary.GetIcon(type),
+
             roundIcon = iconLibrary.GetRoundIcon(type),
-            Icon = iconLibrary.GetIcon(type)
+
+            ProgressionConfig = progressionConfig
         };
 
         if (register) AddWorker(w);
