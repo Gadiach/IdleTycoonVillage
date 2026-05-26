@@ -4,35 +4,81 @@ using UnityEngine;
 
 public class BuildingData : MonoBehaviour
 {
-    public string Name;// { get;  set; }
-    public string Description;// { get; private set; }
-    public int Level; //{ get;  set; }
-    public int Price; //{ get;  set; }
-    public CurrencyType Currency;// { get; private set; }
-    public ObjectType Type;// { get; private set; }
+    #region Definition Data
+    [Header("Definition Data")]
+    public string Name;
+    public string Description;
+    public CurrencyType Currency;
+    public ObjectType Type;
     public BusinessType BusinessType;
-    public Sprite Icon;// { get;  set; }
-    public int PriceToUpgrade = 5;
-    public int CurrentLevel = 1;
-    public int Income;
-    public int LevelOfWorkerNeededForAutomation = 5;
-    public bool IsAutomated;
-    public int TotalIncomeCircles = 0;
+    public Sprite Icon;
+    public int PurchasePrice;
+
+    #endregion
+
+    #region Serialized Fields
+
+    [SerializeField] private BuildingBalanceConfig balanceConfig;
+    [SerializeField] private ProgressionConfig progressionConfig;
+    [SerializeField] private EconomyProgressionConfig economyConfig;
+
+    [SerializeField] private bool startProductionOnPlace = true;
+
+    #endregion
+
+    #region Runtime State
+
+    public int CurrentLevel { get; private set; } = 1;
+    public bool IsAutomated { get; private set; }
+    public int TotalIncomeCircles { get; private set; }
 
     public Rarities CurrentRarity = Rarities.Primitive;
     public Tiers CurrentTier = Tiers.Tier1;
 
-    [SerializeField] private bool startProductionOnPlace = true;
-
-    public bool StartProductionOnPlace => startProductionOnPlace;
-
-    [SerializeField] private float productionDuration = 10f;
-
-    public float ProductionDuration => productionDuration;
-
-    [SerializeField] private ProgressionConfig progressionConfig;
-
     public BuildingPlaceable Placeable { get; private set; }
+
+    #endregion
+
+    #region Calculated Properties
+
+    public int PriceToUpgrade
+    {
+        get
+        {
+            float rarityMultiplier = economyConfig.GetRarityIncomeMultiplier(CurrentRarity);
+
+            float tierMultiplier = economyConfig.GetTierIncomeMultiplier(CurrentTier);
+
+            float progressionPrice = Mathf.Pow(balanceConfig.upgradeMultiplier, CurrentLevel - 1);
+
+            float basePrice = balanceConfig.baseUpgradePrice * rarityMultiplier * tierMultiplier;
+
+            return Mathf.RoundToInt(basePrice * progressionPrice);
+        }
+    }
+
+    public float ProductionDuration
+    {
+        get
+        {
+            float rarityMultiplier = economyConfig.GetRarityProductionTimeMultiplier(CurrentRarity);
+
+            float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(CurrentTier);
+
+            return balanceConfig.baseProductionDuration *
+                   rarityMultiplier *
+                   tierMultiplier;
+        }
+    }
+
+    public int IncomePerCycle => balanceConfig.baseIncomePerCycle * CurrentLevel;
+    public int TotalIncome => IncomePerCycle * TotalIncomeCircles;
+    
+    public bool StartProductionOnPlace => startProductionOnPlace;
+    public int LevelOfWorkerNeededForAutomation => balanceConfig.workerLevelNeededForAutomation;
+
+    #endregion
+    
 
     public void SetPlaceable(BuildingPlaceable placeable)
     {
@@ -43,13 +89,10 @@ public class BuildingData : MonoBehaviour
     {
         Name = item.Name;
         Description = item.Description;
-        Level = item.Level;
-        Price = item.Price;
+        PurchasePrice = item.PurchasePrice;
         Currency = item.Currency;
         Type = item.Type;
         Icon = item.Icon;
-
-        UpdatePriceToUpgrade();
     }
 
     public Tiers NextTier
@@ -202,14 +245,11 @@ public class BuildingData : MonoBehaviour
         }
     }
 
-    public void UpdatePriceToUpgrade()
+    public void CollectIncome()
     {
-        PriceToUpgrade = PriceToUpgrade * CurrentLevel;
-    }
+        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(TotalIncome, CurrencyType.Coins));
 
-    public void UpdateIncome()
-    {
-        Income = 5 * CurrentLevel;
+        ResetTotalIncomeCircles();
     }
 
     public void UpgradeBuilding()
@@ -223,7 +263,6 @@ public class BuildingData : MonoBehaviour
         if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
         {
             CurrentLevel++;
-            UpdatePriceToUpgrade();
         }
     }
 

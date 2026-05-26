@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72e14aad34576a44897ce10bfc4458b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisHouseObject: {fileID: 9193094272671895835}
+  buildingData: {fileID: -1920402991600211836}
   productionController: {fileID: 3089235239481483196}
   audioSource: {fileID: 7979416346430321622}
 --- !u!1 &1852522769249408974
@@ -1510,20 +1510,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  Level: 0
-  Price: 0
   Currency: 0
   Type: 0
   BusinessType: 0
   Icon: {fileID: 0}
-  PriceToUpgrade: 5
-  LevelOfBuilding: 1
-  Income: 0
-  LevelOfWorkerNeededForAutomation: 5
-  IsAutomated: 0
-  TotalIncomeCircles: 0
+  PurchasePrice: 0
+  balanceConfig: {fileID: 11400000, guid: a5c2e27eeac12c34e8a7cb2f33469864, type: 2}
+  progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
+  economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
+  startProductionOnPlace: 1
   CurrentRarity: 0
   CurrentTier: 1
-  startProductionOnPlace: 1
-  productionDuration: 6
-  progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}

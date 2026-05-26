@@ -161,7 +161,7 @@ public class BuildingUI : MonoBehaviour
     private void UpdateUI()
     {
         levelText.text = $"Level: {currentBuilding.CurrentLevel}";
-        incomeText.text = $"Income: {currentBuilding.Income}";
+        incomeText.text = $"Income: {currentBuilding.IncomePerCycle}";
         //upgradePriceText.text = $"Upgrade cost: {currentBuilding.PriceToUpgrade}";
     }
 

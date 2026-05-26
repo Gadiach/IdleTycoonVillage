@@ -22,7 +22,7 @@ public class ShopItemHolder : MonoBehaviour
         titleText.text = Item.Name;
         descriptionText.text = Item.Description;
         currencyImage.sprite = ShopManager.currencySprites[Item.Currency];
-        priceText.text = Item.Price.ToString();
+        priceText.text = Item.PurchasePrice.ToString();
 
         if(Item.Level >= LevelSystem.Level)
         {
@@ -44,7 +44,7 @@ public class ShopItemHolder : MonoBehaviour
     {
         int currentMoney = CurrencySystem.GetCurrencyAmount(Item.Currency); 
 
-        if (currentMoney < Item.Price)
+        if (currentMoney < Item.PurchasePrice)
         {           
             priceText.color = Color.red; 
             if (dragComponent != null)

@@ -8,7 +8,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Common UI Elements")]
     public GameObject buildingPanel;
-    public TextMeshProUGUI automationStatusText;
+    public TextMeshProUGUI AutomationStatusText;
+    public TextMeshProUGUI IncomeText;
+    public TextMeshProUGUI TimeText;
     [SerializeField] private GameObject workerPanel;
     [SerializeField] private GameObject noWorkerPanel;
 
@@ -91,6 +93,10 @@ public class UIManager : MonoBehaviour
     {
         currentBuilding = building;
         currentWorker = building.Placeable.GetAssignedWorker();
+
+        UpdateIncomeText();
+        UpdateTimeText();
+
         BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
         BuildingImage.sprite = building.Icon;
         EvaluateBuildingUpgradeState();
@@ -135,6 +141,28 @@ public class UIManager : MonoBehaviour
     {
         WorkerUpgradePriceText.text =
             currentWorker.PriceToUpgrade.ToString();
+    }
+
+    private void UpdateIncomeText()
+    {
+        if (currentWorker == null)
+        {
+            IncomeText.text = "Income: --";
+            return;
+        }
+
+        IncomeText.text = $"Income: {currentBuilding.IncomePerCycle}";
+    }
+
+    private void UpdateTimeText()
+    {
+        if (currentWorker == null)
+        {
+            TimeText.text = "Time: --";
+            return;
+        }
+
+        TimeText.text = $"Time: {currentBuilding.ProductionDuration:F1}s";
     }
 
     private void EvaluateBuildingUpgradeState()
@@ -309,7 +337,7 @@ public class UIManager : MonoBehaviour
     {
         currentBuilding.UpgradeBuilding();
 
-        currentBuilding.PriceToUpgrade += 5;
+        UpdateIncomeText();
 
         EvaluateBuildingUpgradeState();
 
@@ -321,11 +349,11 @@ public class UIManager : MonoBehaviour
     {
         if (building.IsAutomated)
         {
-            automationStatusText.text = "ON";
+            AutomationStatusText.text = "ON";
         }
         else
         {
-            automationStatusText.text = "OFF";
+            AutomationStatusText.text = "OFF";
         }
     }
 

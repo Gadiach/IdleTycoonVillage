@@ -49902,7 +49902,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1781255408}
-  automationStatusText: {fileID: 1553292974}
+  AutomationStatusText: {fileID: 1553292974}
+  IncomeText: {fileID: 882907538}
+  TimeText: {fileID: 638566712}
   workerPanel: {fileID: 896521364}
   noWorkerPanel: {fileID: 1697926807}
   BuildingLevelText: {fileID: 1701490804}
@@ -53633,7 +53635,7 @@ GameObject:
   - component: {fileID: 1163067655}
   - component: {fileID: 1163067654}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: UpgradePriceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

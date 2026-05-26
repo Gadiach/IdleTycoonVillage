@@ -91,7 +91,7 @@ public class BuildingSystem : MonoBehaviour
                 Debug.LogError("Building prefab missing BuildingData!");
             }
 
-            placeable.Initialize(item.Price, item.Currency);
+            placeable.Initialize(item.PurchasePrice, item.Currency);
             PanZoom.current.FollowObject(obj.transform);
             return;
         }

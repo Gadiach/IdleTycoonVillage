@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ProgressionConfig", menuName = "Configs/ProgressionConfig")]
+
 public class ProgressionConfig : ScriptableObject
 {
     [Header("Max Level for Each Rarity")]
