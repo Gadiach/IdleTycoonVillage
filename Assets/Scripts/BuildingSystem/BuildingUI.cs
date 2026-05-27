@@ -154,7 +154,7 @@ public class BuildingUI : MonoBehaviour
 
     public void UpgradeBuilding()
     {
-        currentBuilding.UpgradeBuilding();
+        currentBuilding.UpgradeBuildingLvl();
         UpdateUI();
     }
 

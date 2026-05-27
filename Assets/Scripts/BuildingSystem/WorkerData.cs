@@ -5,43 +5,82 @@ using UnityEngine;
 [System.Serializable]
 public class WorkerData
 {
-    public BusinessType type;
-    public bool available = true;
-    public int level = 1;
-    public float speedBonus;
-    public float incomeBonus;
-    public Sprite roundIcon;
-    public int PriceToUpgrade = 3;
+    #region Definition Data
+    
+    public BusinessType Type;
+
+    public Sprite RoundIcon;
     public Sprite Icon;
-    public Rarities CurrentRarity = Rarities.Primitive;
-    public Tiers CurrentTier = Tiers.Tier1;
-    public int CurrentLevel = 1;
+
     public CurrencyType Currency;
-    [SerializeField]
-    public ProgressionConfig ProgressionConfig;
+
+    #endregion
+
+    #region Serialized Fields
+
+    [SerializeField] private ProgressionConfig progressionConfig;
+    [SerializeField] private UpgradeCostConfig upgradeCostConfig;
+
+    #endregion
+
+    #region Runtime State
+
+    public int CurrentLevel { get; private set; } = 1;
+
+    public Rarities CurrentRarity { get; private set; } = Rarities.Primitive;
+
+    public Tiers CurrentTier { get; private set; } = Tiers.Tier1;
+
+    public bool IsAvailable { get; private set; } = true;
+
     public BuildingData AssignedBuilding { get; set; }
 
+    #endregion
+
+    #region Calculated Properties
+
+    public int PriceToUpgrade
+    {
+        get
+        {
+            float rarityMultiplier = upgradeCostConfig.GetRarityWorkerUpgradeMultiplier(CurrentRarity);
+
+            float tierMultiplier = upgradeCostConfig.GetTierWorkerUpgradeMultiplier(CurrentTier);
+
+            float progressionMultiplier = Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1);
+
+            float basePrice = upgradeCostConfig.workerBaseUpgradePrice;
+
+            return Mathf.RoundToInt(basePrice * rarityMultiplier * tierMultiplier * progressionMultiplier);
+        }
+    }
 
     public int CurrentTierMaxLevel
     {
         get
         {
-            int baseMax =
-                ProgressionConfig.GetBaseMaxLevel(CurrentRarity);
+            int baseMax = progressionConfig.GetBaseMaxLevel(CurrentRarity);
 
-            int tierBonus =
-                ProgressionConfig.GetTierBonus(CurrentTier);
+            int tierBonus = progressionConfig.GetTierBonus(CurrentTier);
 
             return baseMax + tierBonus;
         }
     }
 
-    public void UpgradeWorker()
+    #endregion
+
+    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig)
     {
-        if (level >= CurrentTierMaxLevel)
+        this.progressionConfig = progressionConfig;
+        this.upgradeCostConfig = upgradeCostConfig;
+    }
+
+    public void UpgradeWorkerLvl()
+    {
+        if (CurrentLevel >= CurrentTierMaxLevel)
             return;
 
-        level++;
+        CurrentLevel++;
     }
 
     public Tiers NextTier
@@ -142,5 +181,19 @@ public class WorkerData
         }
 
         EventManager.Instance.QueueEvent(new WorkerTierOrRarityChangedEvent(this));
+    }
+
+    public void AssignToBuilding(BuildingData building)
+    {
+        AssignedBuilding = building;
+
+        IsAvailable = false;
+    }
+
+    public void UnassignFromBuilding()
+    {
+        AssignedBuilding = null;
+
+        IsAvailable = true;
     }
 }

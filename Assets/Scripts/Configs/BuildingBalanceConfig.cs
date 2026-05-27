@@ -5,16 +5,14 @@ using UnityEngine;
 public class BuildingBalanceConfig : ScriptableObject
 {
     [Header("Upgrade")]
-    public int baseUpgradePrice = 5;
-
-    public float upgradeMultiplier = 1.25f;
+    public int BaseUpgradePrice = 5;
 
     [Header("Income")]
-    public int baseIncomePerCycle = 5;
+    public int BaseIncomePerCycle = 5;
 
     [Header("Production")]
-    public float baseProductionDuration = 10f;
+    public float BaseProductionDuration = 10f;
 
     [Header("Automation")]
-    public int workerLevelNeededForAutomation = 5;
+    public int WorkerLevelNeededForAutomation = 5;
 }

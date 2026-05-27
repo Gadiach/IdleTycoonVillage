@@ -30,8 +30,10 @@ public class UIManager : MonoBehaviour
     public Button WorkerUpgradeButton;                  
     [SerializeField] private Image[] colorStarsWorker;  
 
-    [Header("Building UI")]
+    [Header("Buttons to open panels")]
+
     [SerializeField] private Button buildingButton;
+    [SerializeField] private Button workerButton;
 
     private BuildingData currentBuilding;
     private WorkerData currentWorker;
@@ -97,7 +99,7 @@ public class UIManager : MonoBehaviour
         UpdateIncomeText();
         UpdateTimeText();
 
-        BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
+        UpdateBuildingUpgradePriceText(building);
         BuildingImage.sprite = building.Icon;
         EvaluateBuildingUpgradeState();
 
@@ -130,6 +132,36 @@ public class UIManager : MonoBehaviour
         {
             BuildingUI.Instance.OpenBuildingPanel(building);
         });
+
+        workerButton.onClick.RemoveAllListeners();
+
+        workerButton.onClick.AddListener(() =>
+        {
+            WorkerUI.Instance.OpenWorkerPanel(currentWorker);
+        });
+    }
+
+    public void OnUpgradeBuildingLvlBtnClicked()
+    {
+        currentBuilding.UpgradeBuildingLvl();
+
+        UpdateIncomeText();
+
+        EvaluateBuildingUpgradeState();
+
+        UpdateBuildingUpgradePriceText(currentBuilding);
+
+        EventManager.Instance.QueueEvent(new XPAddedEvent(currentBuilding.CurrentLevel - 1));
+    }
+
+    public void OnUpgradeWorkerLvlBtnClicked()
+    {
+        currentWorker.UpgradeWorkerLvl();
+        EvaluateWorkerUpgradeState();
+
+        UpdateWorkerUpgradePriceText(); 
+
+        currentBuilding.CheckAutomationState();
     }
 
     private void UpdateWorkerImage()
@@ -139,8 +171,12 @@ public class UIManager : MonoBehaviour
 
     private void UpdateWorkerUpgradePriceText()
     {
-        WorkerUpgradePriceText.text =
-            currentWorker.PriceToUpgrade.ToString();
+        WorkerUpgradePriceText.text = currentWorker.PriceToUpgrade.ToString();
+    }
+
+    private void UpdateBuildingUpgradePriceText(BuildingData building)
+    {
+        BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
     }
 
     private void UpdateIncomeText()
@@ -218,11 +254,9 @@ public class UIManager : MonoBehaviour
 
         bool canAfford = CanAffordWorkerUpgrade();
 
-        WorkerUpgradePriceText.color =
-            canAfford ? Color.white : Color.red;
+        WorkerUpgradePriceText.color = canAfford ? Color.white : Color.red;
 
-        WorkerUpgradeButton.interactable =
-            canAfford;
+        WorkerUpgradeButton.interactable = canAfford;
     }
 
     private void SetBuildingUpgradeState(UpgradeUIState state)
@@ -245,25 +279,19 @@ public class UIManager : MonoBehaviour
 
         bool canAfford = CanAffordBuildingUpgrade();
 
-        BuildingUpgradePriceText.color =
-            canAfford ? Color.white : Color.red;
+        BuildingUpgradePriceText.color = canAfford ? Color.white : Color.red;
 
-        BuildingUpgradeButton.interactable =
-            canAfford;
+        BuildingUpgradeButton.interactable = canAfford;
     }
 
     private void SetBuildingLevelTextWithRedMaxLevel()
     {
-        BuildingLevelText.text =
-            $"Lv: {currentBuilding.CurrentLevel} / " +
-            $"<color=red>{currentBuilding.CurrentTierMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " + $"<color=red>{currentBuilding.CurrentTierMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextWithRedMaxLevel()
     {
-        WorkerLevelText.text =
-            $"Lv: {currentWorker.CurrentLevel} / " +
-            $"<color=red>{currentWorker.CurrentTierMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " + $"<color=red>{currentWorker.CurrentTierMaxLevel}</color>";
     }
 
     private void ApplyNeedBuildingTierUpgradeUI()
@@ -277,16 +305,12 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextMaxed()
     {
-        BuildingLevelText.text =
-            $"Lv: <color=red>{currentBuilding.CurrentLevel} / " +
-            $"{currentBuilding.CurrentTierMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: <color=red>{currentBuilding.CurrentLevel} / " + $"{currentBuilding.CurrentTierMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextMaxed()
     {
-        WorkerLevelText.text =
-            $"Lv: <color=red>{currentWorker.CurrentLevel} / " +
-            $"{currentWorker.CurrentTierMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " + $"{currentWorker.CurrentTierMaxLevel}</color>";
     }
 
     private Color GetColorByRarity(Rarities rarity)
@@ -331,18 +355,6 @@ public class UIManager : MonoBehaviour
     public void CloseBuildingPanel()
     {
         buildingPanel.SetActive(false);
-    }
-
-    public void OnUpgradeBuildingClicked()
-    {
-        currentBuilding.UpgradeBuilding();
-
-        UpdateIncomeText();
-
-        EvaluateBuildingUpgradeState();
-
-        BuildingUpgradePriceText.text = currentBuilding.PriceToUpgrade.ToString();
-        EventManager.Instance.QueueEvent(new XPAddedEvent(currentBuilding.CurrentLevel - 1));
     }
 
     private void UpdateAutomationUI(BuildingData building)

@@ -54,8 +54,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             {
                 StopTimer();
                 isAutomated = false;
-                EventManager.Instance.QueueEvent(new BuildingAutomationChangedEvent(
-                    GetComponent<BuildingData>(), false)); 
+                EventManager.Instance.QueueEvent(new BuildingAutomationChangedEvent(GetComponent<BuildingData>(), false)); 
             }
         }
     }
@@ -168,7 +167,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     public void AssignWorker(WorkerData worker)
     {
         assignedWorker = worker;
-        buildingRoundIconImage.sprite = worker.roundIcon;
+        buildingRoundIconImage.sprite = worker.RoundIcon;
         productionController.StartProduction();
     }
 

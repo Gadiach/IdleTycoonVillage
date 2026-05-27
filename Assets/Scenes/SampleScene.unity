@@ -4074,7 +4074,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946652923}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OnUpgradeBuildingClicked
+        m_MethodName: OnUpgradeBuildingLvlBtnClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49353,7 +49353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &896521365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49928,6 +49928,7 @@ MonoBehaviour:
   - {fileID: 1058600785}
   - {fileID: 393283160}
   buildingButton: {fileID: 825812184}
+  workerButton: {fileID: 1044873854}
 --- !u!4 &946652924
 Transform:
   m_ObjectHideFlags: 0
@@ -55753,7 +55754,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946652923}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: UpgradeBuilding
+        m_MethodName: OnUpgradeWorkerLvlBtnClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -61527,7 +61528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1697926808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -72026,6 +72027,7 @@ MonoBehaviour:
   allWorkers: []
   iconLibrary: {fileID: 11400000, guid: 7145ee2313bd6384ebfa938d9ae67905, type: 2}
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
+  upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
 --- !u!4 &1982822722
 Transform:
   m_ObjectHideFlags: 0

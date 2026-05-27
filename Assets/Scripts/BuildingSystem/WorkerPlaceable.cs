@@ -64,10 +64,9 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
         placed = true;
 
         WorkerData worker = WorkerManager.current.CreateWorker(workerType, register: true);
-        worker.available = false;
 
         assignedBuilding.AssignWorker(worker);
-        worker.AssignedBuilding = assignedBuilding.buildingData;
+        worker.AssignToBuilding(assignedBuilding.buildingData);
 
         Destroy(gameObject);
     }

@@ -1518,6 +1518,5 @@ MonoBehaviour:
   balanceConfig: {fileID: 11400000, guid: a5c2e27eeac12c34e8a7cb2f33469864, type: 2}
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
   economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
+  upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
   startProductionOnPlace: 1
-  CurrentRarity: 0
-  CurrentTier: 1

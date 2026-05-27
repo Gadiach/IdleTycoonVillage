@@ -9,7 +9,7 @@ public class EconomyProgressionConfig : ScriptableObject
     public RarityMultiplier[] rarityIncomeMultipliers;
     public TierMultiplier[] tierIncomeMultipliers;
 
-    [Header("Production Speed")]
+    [Header("Production Time")]
     public RarityMultiplier[] rarityProductionTimeMultipliers;
     public TierMultiplier[] tierProductionTimeMultipliers;
 

@@ -21,6 +21,7 @@ public class BuildingData : MonoBehaviour
     [SerializeField] private BuildingBalanceConfig balanceConfig;
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
+    [SerializeField] private UpgradeCostConfig upgradeCostConfig;
 
     [SerializeField] private bool startProductionOnPlace = true;
 
@@ -32,8 +33,9 @@ public class BuildingData : MonoBehaviour
     public bool IsAutomated { get; private set; }
     public int TotalIncomeCircles { get; private set; }
 
-    public Rarities CurrentRarity = Rarities.Primitive;
-    public Tiers CurrentTier = Tiers.Tier1;
+    public Rarities CurrentRarity { get; private set; } = Rarities.Primitive;
+
+    public Tiers CurrentTier { get; private set; } = Tiers.Tier1;
 
     public BuildingPlaceable Placeable { get; private set; }
 
@@ -45,15 +47,15 @@ public class BuildingData : MonoBehaviour
     {
         get
         {
-            float rarityMultiplier = economyConfig.GetRarityIncomeMultiplier(CurrentRarity);
+            float rarityMultiplier = upgradeCostConfig.GetRarityBuildingUpgradeMultiplier(CurrentRarity);
 
-            float tierMultiplier = economyConfig.GetTierIncomeMultiplier(CurrentTier);
+            float tierMultiplier = upgradeCostConfig.GetTierBuildingUpgradeMultiplier(CurrentTier);
 
-            float progressionPrice = Mathf.Pow(balanceConfig.upgradeMultiplier, CurrentLevel - 1);
+            float progressionMultiplier = Mathf.Pow(upgradeCostConfig.buildingUpgradeMultiplier,CurrentLevel - 1);
 
-            float basePrice = balanceConfig.baseUpgradePrice * rarityMultiplier * tierMultiplier;
+            float basePrice = balanceConfig.BaseUpgradePrice;
 
-            return Mathf.RoundToInt(basePrice * progressionPrice);
+            return Mathf.RoundToInt(basePrice * rarityMultiplier * tierMultiplier * progressionMultiplier);
         }
     }
 
@@ -65,17 +67,15 @@ public class BuildingData : MonoBehaviour
 
             float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(CurrentTier);
 
-            return balanceConfig.baseProductionDuration *
-                   rarityMultiplier *
-                   tierMultiplier;
+            return balanceConfig.BaseProductionDuration * rarityMultiplier * tierMultiplier;
         }
     }
 
-    public int IncomePerCycle => balanceConfig.baseIncomePerCycle * CurrentLevel;
+    public int IncomePerCycle => balanceConfig.BaseIncomePerCycle * CurrentLevel;
     public int TotalIncome => IncomePerCycle * TotalIncomeCircles;
     
     public bool StartProductionOnPlace => startProductionOnPlace;
-    public int LevelOfWorkerNeededForAutomation => balanceConfig.workerLevelNeededForAutomation;
+    public int LevelOfWorkerNeededForAutomation => balanceConfig.WorkerLevelNeededForAutomation;
 
     #endregion
     
@@ -252,7 +252,7 @@ public class BuildingData : MonoBehaviour
         ResetTotalIncomeCircles();
     }
 
-    public void UpgradeBuilding()
+    public void UpgradeBuildingLvl()
     {
         if (CurrentLevel >= CurrentTierMaxLevel)
         {
@@ -273,7 +273,7 @@ public class BuildingData : MonoBehaviour
         if (Placeable != null && Placeable.HasWorker())
         {
             WorkerData worker = Placeable.GetAssignedWorker();
-            newState = worker.level >= LevelOfWorkerNeededForAutomation;
+            newState = worker.CurrentLevel >= LevelOfWorkerNeededForAutomation;
         }
 
         if (IsAutomated != newState)

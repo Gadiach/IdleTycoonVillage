@@ -24,11 +24,9 @@ public class BuildingPlaceableEditor : Editor
 
         using (new EditorGUI.DisabledScope(true))
         {
-            EditorGUILayout.LabelField("Type", worker.type.ToString());
-            EditorGUILayout.IntField("Level", worker.level);
-            EditorGUILayout.Toggle("Available", worker.available);
-            EditorGUILayout.FloatField("Speed Bonus", worker.speedBonus);
-            EditorGUILayout.FloatField("Income Bonus", worker.incomeBonus);
+            EditorGUILayout.LabelField("Type", worker.Type.ToString());
+            EditorGUILayout.IntField("Level", worker.CurrentLevel);
+            EditorGUILayout.Toggle("Available", worker.IsAvailable);
             EditorGUILayout.ObjectField("Icon", worker.Icon, typeof(Sprite), false);
         }
     }

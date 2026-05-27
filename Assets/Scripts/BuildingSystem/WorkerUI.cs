@@ -51,33 +51,15 @@ public class WorkerUI : MonoBehaviour
         upgradeButton.interactable = canAfford;
     }
 
-    public void UpgradeWorker()
-    {
-        int price = GetUpgradePrice(currentWorker);
-
-        bool success = CurrencySystem.Instance.TrySpendCurrency(CurrencyType.Coins, price);
-
-        if (!success)
-            return;
-
-        currentWorker.level++;
-
-        priceForUpgradingText.text = GetUpgradePrice(currentWorker).ToString();
-
-        UpdateLvlTxt(currentWorker);
-
-        UpdateUpgradeButtonState();
-
-        EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(currentWorker));
-    }
+    
 
     private void UpdateLvlTxt(WorkerData worker)
     {
-        levelText.text = "Level: " + worker.level;
+        levelText.text = "Level: " + worker.CurrentLevel;
     }
 
     private int GetUpgradePrice(WorkerData worker)
     {
-        return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(1.25f, worker.level));
+        return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(1.25f, worker.CurrentLevel));
     }
 }
