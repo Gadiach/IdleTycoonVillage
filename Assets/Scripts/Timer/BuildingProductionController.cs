@@ -21,11 +21,13 @@ public class BuildingProductionController : MonoBehaviour
     private bool isBusinessAutomated;
 
     private BuildingData buildingData;
+    private WorkerData workerData;
 
     public bool HasActiveStudy => currentBlueprint != null;
 
     private void OnEnable()
     {
+        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -33,7 +35,7 @@ public class BuildingProductionController : MonoBehaviour
     {
         if (EventManager.Instance == null)
             return;
-
+        EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
         EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -50,6 +52,11 @@ public class BuildingProductionController : MonoBehaviour
         if (!buildingData.StartProductionOnPlace)       
         {
             UniversityManager.Instance.RegisterProduction(this);
+        }
+
+        if (buildingData.Placeable != null && buildingData.Placeable.HasWorker())
+        {
+            workerData = buildingData.Placeable.GetAssignedWorker();
         }
     }
 
@@ -72,15 +79,23 @@ public class BuildingProductionController : MonoBehaviour
         timerUI.ResetUI();
     }
 
+    private void OnWorkerAssigned(WorkerAssignedToBuildingEvent evt)
+    {
+        if (evt.Building != buildingData)
+            return;
+
+        workerData = evt.Worker;
+    }
+
     public void StartProduction()
     {
-        finishTime = DateTime.Now.AddSeconds(buildingData.ProductionDuration);
+        finishTime = DateTime.Now.AddSeconds(workerData.ProductionDuration);
 
         timer.Initialize(finishTime);
 
         timer.StartTimer();
 
-        timerUI.Initialize(buildingData.ProductionDuration);
+        timerUI.Initialize(workerData.ProductionDuration);
     }
 
     public void StartProduction(BlueprintItem blueprintItem)

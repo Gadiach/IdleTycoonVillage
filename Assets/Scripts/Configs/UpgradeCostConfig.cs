@@ -11,8 +11,6 @@ public class UpgradeCostConfig : ScriptableObject
 
     [Header("Worker Upgrade")]
 
-    public int workerBaseUpgradePrice = 3;
-
     public float workerUpgradeMultiplier = 1.2f;
 
     [Header("Building Upgrade Cost")]

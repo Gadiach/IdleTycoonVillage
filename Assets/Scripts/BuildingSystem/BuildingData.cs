@@ -13,12 +13,14 @@ public class BuildingData : MonoBehaviour
     public BusinessType BusinessType;
     public Sprite Icon;
     public int PurchasePrice;
+    [SerializeField] private int baseUpgradePrice = 5;
+    [SerializeField] private int baseIncomePerCycle = 5;
+    [SerializeField] private int workerLevelNeededForAutomation = 5;
 
     #endregion
 
     #region Serialized Fields
 
-    [SerializeField] private BuildingBalanceConfig balanceConfig;
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
@@ -47,35 +49,45 @@ public class BuildingData : MonoBehaviour
     {
         get
         {
-            float rarityMultiplier = upgradeCostConfig.GetRarityBuildingUpgradeMultiplier(CurrentRarity);
-
-            float tierMultiplier = upgradeCostConfig.GetTierBuildingUpgradeMultiplier(CurrentTier);
-
-            float progressionMultiplier = Mathf.Pow(upgradeCostConfig.buildingUpgradeMultiplier,CurrentLevel - 1);
-
-            float basePrice = balanceConfig.BaseUpgradePrice;
-
-            return Mathf.RoundToInt(basePrice * rarityMultiplier * tierMultiplier * progressionMultiplier);
+            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.buildingUpgradeMultiplier,CurrentLevel - 1));
         }
     }
 
-    public float ProductionDuration
+    public int CurrentProgressionMaxIncome
     {
         get
         {
-            float rarityMultiplier = economyConfig.GetRarityProductionTimeMultiplier(CurrentRarity);
+            float currentRarityMultiplier = economyConfig.GetRarityIncomeMultiplier(CurrentRarity);
 
-            float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(CurrentTier);
+            float currentTierMultiplier = economyConfig.GetTierIncomeMultiplier(CurrentTier);
 
-            return balanceConfig.BaseProductionDuration * rarityMultiplier * tierMultiplier;
+            return Mathf.RoundToInt(baseIncomePerCycle * CurrentProgressionMaxLevel * currentRarityMultiplier * currentTierMultiplier);
         }
     }
 
-    public int IncomePerCycle => balanceConfig.BaseIncomePerCycle * CurrentLevel;
+    public int NextProgressionMaxIncome
+    {
+        get
+        {
+            float nextRarityMultiplier = economyConfig.GetRarityIncomeMultiplier(NextProgressionRarity);
+
+            float nextTierMultiplier = economyConfig.GetTierIncomeMultiplier(NextProgressionTier);
+
+            int nextRarityMaxLevel = progressionConfig.GetRarityMaxLevel(NextProgressionRarity);
+
+            int nextTierLevelBonus = progressionConfig.GetTierLevelBonus(NextProgressionTier);
+
+            int nextMaxLevel = nextRarityMaxLevel + nextTierLevelBonus;
+
+            return Mathf.RoundToInt(baseIncomePerCycle * nextMaxLevel * nextRarityMultiplier * nextTierMultiplier);
+        }
+    }
+
+    public int IncomePerCycle => baseIncomePerCycle * CurrentLevel;
     public int TotalIncome => IncomePerCycle * TotalIncomeCircles;
     
     public bool StartProductionOnPlace => startProductionOnPlace;
-    public int LevelOfWorkerNeededForAutomation => balanceConfig.WorkerLevelNeededForAutomation;
+    public int LevelOfWorkerNeededForAutomation => workerLevelNeededForAutomation;
 
     #endregion
     
@@ -145,8 +157,7 @@ public class BuildingData : MonoBehaviour
 
         if (currentTierIndex < maxTier)
         {
-            CurrencyType blueprint =
-                CurrencyHelper.GetBlueprintCurrency(CurrentRarity);
+            CurrencyType blueprint = CurrencyHelper.GetBlueprintCurrency(CurrentRarity);
 
             requirements[blueprint] = currentTierIndex + 1;
             return requirements;
@@ -155,8 +166,7 @@ public class BuildingData : MonoBehaviour
         for (int r = 0; r <= currentRarityIndex; r++)
         {
             Rarities rarity = (Rarities)r;
-            CurrencyType blueprint =
-                CurrencyHelper.GetBlueprintCurrency(rarity);
+            CurrencyType blueprint = CurrencyHelper.GetBlueprintCurrency(rarity);
 
             if (r < currentRarityIndex)
                 requirements[blueprint] = maxTier;
@@ -208,17 +218,33 @@ public class BuildingData : MonoBehaviour
         EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
     }
 
-    public int CurrentTierMaxLevel
+    public int CurrentProgressionMaxLevel
     {
         get
         {
-            int baseMax = progressionConfig.GetBaseMaxLevel(CurrentRarity);
-            int tierBonus = progressionConfig.GetTierBonus(CurrentTier);
+            int baseMax = progressionConfig.GetRarityMaxLevel(CurrentRarity);
+            int tierBonus = progressionConfig.GetTierLevelBonus(CurrentTier);
             return baseMax + tierBonus;
         }
     }
 
-    public int NextTierMaxLevel
+    public Rarities NextProgressionRarity
+    {
+        get
+        {
+            return CurrentTier == Tiers.Tier5 ? NextRarity : CurrentRarity;
+        }
+    }
+
+    public Tiers NextProgressionTier
+    {
+        get
+        {
+            return CurrentTier == Tiers.Tier5 ? Tiers.Tier1 : NextTier;
+        }
+    }
+
+    public int NextProgressionMaxLevel
     {
         get
         {
@@ -238,8 +264,8 @@ public class BuildingData : MonoBehaviour
                 targetTier = Tiers.Tier1;
             }
 
-            int baseMax = progressionConfig.GetBaseMaxLevel(targetRarity);
-            int tierBonus = progressionConfig.GetTierBonus(targetTier);
+            int baseMax = progressionConfig.GetRarityMaxLevel(targetRarity);
+            int tierBonus = progressionConfig.GetTierLevelBonus(targetTier);
 
             return baseMax + tierBonus;
         }
@@ -254,7 +280,7 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeBuildingLvl()
     {
-        if (CurrentLevel >= CurrentTierMaxLevel)
+        if (CurrentLevel >= CurrentProgressionMaxLevel)
         {
             Debug.Log("Building is already at MAX level!");
             return;

@@ -48025,9 +48025,9 @@ RectTransform:
   - {fileID: 751879682}
   m_Father: {fileID: 1423112221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.5000124, y: -8.000008}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 71.144, y: 33.1344}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &768161890
@@ -51286,7 +51286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &957401947
 RectTransform:
   m_ObjectHideFlags: 0
@@ -52052,9 +52052,9 @@ RectTransform:
   - {fileID: 589035427}
   m_Father: {fileID: 1423112221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 134.6, y: -8.000008}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 71.144, y: 33.1344}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1031096251
@@ -57502,9 +57502,9 @@ RectTransform:
   - {fileID: 938320423}
   m_Father: {fileID: 1423112221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 69.30001, y: -8.000008}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 71.144, y: 33.1344}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1354032619
@@ -57895,7 +57895,7 @@ GameObject:
   - component: {fileID: 1372183287}
   - component: {fileID: 1372183286}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BuildingIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58520,6 +58520,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1423112221}
+  - component: {fileID: 1423112222}
   m_Layer: 5
   m_Name: PricePanel
   m_TagString: Untagged
@@ -58548,9 +58549,35 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3, y: -80}
+  m_AnchoredPosition: {x: -17.8, y: -84.9}
   m_SizeDelta: {x: 326.5403, y: 29.1437}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1423112222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423112220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1435546908
 GameObject:
   m_ObjectHideFlags: 0
@@ -59616,7 +59643,7 @@ GameObject:
   - component: {fileID: 1492772799}
   - component: {fileID: 1492772798}
   m_Layer: 5
-  m_Name: RarityText
+  m_Name: CurrentRarityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59770,9 +59797,9 @@ RectTransform:
   - {fileID: 365099748}
   m_Father: {fileID: 1423112221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -130, y: -8}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 71.144, y: 33.1344}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1500388179
@@ -73756,9 +73783,9 @@ RectTransform:
   - {fileID: 2006086115}
   m_Father: {fileID: 1423112221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62.99999, y: -8.000008}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 71.144, y: 33.1344}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1943385632
@@ -74265,7 +74292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1980132719
 RectTransform:
   m_ObjectHideFlags: 0
@@ -74374,6 +74401,7 @@ MonoBehaviour:
   iconLibrary: {fileID: 11400000, guid: 7145ee2313bd6384ebfa938d9ae67905, type: 2}
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
   upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
+  economyConfig: {fileID: 0}
 --- !u!4 &1982822722
 Transform:
   m_ObjectHideFlags: 0
@@ -76938,34 +76966,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da175ce14d233274391cbb739434d59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingIcon: {fileID: 0}
-  buildingNameText: {fileID: 0}
-  levelText: {fileID: 0}
-  incomeText: {fileID: 0}
-  rarityText: {fileID: 1492772798}
+  currentRarityText: {fileID: 1492772798}
+  currentTierRarityStarsColor:
+  - {fileID: 1107982128}
+  - {fileID: 1764410054}
+  - {fileID: 323328487}
+  - {fileID: 421552696}
+  - {fileID: 219468798}
+  nextTierRarityStarsColor:
+  - {fileID: 1797001124}
+  - {fileID: 305453842}
+  - {fileID: 993061844}
+  - {fileID: 71674397}
+  - {fileID: 221159413}
+  buildingIcon: {fileID: 1372183286}
+  currentMaxLvlTxt: {fileID: 407140096}
+  nextMaxLvlTxt: {fileID: 878696130}
+  CurrentMaxIncomeText: {fileID: 147747513}
+  NextMaxIncomeText: {fileID: 1917589468}
+  addStarButton: {fileID: 1487377942}
+  buildingPanel: {fileID: 1980132718}
+  blueprintSlots:
+  - {fileID: 1497111249}
+  - {fileID: 1937123952}
+  - {fileID: 766773984}
+  - {fileID: 1351261525}
+  - {fileID: 1028101207}
   upgradePriceTexts:
   - {fileID: 1637869337}
   - {fileID: 739964622}
   - {fileID: 504646522}
   - {fileID: 1545764180}
   - {fileID: 1065306894}
-  upgradeButton: {fileID: 1487377942}
-  businessType: {fileID: 0}
-  currentTierMaxLvlTxt: {fileID: 407140096}
-  nextTierMaxLvlTxt: {fileID: 878696130}
-  buildingPanel: {fileID: 1980132718}
-  colorStars:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  nextTierColorStars:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &2121644997
 GameObject:
   m_ObjectHideFlags: 0

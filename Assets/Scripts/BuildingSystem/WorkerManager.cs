@@ -11,6 +11,7 @@ public class WorkerManager : MonoBehaviour
 
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
+    [SerializeField] private EconomyProgressionConfig economyConfig;
     private void Awake()
     {
         current = this;
@@ -26,7 +27,7 @@ public class WorkerManager : MonoBehaviour
 
     public WorkerData CreateWorker(BusinessType type, bool register)
     {
-        var w = new WorkerData(progressionConfig,upgradeCostConfig)
+        var w = new WorkerData(progressionConfig,upgradeCostConfig, economyConfig)
         {
             Type = type,
 

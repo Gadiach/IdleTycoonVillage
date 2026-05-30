@@ -198,12 +198,12 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        TimeText.text = $"Time: {currentBuilding.ProductionDuration:F1}s";
+        TimeText.text = $"Time: {currentWorker.ProductionDuration:F1}s";
     }
 
     private void EvaluateBuildingUpgradeState()
     {
-        if (currentBuilding.CurrentLevel >= currentBuilding.CurrentTierMaxLevel)
+        if (currentBuilding.CurrentLevel >= currentBuilding.CurrentProgressionMaxLevel)
         {
             SetBuildingUpgradeState(UpgradeUIState.NeedTierUpgrade);
         }
@@ -286,7 +286,7 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextWithRedMaxLevel()
     {
-        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " + $"<color=red>{currentBuilding.CurrentTierMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " + $"<color=red>{currentBuilding.CurrentProgressionMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextWithRedMaxLevel()
@@ -305,7 +305,7 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextMaxed()
     {
-        BuildingLevelText.text = $"Lv: <color=red>{currentBuilding.CurrentLevel} / " + $"{currentBuilding.CurrentTierMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: <color=red>{currentBuilding.CurrentLevel} / " + $"{currentBuilding.CurrentProgressionMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextMaxed()

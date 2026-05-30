@@ -10,7 +10,7 @@ public class ProgressionConfig : ScriptableObject
     [Header("Bonus Levels for Each Tier")]
     public TierLevel[] tierLevels;
 
-    public int GetBaseMaxLevel(Rarities rarity)
+    public int GetRarityMaxLevel(Rarities rarity)
     {
         foreach (var r in rarityLevels)
         {
@@ -22,7 +22,7 @@ public class ProgressionConfig : ScriptableObject
         return 1;
     }
 
-    public int GetTierBonus(Tiers tier)
+    public int GetTierLevelBonus(Tiers tier)
     {
         foreach (var t in tierLevels)
         {

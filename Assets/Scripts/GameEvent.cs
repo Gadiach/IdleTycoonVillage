@@ -113,5 +113,18 @@ public class BuildingPlacedEvent : GameEvent
     }
 }
 
+public class WorkerAssignedToBuildingEvent : GameEvent
+{
+    public BuildingData Building { get; private set; }
+
+    public WorkerData Worker { get; private set; }
+
+    public WorkerAssignedToBuildingEvent(BuildingData building, WorkerData worker)
+    {
+        Building = building;
+        Worker = worker;
+    }
+}
+
 
 

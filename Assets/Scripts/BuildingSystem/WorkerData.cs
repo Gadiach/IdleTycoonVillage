@@ -13,13 +13,16 @@ public class WorkerData
     public Sprite Icon;
 
     public CurrencyType Currency;
+    [SerializeField] private float baseProductionDuration = 10f;
+    [SerializeField] private float baseUpgradePrice = 3f;
 
     #endregion
 
-    #region Serialized Fields
+    #region Configs
 
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
+    [SerializeField] private EconomyProgressionConfig economyConfig;
 
     #endregion
 
@@ -43,15 +46,19 @@ public class WorkerData
     {
         get
         {
-            float rarityMultiplier = upgradeCostConfig.GetRarityWorkerUpgradeMultiplier(CurrentRarity);
+            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
+        }
+    }
 
-            float tierMultiplier = upgradeCostConfig.GetTierWorkerUpgradeMultiplier(CurrentTier);
+    public float ProductionDuration
+    {
+        get
+        {
+            float rarityMultiplier = economyConfig.GetRarityProductionTimeMultiplier(CurrentRarity);
 
-            float progressionMultiplier = Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1);
+            float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(CurrentTier);
 
-            float basePrice = upgradeCostConfig.workerBaseUpgradePrice;
-
-            return Mathf.RoundToInt(basePrice * rarityMultiplier * tierMultiplier * progressionMultiplier);
+            return baseProductionDuration * rarityMultiplier * tierMultiplier;
         }
     }
 
@@ -59,9 +66,9 @@ public class WorkerData
     {
         get
         {
-            int baseMax = progressionConfig.GetBaseMaxLevel(CurrentRarity);
+            int baseMax = progressionConfig.GetRarityMaxLevel(CurrentRarity);
 
-            int tierBonus = progressionConfig.GetTierBonus(CurrentTier);
+            int tierBonus = progressionConfig.GetTierLevelBonus(CurrentTier);
 
             return baseMax + tierBonus;
         }
@@ -69,10 +76,11 @@ public class WorkerData
 
     #endregion
 
-    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig)
+    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
     {
         this.progressionConfig = progressionConfig;
         this.upgradeCostConfig = upgradeCostConfig;
+        this.economyConfig = economyConfig;
     }
 
     public void UpgradeWorkerLvl()

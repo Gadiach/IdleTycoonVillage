@@ -387,8 +387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72e14aad34576a44897ce10bfc4458b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisHouseObject: {fileID: 3285537844617060477}
-  timerTooltip: {fileID: 1603509743723744176}
+  buildingData: {fileID: 0}
+  productionController: {fileID: 0}
   audioSource: {fileID: 5581537094962189082}
 --- !u!1 &2481981350533294279
 GameObject:
@@ -662,7 +662,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.2464, y: -4.4942, z: 0}
-  m_LocalScale: {x: 0.79078287, y: 0.71496004, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3490136033381153834}

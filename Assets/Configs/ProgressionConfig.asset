@@ -16,21 +16,21 @@ MonoBehaviour:
   - rarity: 0
     maxLevel: 2
   - rarity: 1
-    maxLevel: 4
+    maxLevel: 30
   - rarity: 2
-    maxLevel: 6
+    maxLevel: 60
   - rarity: 3
-    maxLevel: 8
+    maxLevel: 100
   - rarity: 4
-    maxLevel: 10
+    maxLevel: 150
   tierLevels:
   - tier: 1
     bonus: 0
   - tier: 2
-    bonus: 3
+    bonus: 5
   - tier: 3
-    bonus: 6
-  - tier: 4
     bonus: 9
-  - tier: 5
+  - tier: 4
     bonus: 13
+  - tier: 5
+    bonus: 20

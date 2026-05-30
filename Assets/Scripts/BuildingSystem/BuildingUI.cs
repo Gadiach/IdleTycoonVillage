@@ -7,23 +7,25 @@ public class BuildingUI : MonoBehaviour
     public static BuildingUI Instance;
 
     [Header("UI Elements")]
-    [SerializeField] private Image buildingIcon;
-    [SerializeField] private TextMeshProUGUI buildingNameText;
-    [SerializeField] private TextMeshProUGUI levelText;
-    [SerializeField] private TextMeshProUGUI incomeText;
-    [SerializeField] private TextMeshProUGUI rarityText;
-    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
+    [SerializeField] private TextMeshProUGUI currentRarityText;
 
-    [SerializeField] private Button upgradeButton;
-    [SerializeField] private TextMeshProUGUI businessType;
-    [SerializeField] private TextMeshProUGUI currentTierMaxLvlTxt;
-    [SerializeField] private TextMeshProUGUI nextTierMaxLvlTxt;
+    [SerializeField] private Image[] currentTierRarityStarsColor;
+    [SerializeField] private Image[] nextTierRarityStarsColor;
+
+    [SerializeField] private Image buildingIcon;
+
+    [SerializeField] private TextMeshProUGUI currentMaxLvlTxt;
+    [SerializeField] private TextMeshProUGUI nextMaxLvlTxt;
+
+    [SerializeField] private TextMeshProUGUI CurrentMaxIncomeText;
+    [SerializeField] private TextMeshProUGUI NextMaxIncomeText;
+
+    [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject buildingPanel;
 
-    [SerializeField] private Image[] colorStars;
-    [SerializeField] private Image[] nextTierColorStars;
-
+    [SerializeField] private GameObject[] blueprintSlots;
+    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
 
     private BuildingData currentBuilding;
 
@@ -36,19 +38,10 @@ public class BuildingUI : MonoBehaviour
     public void OpenBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
-        buildingIcon.sprite = currentBuilding.Icon;
-        buildingNameText.text = building.Name;
-        businessType.text = currentBuilding.BusinessType.ToString();
-        levelText.text = $"{building.CurrentLevel}";
-        //incomeText.text = $"Income: {building.Income}";
-        rarityText.text = building.CurrentRarity.ToString();
-        //upgradeCostText.text = $"Upgrade cost: {building.PriceToUpgrade}";
-        currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
-        nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString() ;
-        UpdateStarUI(building);
-        UpdateStarUpgradeButton();
-        UpdateStarUpgradeCostText();
-        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
+
+        UpdateBuildingPanelUI();
+
+        buildingIcon.sprite = currentBuilding.Icon; // later put into  UpdateUI()
 
         buildingPanel.SetActive(true);
     }
@@ -66,56 +59,91 @@ public class BuildingUI : MonoBehaviour
         };
     }
 
+    private void UpdateBuildingPanelUI()
+    {
+        UpdateCurrentRarityText();
+
+        UpdateStarUI(currentBuilding);
+
+        UpdatecurrentMaxLvlTxt();
+
+        UpdateNextMaxLvlTxt();
+
+        UpdateCurrentMaxIncomeText();
+
+        UpdateNextMaxIncomeText();
+
+        UpdateStarUpgradeButton();
+
+        UpdateBlueprintPriceUI();
+    }
+
+    private void UpdateCurrentRarityText()
+    {
+        currentRarityText.text = currentBuilding.CurrentRarity.ToString();
+    }
+
+    private void UpdatecurrentMaxLvlTxt()
+    {
+        currentMaxLvlTxt.text = currentBuilding.CurrentProgressionMaxLevel.ToString();
+    }
+
+    private void UpdateNextMaxLvlTxt()
+    {
+        nextMaxLvlTxt.text = currentBuilding.NextProgressionMaxLevel.ToString();
+    }
+
+    private void UpdateCurrentMaxIncomeText()
+    {
+        CurrentMaxIncomeText.text = currentBuilding.CurrentProgressionMaxIncome.ToString();
+    }
+
+    private void UpdateNextMaxIncomeText()
+    {
+        NextMaxIncomeText.text = currentBuilding.NextProgressionMaxIncome.ToString();
+    }
+
+    private void UpdateBlueprintPriceUI()
+    {
+        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
+
+        int index = 0;
+
+        foreach (var req in requirements)
+        {
+            blueprintSlots[index].SetActive(true);
+
+            CurrencyType blueprint = req.Key;
+
+            int owned = CurrencySystem.GetCurrencyAmount(blueprint);
+
+            int required = req.Value;
+
+            upgradePriceTexts[index].text = $"{owned}/{required}";
+
+            upgradePriceTexts[index].color = owned >= required ? Color.white : Color.red;
+
+            index++;
+        }
+
+        for (; index < blueprintSlots.Length; index++)
+        {
+            blueprintSlots[index].SetActive(false);
+        }
+    }
+
     private void UpdateStarUpgradeButton()
     {
         bool canUpgrade = currentBuilding.CanUpgradeTierOrRarity();
 
-        upgradeButton.interactable = canUpgrade;
-        upgradePriceTexts[0].color = canUpgrade ? Color.white : Color.red;       
+        addStarButton.interactable = canUpgrade;      
     }
 
     public void OnAddStarButtonClicked()
     {
         currentBuilding.UpgradeTierOrRarity();
 
-        UpdateStarUI(currentBuilding);
-        UpdateStarUpgradeCostText();
-        UpdateStarUpgradeButton();
-
-        currentTierMaxLvlTxt.text = currentBuilding.CurrentTierMaxLevel.ToString();
-        nextTierMaxLvlTxt.text = currentBuilding.NextTierMaxLevel.ToString();
-    }
-
-    private void UpdateStarUpgradeCostText()
-    {
-        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
-
-        int currentRarityIndex = (int)currentBuilding.CurrentRarity;
-
-        for (int r = 0; r < upgradePriceTexts.Length; r++)
-        {
-            var text = upgradePriceTexts[r];
-
-            if (r > currentRarityIndex)
-            {
-                text.gameObject.SetActive(false);
-                continue;
-            }
-
-            text.gameObject.SetActive(true);
-
-            Rarities rarity = (Rarities)r;
-            CurrencyType blueprint =
-                CurrencyHelper.GetBlueprintCurrency(rarity);
-
-            int owned = CurrencySystem.GetCurrencyAmount(blueprint);
-            int required = requirements.TryGetValue(blueprint, out int val)
-                ? val
-                : 0;
-
-            text.text = $"{owned}/{required}";
-            text.color = owned >= required ? Color.white : Color.red;
-        }
+        UpdateBuildingPanelUI();
     }
 
     private void UpdateStarUI(BuildingData building)
@@ -125,18 +153,18 @@ public class BuildingUI : MonoBehaviour
         int currentTier = (int)info.CurrentTier;
         int nextTier = (int)info.NextTierValue;
 
-        int maxStars = colorStars.Length;
+        int maxStars = currentTierRarityStarsColor.Length;
 
         Color activeColor = GetColorByRarity(info.CurrentRarity);
         Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)
-            colorStars[i].color = (i < currentTier) ? activeColor : inactiveColor;
+            currentTierRarityStarsColor[i].color = (i < currentTier) ? activeColor : inactiveColor;
 
         if (nextTier > currentTier)
         {
             for (int i = 0; i < maxStars; i++)
-                nextTierColorStars[i].color = (i < nextTier) ? activeColor : inactiveColor;
+                nextTierRarityStarsColor[i].color = (i < nextTier) ? activeColor : inactiveColor;
 
             return;
         }
@@ -146,7 +174,7 @@ public class BuildingUI : MonoBehaviour
             Color nextColor = GetColorByRarity(info.NextRarity);
 
             for (int i = 0; i < maxStars; i++)
-                nextTierColorStars[i].color = (i == 0) ? nextColor : inactiveColor;
+                nextTierRarityStarsColor[i].color = (i == 0) ? nextColor : inactiveColor;
 
             return;
         }
@@ -155,14 +183,7 @@ public class BuildingUI : MonoBehaviour
     public void UpgradeBuilding()
     {
         currentBuilding.UpgradeBuildingLvl();
-        UpdateUI();
-    }
-
-    private void UpdateUI()
-    {
-        levelText.text = $"Level: {currentBuilding.CurrentLevel}";
-        incomeText.text = $"Income: {currentBuilding.IncomePerCycle}";
-        //upgradePriceText.text = $"Upgrade cost: {currentBuilding.PriceToUpgrade}";
+        
     }
 
     public void ClosePanel()
