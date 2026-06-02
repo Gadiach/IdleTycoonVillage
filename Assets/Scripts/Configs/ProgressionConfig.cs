@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class ProgressionConfig : ScriptableObject
 {
-    [Header("Max Level for Each Rarity")]
-    public RarityLevel[] rarityLevels;
+    [Header("Building level progression")]
 
-    [Header("Bonus Levels for Each Tier")]
-    public TierLevel[] tierLevels;
+    public RarityLevel[] BuildingRarityLevels;
 
-    public int GetRarityMaxLevel(Rarities rarity)
+    public TierLevel[] BuildingTierLevels;
+
+    [Header("Worker level progression")]
+
+    public RarityLevel[] WorkerRarityLevels;
+
+    public TierLevel[] WorkerTierLevels;
+
+    public int GetBuildingRarityMaxLevel(Rarities rarity)
     {
-        foreach (var r in rarityLevels)
+        foreach (var r in BuildingRarityLevels)
         {
             if (r.rarity == rarity)
                 return r.maxLevel;
@@ -22,9 +28,33 @@ public class ProgressionConfig : ScriptableObject
         return 1;
     }
 
-    public int GetTierLevelBonus(Tiers tier)
+    public int GetWorkerRarityMaxLevel(Rarities rarity)
     {
-        foreach (var t in tierLevels)
+        foreach (var r in WorkerRarityLevels)
+        {
+            if (r.rarity == rarity)
+                return r.maxLevel;
+        }
+
+        Debug.LogError($"No rarity config found for {rarity}");
+        return 1;
+    }
+
+    public int GetBuildingTierLevelBonus(Tiers tier)
+    {
+        foreach (var t in BuildingTierLevels)
+        {
+            if (t.tier == tier)
+                return t.bonus;
+        }
+
+        Debug.LogError($"No tier config found for {tier}");
+        return 0;
+    }
+
+    public int GetWorkerTierLevelBonus(Tiers tier)
+    {
+        foreach (var t in WorkerTierLevels)
         {
             if (t.tier == tier)
                 return t.bonus;

@@ -50,6 +50,7 @@ public class UIManager : MonoBehaviour
         EventManager.Instance.AddListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
         EventManager.Instance.AddListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
+        EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
     }
 
     private void OnDisable()
@@ -82,6 +83,15 @@ public class UIManager : MonoBehaviour
 
         EvaluateBuildingUpgradeState();
         UpdateBuildingStarUI(currentBuilding);
+    }
+
+    private void OnWorkerTierOrRarityChanged(WorkerTierOrRarityChangedEvent evt)
+    {
+        if (currentWorker != evt.Worker)
+            return;
+
+        EvaluateWorkerUpgradeState();
+        UpdateWorkerStarUI(currentWorker);
     }
 
     public void OpenWorkerShop()
@@ -157,6 +167,9 @@ public class UIManager : MonoBehaviour
     public void OnUpgradeWorkerLvlBtnClicked()
     {
         currentWorker.UpgradeWorkerLvl();
+
+        UpdateTimeText();
+
         EvaluateWorkerUpgradeState();
 
         UpdateWorkerUpgradePriceText(); 
@@ -198,7 +211,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        TimeText.text = $"Time: {currentWorker.ProductionDuration:F1}s";
+        TimeText.text = $"Time: {currentWorker.CycleDuration:F2}s";
     }
 
     private void EvaluateBuildingUpgradeState()
@@ -215,7 +228,7 @@ public class UIManager : MonoBehaviour
 
     private void EvaluateWorkerUpgradeState()
     {
-        if (currentWorker.CurrentLevel >= currentWorker.CurrentTierMaxLevel)
+        if (currentWorker.CurrentLevel >= currentWorker.CurrentProgressionMaxLevel)
         {
             SetWorkerUpgradeState(UpgradeUIState.NeedTierUpgrade);
         }
@@ -291,7 +304,7 @@ public class UIManager : MonoBehaviour
 
     private void SetWorkerLevelTextWithRedMaxLevel()
     {
-        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " + $"<color=red>{currentWorker.CurrentTierMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " + $"<color=red>{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private void ApplyNeedBuildingTierUpgradeUI()
@@ -310,7 +323,7 @@ public class UIManager : MonoBehaviour
 
     private void SetWorkerLevelTextMaxed()
     {
-        WorkerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " + $"{currentWorker.CurrentTierMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " + $"{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private Color GetColorByRarity(Rarities rarity)

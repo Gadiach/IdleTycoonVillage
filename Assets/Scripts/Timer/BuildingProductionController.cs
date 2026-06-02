@@ -27,7 +27,6 @@ public class BuildingProductionController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -35,7 +34,6 @@ public class BuildingProductionController : MonoBehaviour
     {
         if (EventManager.Instance == null)
             return;
-        EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
         EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
     }
 
@@ -60,6 +58,11 @@ public class BuildingProductionController : MonoBehaviour
         }
     }
 
+    public void SetWorker(WorkerData worker)
+    {
+        workerData = worker;
+    }
+
     public void CollectReward()
     {
         SetIncomeButton(false);
@@ -79,23 +82,15 @@ public class BuildingProductionController : MonoBehaviour
         timerUI.ResetUI();
     }
 
-    private void OnWorkerAssigned(WorkerAssignedToBuildingEvent evt)
-    {
-        if (evt.Building != buildingData)
-            return;
-
-        workerData = evt.Worker;
-    }
-
     public void StartProduction()
     {
-        finishTime = DateTime.Now.AddSeconds(workerData.ProductionDuration);
+        finishTime = DateTime.Now.AddSeconds(workerData.CycleDuration);
 
         timer.Initialize(finishTime);
 
         timer.StartTimer();
 
-        timerUI.Initialize(workerData.ProductionDuration);
+        timerUI.Initialize(workerData.CycleDuration);
     }
 
     public void StartProduction(BlueprintItem blueprintItem)

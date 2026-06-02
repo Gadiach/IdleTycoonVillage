@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b077954468833ea4fadb99b4065f6309, type: 3}
   m_Name: ProgressionConfig
   m_EditorClassIdentifier: 
-  rarityLevels:
+  BuildingRarityLevels:
   - rarity: 0
     maxLevel: 2
   - rarity: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
     maxLevel: 100
   - rarity: 4
     maxLevel: 150
-  tierLevels:
+  BuildingTierLevels:
   - tier: 1
     bonus: 0
   - tier: 2
@@ -34,3 +34,25 @@ MonoBehaviour:
     bonus: 13
   - tier: 5
     bonus: 20
+  WorkerRarityLevels:
+  - rarity: 0
+    maxLevel: 5
+  - rarity: 1
+    maxLevel: 70
+  - rarity: 2
+    maxLevel: 160
+  - rarity: 3
+    maxLevel: 300
+  - rarity: 4
+    maxLevel: 500
+  WorkerTierLevels:
+  - tier: 1
+    bonus: 0
+  - tier: 2
+    bonus: 5
+  - tier: 3
+    bonus: 10
+  - tier: 4
+    bonus: 15
+  - tier: 5
+    bonus: 25

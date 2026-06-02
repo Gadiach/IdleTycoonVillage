@@ -6,17 +6,28 @@ public class WorkerUI : MonoBehaviour
 {
     public static WorkerUI Instance;
 
-    [SerializeField] private Image icon;
-    [SerializeField] private TextMeshProUGUI levelText;
-    [SerializeField] private Text typeText;
-    [SerializeField] private Text speedBonusText;
-    [SerializeField] private Text incomeBonusText;
-    [SerializeField] private TextMeshProUGUI priceForUpgradingText;
-    private WorkerData currentWorker;
-    [SerializeField] private int baseUpgradePrice = 10;
+    [Header("UI Elements")]
+    [SerializeField] private TextMeshProUGUI currentRarityText;
+
+    [SerializeField] private Image[] currentTierRarityStarsColor;
+    [SerializeField] private Image[] nextTierRarityStarsColor;
+
+    [SerializeField] private Image workerIcon;
+
+    [SerializeField] private TextMeshProUGUI currentMaxLvlTxt;
+    [SerializeField] private TextMeshProUGUI nextMaxLvlTxt;
+
+    [SerializeField] private TextMeshProUGUI currentMinCycleDurationText;
+    [SerializeField] private TextMeshProUGUI nextMinCycleDurationText;
+
+    [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject workerPanel;
-    [SerializeField] private Button upgradeButton;
+
+    [SerializeField] private GameObject[] blueprintSlots;
+    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
+
+    private WorkerData currentWorker;
 
     private void Awake()
     {
@@ -28,38 +39,150 @@ public class WorkerUI : MonoBehaviour
     {
         currentWorker = worker;
 
-        UpdateUpgradeButtonState();
+        workerIcon.sprite = currentWorker.Icon;
 
-        icon.sprite = worker.Icon;
-
-        UpdateLvlTxt(currentWorker);
-
-        priceForUpgradingText.text = GetUpgradePrice(currentWorker).ToString();
+        UpdateWorkerPanelUI();
 
         workerPanel.SetActive(true);
     }
 
-    private void UpdateUpgradeButtonState()
+    private void UpdateWorkerPanelUI()
     {
-        int price = GetUpgradePrice(currentWorker);
+        UpdateCurrentRarityText();
 
-        bool canAfford =
-            CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
-                CurrencyType.Coins,
-                price);
+        UpdateStarUI(currentWorker);
 
-        upgradeButton.interactable = canAfford;
+        UpdateCurrentMaxLvlTxt();
+
+        UpdateNextMaxLvlTxt();
+
+        UpdateCurrentMinCycleDurationText();
+
+        UpdateNextMinCycleDurationText();
+
+        UpdateStarUpgradeButton();
+
+        UpdateBlueprintPriceUI();
     }
 
-    
-
-    private void UpdateLvlTxt(WorkerData worker)
+    private void UpdateCurrentRarityText()
     {
-        levelText.text = "Level: " + worker.CurrentLevel;
+        currentRarityText.text = currentWorker.CurrentRarity.ToString();
     }
 
-    private int GetUpgradePrice(WorkerData worker)
+    private void UpdateCurrentMaxLvlTxt()
     {
-        return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(1.25f, worker.CurrentLevel));
+        currentMaxLvlTxt.text = currentWorker.CurrentProgressionMaxLevel.ToString();
+    }
+
+    private void UpdateNextMaxLvlTxt()
+    {
+        nextMaxLvlTxt.text = currentWorker.NextProgressionMaxLevel.ToString();
+    }
+
+    private void UpdateCurrentMinCycleDurationText()
+    {
+        currentMinCycleDurationText.text = currentWorker.CurrentProgressionMinCycleDuration.ToString("F1");
+    }
+
+    private void UpdateNextMinCycleDurationText()
+    {
+        nextMinCycleDurationText.text = currentWorker.NextProgressionMinCycleDuration.ToString("F1");
+    }
+
+    private void UpdateStarUpgradeButton()
+    {
+        addStarButton.interactable = currentWorker.CanUpgradeTierOrRarity();
+    }
+
+    private void UpdateBlueprintPriceUI()
+    {
+        var requirements = currentWorker.GetBlueprintRequirementsForNextUpgrade();
+
+        int index = 0;
+
+        foreach (var req in requirements)
+        {
+            blueprintSlots[index].SetActive(true);
+
+            int owned = CurrencySystem.GetCurrencyAmount(req.Key);
+
+            int required = req.Value;
+
+            upgradePriceTexts[index].text = $"{owned}/{required}";
+
+            upgradePriceTexts[index].color = owned >= required ? Color.white : Color.red;
+
+            index++;
+        }
+
+        for (int i = index; i < blueprintSlots.Length; i++)
+        {
+            blueprintSlots[i].SetActive(false);
+        }
+    }
+
+    public void OnAddStarButtonClicked()
+    {
+        currentWorker.UpgradeTierOrRarity();
+
+        UpdateWorkerPanelUI();
+    }
+
+    public void ClosePanel()
+    {
+        workerPanel.SetActive(false);
+    }
+
+    private Color GetColorByRarity(Rarities rarity)
+    {
+        return rarity switch
+        {
+            Rarities.Primitive => Color.blue,
+            Rarities.Developed => Color.green,
+            Rarities.Industrial => Color.yellow,
+            Rarities.Modern => new Color(0.5f, 0f, 1f),
+            Rarities.Futuristic => Color.red,
+            _ => Color.grey
+        };
+    }
+
+    private void UpdateStarUI(WorkerData worker)
+    {
+        var info = worker.GetStarDisplayInfo();
+
+        int currentTier = (int)info.CurrentTier;
+        int nextTier = (int)info.NextTierValue;
+
+        int maxStars = currentTierRarityStarsColor.Length;
+
+        Color activeColor = GetColorByRarity(info.CurrentRarity);
+
+        Color inactiveColor = Color.grey;
+
+        for (int i = 0; i < maxStars; i++)
+        {
+            currentTierRarityStarsColor[i].color = (i < currentTier) ? activeColor : inactiveColor;
+        }
+
+        if (nextTier > currentTier)
+        {
+            for (int i = 0; i < maxStars; i++)
+            {
+                nextTierRarityStarsColor[i].color = (i < nextTier) ? activeColor : inactiveColor;
+            }
+
+            return;
+        }
+
+        if (info.NextRarity != info.CurrentRarity)
+        {
+            Color nextColor = GetColorByRarity(info.NextRarity);
+
+            for (int i = 0; i < maxStars; i++)
+            {
+                nextTierRarityStarsColor[i].color = (i == 0) ? nextColor : inactiveColor;
+            }
+        }
     }
 }

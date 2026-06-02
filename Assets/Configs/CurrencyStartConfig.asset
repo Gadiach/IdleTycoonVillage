@@ -12,18 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c07c9d837d0494aaa85b7b7ef56d90, type: 3}
   m_Name: CurrencyStartConfig
   m_EditorClassIdentifier: 
-  startAmounts:
+  currencies:
   - currencyType: 0
     amount: 50
   - currencyType: 1
     amount: 0
+  buildingBlueprints:
   - currencyType: 2
     amount: 2
   - currencyType: 3
-    amount: 17
+    amount: 0
   - currencyType: 4
     amount: 0
   - currencyType: 5
     amount: 0
   - currencyType: 6
+    amount: 0
+  workerBlueprints:
+  - currencyType: 7
+    amount: 3
+  - currencyType: 8
+    amount: 0
+  - currencyType: 9
+    amount: 1
+  - currencyType: 10
+    amount: 0
+  - currencyType: 11
     amount: 0

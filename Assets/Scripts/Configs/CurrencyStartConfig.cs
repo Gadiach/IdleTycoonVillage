@@ -5,7 +5,14 @@ using UnityEngine;
 
 public class CurrencyStartConfig : ScriptableObject
 {
-    public CurrencyAmount[] startAmounts;
+    [Header("Currencies")]
+    public CurrencyAmount[] currencies;
+
+    [Header("Building Blueprints")]
+    public CurrencyAmount[] buildingBlueprints;
+
+    [Header("Worker Blueprints")]
+    public CurrencyAmount[] workerBlueprints;
 }
 
 [Serializable]

@@ -73,9 +73,9 @@ public class BuildingData : MonoBehaviour
 
             float nextTierMultiplier = economyConfig.GetTierIncomeMultiplier(NextProgressionTier);
 
-            int nextRarityMaxLevel = progressionConfig.GetRarityMaxLevel(NextProgressionRarity);
+            int nextRarityMaxLevel = progressionConfig.GetBuildingRarityMaxLevel(NextProgressionRarity);
 
-            int nextTierLevelBonus = progressionConfig.GetTierLevelBonus(NextProgressionTier);
+            int nextTierLevelBonus = progressionConfig.GetBuildingTierLevelBonus(NextProgressionTier);
 
             int nextMaxLevel = nextRarityMaxLevel + nextTierLevelBonus;
 
@@ -157,7 +157,7 @@ public class BuildingData : MonoBehaviour
 
         if (currentTierIndex < maxTier)
         {
-            CurrencyType blueprint = CurrencyHelper.GetBlueprintCurrency(CurrentRarity);
+            CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
 
             requirements[blueprint] = currentTierIndex + 1;
             return requirements;
@@ -166,7 +166,7 @@ public class BuildingData : MonoBehaviour
         for (int r = 0; r <= currentRarityIndex; r++)
         {
             Rarities rarity = (Rarities)r;
-            CurrencyType blueprint = CurrencyHelper.GetBlueprintCurrency(rarity);
+            CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(rarity);
 
             if (r < currentRarityIndex)
                 requirements[blueprint] = maxTier;
@@ -222,8 +222,8 @@ public class BuildingData : MonoBehaviour
     {
         get
         {
-            int baseMax = progressionConfig.GetRarityMaxLevel(CurrentRarity);
-            int tierBonus = progressionConfig.GetTierLevelBonus(CurrentTier);
+            int baseMax = progressionConfig.GetBuildingRarityMaxLevel(CurrentRarity);
+            int tierBonus = progressionConfig.GetBuildingTierLevelBonus(CurrentTier);
             return baseMax + tierBonus;
         }
     }
@@ -264,8 +264,8 @@ public class BuildingData : MonoBehaviour
                 targetTier = Tiers.Tier1;
             }
 
-            int baseMax = progressionConfig.GetRarityMaxLevel(targetRarity);
-            int tierBonus = progressionConfig.GetTierLevelBonus(targetTier);
+            int baseMax = progressionConfig.GetBuildingRarityMaxLevel(targetRarity);
+            int tierBonus = progressionConfig.GetBuildingTierLevelBonus(targetTier);
 
             return baseMax + tierBonus;
         }

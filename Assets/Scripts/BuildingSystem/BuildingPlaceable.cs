@@ -168,6 +168,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         assignedWorker = worker;
         buildingRoundIconImage.sprite = worker.RoundIcon;
+        productionController.SetWorker(worker);
         productionController.StartProduction();
     }
 

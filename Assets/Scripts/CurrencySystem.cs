@@ -8,11 +8,18 @@ public class CurrencySystem : MonoBehaviour
 {
     public static CurrencySystem Instance;
 
-    private static Dictionary<CurrencyType, int> CurrencyAmounts = new Dictionary<CurrencyType, int>();
+    private static Dictionary<CurrencyType, int> currencyAmounts = new Dictionary<CurrencyType, int>();
 
-    [SerializeField] private List<GameObject> texts;
+    private Dictionary<CurrencyType, TextMeshProUGUI> currencyTexts = new();
 
-    private Dictionary<CurrencyType, TextMeshProUGUI> currencyTexts = new Dictionary<CurrencyType, TextMeshProUGUI> ();
+    [System.Serializable]
+    public class CurrencyTextBinding
+    {
+        public CurrencyType CurrencyType;
+        public TextMeshProUGUI Text;
+    }
+
+    [SerializeField] private CurrencyTextBinding[] currencyBindings;
 
     [SerializeField] private CurrencyStartConfig startConfig;
 
@@ -29,18 +36,15 @@ public class CurrencySystem : MonoBehaviour
 
         foreach (CurrencyType type in Enum.GetValues(typeof(CurrencyType)))
         {
-            CurrencyAmounts[type] = 0;
+            currencyAmounts[type] = 0;
         }
 
-        for (int i = 0; i < texts.Count; i++)
+        foreach (var binding in currencyBindings)
         {
-            CurrencyType currencyType = (CurrencyType)i;
-            if (!CurrencyAmounts.ContainsKey(currencyType))
-            {
-                CurrencyAmounts.Add(currencyType, 0); 
-            }
+            if (binding == null || binding.Text == null)
+                continue;
 
-            currencyTexts.Add(currencyType, texts[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>());
+            currencyTexts[binding.CurrencyType] = binding.Text;
         }
 
         ApplyStartConfig();
@@ -61,18 +65,25 @@ public class CurrencySystem : MonoBehaviour
             return;
         }
 
-        foreach (var entry in startConfig.startAmounts)
+        ApplyEntries(startConfig.currencies);
+        ApplyEntries(startConfig.buildingBlueprints);
+        ApplyEntries(startConfig.workerBlueprints);
+    }
+
+    private void ApplyEntries(CurrencyAmount[] entries)
+    {
+        foreach (var entry in entries)
         {
-            CurrencyAmounts[entry.currencyType] = entry.amount;
+            currencyAmounts[entry.currencyType] = entry.amount;
+
         }
-        
     }
 
     public static int GetCurrencyAmount(CurrencyType currencyType)
     {
-        if (CurrencyAmounts.ContainsKey(currencyType))
+        if (currencyAmounts.ContainsKey(currencyType))
         {
-            return CurrencyAmounts[currencyType];
+            return currencyAmounts[currencyType];
         }
         return 0;
     }
@@ -81,8 +92,8 @@ public class CurrencySystem : MonoBehaviour
     {
         if (info.amount < 0)
         {
-            if (!CurrencyAmounts.ContainsKey(info.currencyType) ||
-                CurrencyAmounts[info.currencyType] < Mathf.Abs(info.amount))
+            if (!currencyAmounts.ContainsKey(info.currencyType) ||
+                currencyAmounts[info.currencyType] < Mathf.Abs(info.amount))
             {
                 EventManager.Instance.QueueEvent(
                     new NotEnoughCurrencyEvent(info.amount, info.currencyType)
@@ -97,7 +108,7 @@ public class CurrencySystem : MonoBehaviour
 
         if (currencyTexts.TryGetValue(info.currencyType, out var text))
         {
-            text.text = CurrencyAmounts[info.currencyType].ToString();
+            text.text = currencyAmounts[info.currencyType].ToString();
         }
 
         UpdateUI();
@@ -109,17 +120,17 @@ public class CurrencySystem : MonoBehaviour
 
     private void AddCurrency(CurrencyType currencyType, int amount)
     {
-        CurrencyAmounts[currencyType] += amount;
+        currencyAmounts[currencyType] += amount;
     }
 
     private void SubtractCurrency(CurrencyType currencyType, int amount)
     {
-        CurrencyAmounts[currencyType] -= amount;
+        currencyAmounts[currencyType] -= amount;
     }
 
     public bool IsEnoughMoneyForUpgrade(CurrencyType currencyType, int amount)
     {
-        if (CurrencyAmounts.ContainsKey(currencyType) && CurrencyAmounts[currencyType] >= amount)
+        if (currencyAmounts.ContainsKey(currencyType) && currencyAmounts[currencyType] >= amount)
         {
             return true;
         }
@@ -128,17 +139,17 @@ public class CurrencySystem : MonoBehaviour
 
     public bool TrySpendCurrency(CurrencyType currencyType, int amount)
     {
-        if (!CurrencyAmounts.ContainsKey(currencyType))
+        if (!currencyAmounts.ContainsKey(currencyType))
             return false;
 
-        if (CurrencyAmounts[currencyType] < amount)
+        if (currencyAmounts[currencyType] < amount)
             return false;
 
         SubtractCurrency (currencyType, amount);
 
         if (currencyTexts.TryGetValue(currencyType, out var text))
         {
-            text.text = CurrencyAmounts[currencyType].ToString();
+            text.text = currencyAmounts[currencyType].ToString();
         }
         EventManager.Instance.QueueEvent(new CurrencyChangedEvent(currencyType));
         UpdateUI();
@@ -154,7 +165,7 @@ public class CurrencySystem : MonoBehaviour
     {
         foreach (var pair in currencyTexts)
         {
-            pair.Value.text = CurrencyAmounts[pair.Key].ToString();
+            pair.Value.text = currencyAmounts[pair.Key].ToString();
         }
     }
 }
@@ -164,10 +175,16 @@ public enum CurrencyType
     Coins,
     Crystals,
 
-    Blueprint_Primitive,
-    Blueprint_Developed,
-    Blueprint_Industrial,
-    Blueprint_Modern,
-    Blueprint_Futuristic
+    BuildingBlueprint_Primitive,
+    BuildingBlueprint_Developed,
+    BuildingBlueprint_Industrial,
+    BuildingBlueprint_Modern,
+    BuildingBlueprint_Futuristic,
+
+    WorkerBlueprint_Primitive,
+    WorkerBlueprint_Developed,
+    WorkerBlueprint_Industrial,
+    WorkerBlueprint_Modern,
+    WorkerBlueprint_Futuristic
 }
 

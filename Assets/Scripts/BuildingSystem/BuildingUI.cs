@@ -17,8 +17,8 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentMaxLvlTxt;
     [SerializeField] private TextMeshProUGUI nextMaxLvlTxt;
 
-    [SerializeField] private TextMeshProUGUI CurrentMaxIncomeText;
-    [SerializeField] private TextMeshProUGUI NextMaxIncomeText;
+    [SerializeField] private TextMeshProUGUI currentMaxIncomeText;
+    [SerializeField] private TextMeshProUGUI nextMaxIncomeText;
 
     [SerializeField] private Button addStarButton;
 
@@ -39,24 +39,11 @@ public class BuildingUI : MonoBehaviour
     {
         currentBuilding = building;
 
+        buildingIcon.sprite = currentBuilding.Icon;
+
         UpdateBuildingPanelUI();
 
-        buildingIcon.sprite = currentBuilding.Icon; // later put into  UpdateUI()
-
         buildingPanel.SetActive(true);
-    }
-
-    private Color GetColorByRarity(Rarities rarity)
-    {
-        return rarity switch
-        {
-            Rarities.Primitive => Color.blue,
-            Rarities.Developed => Color.green,
-            Rarities.Industrial => Color.yellow,
-            Rarities.Modern => new Color(0.5f, 0, 1),   
-            Rarities.Futuristic => Color.red, 
-            _ => Color.grey
-        };
     }
 
     private void UpdateBuildingPanelUI()
@@ -78,6 +65,21 @@ public class BuildingUI : MonoBehaviour
         UpdateBlueprintPriceUI();
     }
 
+    private Color GetColorByRarity(Rarities rarity)
+    {
+        return rarity switch
+        {
+            Rarities.Primitive => Color.blue,
+            Rarities.Developed => Color.green,
+            Rarities.Industrial => Color.yellow,
+            Rarities.Modern => new Color(0.5f, 0, 1),   
+            Rarities.Futuristic => Color.red, 
+            _ => Color.grey
+        };
+    }
+
+    
+
     private void UpdateCurrentRarityText()
     {
         currentRarityText.text = currentBuilding.CurrentRarity.ToString();
@@ -95,12 +97,12 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateCurrentMaxIncomeText()
     {
-        CurrentMaxIncomeText.text = currentBuilding.CurrentProgressionMaxIncome.ToString();
+        currentMaxIncomeText.text = currentBuilding.CurrentProgressionMaxIncome.ToString();
     }
 
     private void UpdateNextMaxIncomeText()
     {
-        NextMaxIncomeText.text = currentBuilding.NextProgressionMaxIncome.ToString();
+        nextMaxIncomeText.text = currentBuilding.NextProgressionMaxIncome.ToString();
     }
 
     private void UpdateBlueprintPriceUI()
@@ -126,9 +128,9 @@ public class BuildingUI : MonoBehaviour
             index++;
         }
 
-        for (; index < blueprintSlots.Length; index++)
+        for (int i = index; i < blueprintSlots.Length; i++)
         {
-            blueprintSlots[index].SetActive(false);
+            blueprintSlots[i].SetActive(false);
         }
     }
 

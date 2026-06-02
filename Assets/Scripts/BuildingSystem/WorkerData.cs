@@ -15,6 +15,7 @@ public class WorkerData
     public CurrencyType Currency;
     [SerializeField] private float baseProductionDuration = 10f;
     [SerializeField] private float baseUpgradePrice = 3f;
+    [SerializeField] private float productionTimeReductionPerLevel = 0.0015f;
 
     #endregion
 
@@ -42,53 +43,46 @@ public class WorkerData
 
     #region Calculated Properties
 
-    public int PriceToUpgrade
+    public float CurrentProgressionMinCycleDuration => CalculateCycleDuration(CurrentProgressionMaxLevel,CurrentRarity,CurrentTier);
+
+    public float NextProgressionMinCycleDuration => CalculateCycleDuration(NextProgressionMaxLevel,NextProgressionRarity,NextProgressionTier);
+
+    public int CurrentProgressionMaxLevel
     {
         get
         {
-            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
-        }
-    }
-
-    public float ProductionDuration
-    {
-        get
-        {
-            float rarityMultiplier = economyConfig.GetRarityProductionTimeMultiplier(CurrentRarity);
-
-            float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(CurrentTier);
-
-            return baseProductionDuration * rarityMultiplier * tierMultiplier;
-        }
-    }
-
-    public int CurrentTierMaxLevel
-    {
-        get
-        {
-            int baseMax = progressionConfig.GetRarityMaxLevel(CurrentRarity);
-
-            int tierBonus = progressionConfig.GetTierLevelBonus(CurrentTier);
-
+            int baseMax = progressionConfig.GetWorkerRarityMaxLevel(CurrentRarity);
+            int tierBonus = progressionConfig.GetWorkerTierLevelBonus(CurrentTier);
             return baseMax + tierBonus;
         }
     }
 
-    #endregion
-
-    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
+    public int NextProgressionMaxLevel
     {
-        this.progressionConfig = progressionConfig;
-        this.upgradeCostConfig = upgradeCostConfig;
-        this.economyConfig = economyConfig;
+        get
+        {
+            int nextRarityMaxLevel = progressionConfig.GetWorkerRarityMaxLevel(NextProgressionRarity);
+
+            int nextTierLevelBonus = progressionConfig.GetWorkerTierLevelBonus(NextProgressionTier);
+
+            return nextRarityMaxLevel + nextTierLevelBonus;
+        }
     }
 
-    public void UpgradeWorkerLvl()
+    public Rarities NextProgressionRarity
     {
-        if (CurrentLevel >= CurrentTierMaxLevel)
-            return;
+        get
+        {
+            return CurrentTier == Tiers.Tier5 ? NextRarity : CurrentRarity;
+        }
+    }
 
-        CurrentLevel++;
+    public Tiers NextProgressionTier
+    {
+        get
+        {
+            return CurrentTier == Tiers.Tier5 ? Tiers.Tier1 : NextTier;
+        }
     }
 
     public Tiers NextTier
@@ -119,6 +113,52 @@ public class WorkerData
         }
     }
 
+    public int PriceToUpgrade
+    {
+        get
+        {
+            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
+        }
+    }
+
+    public float CycleDuration => CalculateCycleDuration(CurrentLevel,CurrentRarity,CurrentTier);
+
+
+
+    #endregion
+
+    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
+    {
+        this.progressionConfig = progressionConfig;
+        this.upgradeCostConfig = upgradeCostConfig;
+        this.economyConfig = economyConfig;
+    }
+
+    public void UpgradeWorkerLvl()
+    {
+        if (CurrentLevel >= CurrentProgressionMaxLevel)
+        {
+            Debug.Log("Worker is already at MAX level!");
+            return;
+        }
+
+        if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
+        {
+            CurrentLevel++;
+        }
+    }
+
+    private float CalculateCycleDuration(int level, Rarities rarity, Tiers tier)
+    {
+        float rarityMultiplier = economyConfig.GetRarityProductionTimeMultiplier(rarity);
+
+        float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(tier);
+
+        float levelMultiplier = 1f - ((level - 1) * productionTimeReductionPerLevel);
+
+        return baseProductionDuration * rarityMultiplier * tierMultiplier * levelMultiplier;
+    }
+
     public Dictionary<CurrencyType, int> GetBlueprintRequirementsForNextUpgrade()
     {
         Dictionary<CurrencyType, int> requirements = new();
@@ -130,8 +170,7 @@ public class WorkerData
 
         if (currentTierIndex < maxTier)
         {
-            CurrencyType blueprint =
-                CurrencyHelper.GetBlueprintCurrency(CurrentRarity);
+            CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
 
             requirements[blueprint] = currentTierIndex + 1;
             return requirements;
@@ -140,8 +179,7 @@ public class WorkerData
         for (int r = 0; r <= currentRarityIndex; r++)
         {
             Rarities rarity = (Rarities)r;
-            CurrencyType blueprint =
-                CurrencyHelper.GetBlueprintCurrency(rarity);
+            CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(rarity);
 
             if (r < currentRarityIndex)
                 requirements[blueprint] = maxTier;
@@ -189,6 +227,17 @@ public class WorkerData
         }
 
         EventManager.Instance.QueueEvent(new WorkerTierOrRarityChangedEvent(this));
+    }
+
+    public StarDisplayInfo GetStarDisplayInfo()
+    {
+        return new StarDisplayInfo
+        {
+            CurrentTier = CurrentTier,
+            NextTierValue = NextTier,
+            CurrentRarity = CurrentRarity,
+            NextRarity = NextRarity
+        };
     }
 
     public void AssignToBuilding(BuildingData building)
