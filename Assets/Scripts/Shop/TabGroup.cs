@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class TabGroup : MonoBehaviour
 {
@@ -63,6 +62,8 @@ public class TabGroup : MonoBehaviour
         button.background.sprite = tabActive;
 
         int index = button.transform.GetSiblingIndex();
+
+        UniversityManager.Instance.ShowTab(index);
 
         for (int i = 0; i < objectsToSwap.Count; i++)
         {

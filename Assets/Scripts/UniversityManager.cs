@@ -3,14 +3,18 @@ using UnityEngine;
 public class UniversityManager : MonoBehaviour
 {
     [System.Serializable]
+
     private class BlueprintBinding
     {
-        public BlueprintItem Item;
         public BlueprintItemUI UI;
     }
+
     public static UniversityManager Instance;
 
     [SerializeField] private BlueprintBinding[] bindings;
+
+    [SerializeField] private BlueprintItem[] buildingBlueprints;
+    [SerializeField] private BlueprintItem[] workerBlueprints;
 
     private BuildingProductionController activeProduction;
 
@@ -31,11 +35,24 @@ public class UniversityManager : MonoBehaviour
     private void Start()
     {
         EventManager.Instance.AddListener<CurrencyChangedEvent>(UpdateUI);
+    }
 
-        foreach (var binding in bindings)
+    public void ShowBlueprints(BlueprintItem[] blueprints)
+    {
+        for (int i = 0; i < bindings.Length; i++)
         {
-            binding.UI.Initialize(binding.Item);
+            if (i < blueprints.Length)
+            {
+                bindings[i].UI.gameObject.SetActive(true);
+                bindings[i].UI.Initialize(blueprints[i]);
+            }
+            else
+            {
+                bindings[i].UI.gameObject.SetActive(false);
+            }
         }
+
+        RefreshStudyButtons();
     }
 
     private void RefreshStudyButtons()
@@ -72,16 +89,35 @@ public class UniversityManager : MonoBehaviour
         RefreshStudyButtons();
     }
 
+    public void ShowTab(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                ShowBlueprints(buildingBlueprints);
+                break;
+
+            case 1:
+                ShowBlueprints(workerBlueprints);
+                break;
+        }
+    }
+
     private void UpdateUI(CurrencyChangedEvent info)
     {
         foreach (var binding in bindings)
         {
-            if (binding.Item.StudyCurrency == info.CurrencyType)
+            BlueprintItem item = binding.UI.Item;
+
+            if (item == null)
+                continue;
+
+            if (item.StudyCurrency == info.CurrencyType)
             {
                 binding.UI.UpdateStudyButtonState();
             }
 
-            if (binding.Item.Type == info.CurrencyType)
+            if (item.Type == info.CurrencyType)
             {
                 binding.UI.UpdateOwnedText();
             }

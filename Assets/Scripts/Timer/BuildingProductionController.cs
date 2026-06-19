@@ -97,7 +97,7 @@ public class BuildingProductionController : MonoBehaviour
     {
         currentBlueprint = blueprintItem;
 
-        rewardIconImage.sprite = blueprintItem.Icon;
+        rewardIconImage.sprite = blueprintItem.MainIcon;
 
         StartProduction();
     }

@@ -10,16 +10,25 @@ public class BlueprintItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI studyTimeText;
     [SerializeField] private TextMeshProUGUI blueprintName;
     [SerializeField] private Button studyButton;
+    [SerializeField] private Image pazzleMainImg;
+    [SerializeField] private Image pazzleSmallImg;
 
     private BlueprintItem item;
+
+    public BlueprintItem Item => item;
 
 
     public void Initialize(BlueprintItem blueprintItem)
     {
         item = blueprintItem;
         studyPriceText.text = item.StudyCost.ToString();
-        studyTimeText.text = "Time: " + item.StudyTime.ToString();
+        studyTimeText.text =  item.StudyTime.ToString() + "m";
         blueprintName.text = item.BlueprintName.ToString();
+
+        pazzleMainImg.sprite = item.MainIcon;
+        pazzleSmallImg.sprite = item.SmallIcon;
+
+
         UpdateOwnedText();
         UpdateStudyButtonState();
     }

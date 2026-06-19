@@ -1,8 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(
-    fileName = "New Blueprint Item",
-    menuName = "University/Blueprint Item")]
+[CreateAssetMenu(fileName = "New Blueprint Item", menuName = "University/Blueprint Item")]
 public class BlueprintItem : ScriptableObject
 {
     [SerializeField] private string blueprintName;
@@ -11,9 +9,11 @@ public class BlueprintItem : ScriptableObject
     private CurrencyType studyCurrency = CurrencyType.Coins;
     [SerializeField] private float studyTime;
     [SerializeField] private CurrencyType type;
-    [SerializeField] private Sprite icon;
+    [SerializeField] private Sprite mainIcon;
+    [SerializeField] private Sprite smallIcon;
 
-    public Sprite Icon => icon;
+    public Sprite MainIcon => mainIcon;
+    public Sprite SmallIcon => smallIcon;
 
     public CurrencyType Type => type;
     public int StudyCost => studyCost;
