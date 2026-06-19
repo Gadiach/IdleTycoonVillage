@@ -84,6 +84,7 @@ public class BuildingProductionController : MonoBehaviour
 
     public void StartProduction()
     {
+
         finishTime = DateTime.Now.AddSeconds(workerData.CycleDuration);
 
         timer.Initialize(finishTime);
@@ -100,6 +101,20 @@ public class BuildingProductionController : MonoBehaviour
         rewardIconImage.sprite = blueprintItem.MainIcon;
 
         StartProduction();
+    }
+
+    public void StartResearch(BlueprintItem item)
+    {
+        currentBlueprint = item;
+
+        rewardIconImage.sprite = item.MainIcon;
+
+        finishTime = DateTime.Now.AddSeconds(item.StudyTime);
+
+        timer.Initialize(finishTime);
+        timer.StartTimer();
+
+        timerUI.Initialize(item.StudyTime);
     }
 
     private void SetIncomeButton(bool state)
@@ -126,7 +141,7 @@ public class BuildingProductionController : MonoBehaviour
         if (!success)
             return;
 
-        StartProduction(item);
+        StartResearch(item);
     }
 
     public void ClearCurrentBlueprint()
