@@ -1,18 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionDatabase : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "MissionDatabase",menuName = "Missions/Mission Database")]
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public class MissionDatabase : ScriptableObject
+{
+    public List<MissionData> missions = new();
 }
