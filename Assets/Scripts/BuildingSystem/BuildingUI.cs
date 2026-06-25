@@ -107,23 +107,19 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateBlueprintPriceUI()
     {
-        var requirements = currentBuilding.GetBlueprintRequirementsForNextUpgrade();
+        var requirements = currentBuilding.BlueprintRequirementsForNextUpgrade;
 
         int index = 0;
 
-        foreach (var req in requirements)
+        foreach (var requirement in requirements)
         {
             blueprintSlots[index].SetActive(true);
 
-            CurrencyType blueprint = req.Key;
+            int owned = CurrencySystem.GetCurrencyAmount(requirement.Key);
 
-            int owned = CurrencySystem.GetCurrencyAmount(blueprint);
+            upgradePriceTexts[index].text = $"{owned}/{requirement.Value}";
 
-            int required = req.Value;
-
-            upgradePriceTexts[index].text = $"{owned}/{required}";
-
-            upgradePriceTexts[index].color = owned >= required ? Color.white : Color.red;
+            upgradePriceTexts[index].color = owned >= requirement.Value ? Color.white : Color.red;
 
             index++;
         }
@@ -136,9 +132,7 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateStarUpgradeButton()
     {
-        bool canUpgrade = currentBuilding.CanUpgradeTierOrRarity();
-
-        addStarButton.interactable = canUpgrade;      
+        addStarButton.interactable = currentBuilding.CanUpgradeTierOrRarity;
     }
 
     public void OnAddStarButtonClicked()

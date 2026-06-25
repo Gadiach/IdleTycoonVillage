@@ -47,7 +47,7 @@ public class BlueprintItemUI : MonoBehaviour
 
     public void UpdateStudyButtonState()
     {
-        bool canAfford = CurrencySystem.Instance.IsEnoughMoneyForUpgrade(item.StudyCurrency,item.StudyCost);
+        bool canAfford = CurrencySystem.Instance.HasEnoughCurrency(item.StudyCurrency, item.StudyCost);
 
         bool noStudyRunning = !UniversityManager.Instance.IsStudyInProgress;
 

@@ -34,7 +34,8 @@ public class UniversityManager : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.AddListener<CurrencyChangedEvent>(UpdateUI);
+        EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyAdded);
+        EventManager.Instance.AddListener<CurrencySpentEvent>(OnCurrencySpent);
     }
 
     public void ShowBlueprints(BlueprintItem[] blueprints)
@@ -103,7 +104,17 @@ public class UniversityManager : MonoBehaviour
         }
     }
 
-    private void UpdateUI(CurrencyChangedEvent info)
+    private void OnCurrencyAdded(CurrencyAddedEvent info)
+    {
+        UpdateUI(info.CurrencyType);
+    }
+
+    private void OnCurrencySpent(CurrencySpentEvent info)
+    {
+        UpdateUI(info.CurrencyType);
+    }
+
+    private void UpdateUI(CurrencyType currencyType)
     {
         foreach (var binding in bindings)
         {
@@ -112,12 +123,12 @@ public class UniversityManager : MonoBehaviour
             if (item == null)
                 continue;
 
-            if (item.StudyCurrency == info.CurrencyType)
+            if (item.StudyCurrency == currencyType)
             {
                 binding.UI.UpdateStudyButtonState();
             }
 
-            if (item.Type == info.CurrencyType)
+            if (item.Type == currencyType)
             {
                 binding.UI.UpdateOwnedText();
             }

@@ -392,9 +392,7 @@ public class UIManager : MonoBehaviour
 
     private bool CanAffordBuildingUpgrade()
     {
-        return CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
-            currentBuilding.Currency,
-            currentBuilding.PriceToUpgrade);
+        return CurrencySystem.Instance.HasEnoughCurrency(currentBuilding.Currency, currentBuilding.PriceToUpgrade);
     }
 
     private bool HasWorker()
@@ -404,9 +402,7 @@ public class UIManager : MonoBehaviour
 
     private bool CanAffordWorkerUpgrade()
     {
-        return CurrencySystem.Instance.IsEnoughMoneyForUpgrade(
-            currentWorker.Currency,
-            currentWorker.PriceToUpgrade);
+        return CurrencySystem.Instance.HasEnoughCurrency(currentWorker.Currency, currentWorker.PriceToUpgrade);
     }
 
     public void QuitGame()

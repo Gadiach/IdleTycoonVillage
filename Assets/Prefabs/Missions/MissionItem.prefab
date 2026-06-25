@@ -296,7 +296,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.595
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -356,6 +356,7 @@ MonoBehaviour:
   missionNameText: {fileID: 1815627228407939721}
   progressText: {fileID: 4418731124359719967}
   iconImage: {fileID: 4067728794801492326}
+  progressFillImage: {fileID: 166823943446841372}
 --- !u!1 &7640001237426292837
 GameObject:
   m_ObjectHideFlags: 0

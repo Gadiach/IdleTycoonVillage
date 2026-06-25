@@ -1,26 +1,27 @@
 
 public abstract class GameEvent { }
 
-public class RequestCurrencyChangeEvent : GameEvent
+public class CurrencyAddedEvent : GameEvent
 {
-    public int amount;
-    public CurrencyType currencyType;
+    public CurrencyType CurrencyType { get; private set; }
+    public int Amount { get; private set; }
 
-    public RequestCurrencyChangeEvent(int amount, CurrencyType currencyType)
+    public CurrencyAddedEvent(CurrencyType currencyType, int amount)
     {
-        this.amount = amount;
-        this.currencyType = currencyType;
+        CurrencyType = currencyType;
+        Amount = amount;
     }
 }
 
-public class CurrencyChangedEvent : GameEvent
+public class CurrencySpentEvent : GameEvent
 {
-    public CurrencyType CurrencyType;
+    public CurrencyType CurrencyType { get; private set; }
+    public int Amount { get; private set; }
 
-    public CurrencyChangedEvent(
-        CurrencyType currencyType)
+    public CurrencySpentEvent(CurrencyType currencyType, int amount)
     {
         CurrencyType = currencyType;
+        Amount = amount;
     }
 }
 
@@ -54,11 +55,6 @@ public class WorkerTierOrRarityChangedEvent : GameEvent
     {
         Worker = worker;
     }
-}
-
-public class EnoughCurrencyEvent : GameEvent
-{
-
 }
 
 public class XPAddedEvent : GameEvent

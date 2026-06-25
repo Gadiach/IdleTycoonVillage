@@ -136,9 +136,7 @@ public class BuildingProductionController : MonoBehaviour
 
     public void StartStudy(BlueprintItem item)
     {
-        bool success = CurrencySystem.Instance.TrySpendCurrency(item.StudyCurrency, item.StudyCost);
-
-        if (!success)
+        if (!CurrencySystem.Instance.SpendCurrency(item.StudyCurrency, item.StudyCost))
             return;
 
         StartResearch(item);

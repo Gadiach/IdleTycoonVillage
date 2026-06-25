@@ -123,7 +123,41 @@ public class WorkerData
 
     public float CycleDuration => CalculateCycleDuration(CurrentLevel,CurrentRarity,CurrentTier);
 
+    public Dictionary<CurrencyType, int> BlueprintRequirementsForNextUpgrade
+    {
+        get
+        {
+            Dictionary<CurrencyType, int> requirements = new();
 
+            int currentRarityIndex = (int)CurrentRarity;
+            int currentTierIndex = (int)CurrentTier;
+
+            int maxTier = Enum.GetValues(typeof(Tiers)).Length;
+
+            if (currentTierIndex < maxTier)
+            {
+                CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
+
+                requirements[blueprint] = currentTierIndex + 1;
+                return requirements;
+            }
+
+            for (int r = 0; r <= currentRarityIndex; r++)
+            {
+                Rarities rarity = (Rarities)r;
+                CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(rarity);
+
+                if (r < currentRarityIndex)
+                    requirements[blueprint] = maxTier;
+                else
+                    requirements[blueprint] = 1;
+            }
+
+            return requirements;
+        }
+    }
+
+    public bool CanUpgradeTierOrRarity => HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
 
     #endregion
 
@@ -142,7 +176,7 @@ public class WorkerData
             return;
         }
 
-        if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
+        if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
             CurrentLevel++;
         }
@@ -159,61 +193,35 @@ public class WorkerData
         return baseProductionDuration * rarityMultiplier * tierMultiplier * levelMultiplier;
     }
 
-    public Dictionary<CurrencyType, int> GetBlueprintRequirementsForNextUpgrade()
+    private bool HasEnoughResourcesForTierOrRarityUpgrade(Dictionary<CurrencyType, int> requirements)
     {
-        Dictionary<CurrencyType, int> requirements = new();
-
-        int currentRarityIndex = (int)CurrentRarity;
-        int currentTierIndex = (int)CurrentTier;
-
-        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-        if (currentTierIndex < maxTier)
+        foreach (var requirement in requirements)
         {
-            CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
-
-            requirements[blueprint] = currentTierIndex + 1;
-            return requirements;
-        }
-
-        for (int r = 0; r <= currentRarityIndex; r++)
-        {
-            Rarities rarity = (Rarities)r;
-            CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(rarity);
-
-            if (r < currentRarityIndex)
-                requirements[blueprint] = maxTier;
-            else
-                requirements[blueprint] = 1;
-        }
-
-        return requirements;
-    }
-    public bool CanUpgradeTierOrRarity()
-    {
-        var requirements = GetBlueprintRequirementsForNextUpgrade();
-
-        foreach (var req in requirements)
-        {
-            int owned = CurrencySystem.GetCurrencyAmount(req.Key);
-            if (owned < req.Value)
+            if (!CurrencySystem.Instance.HasEnoughCurrency(requirement.Key, requirement.Value))
+            {
                 return false;
+            }
         }
 
         return true;
     }
+
     public void UpgradeTierOrRarity()
     {
-        if (!CanUpgradeTierOrRarity())
+        var requirements = BlueprintRequirementsForNextUpgrade;
+
+        if (!HasEnoughResourcesForTierOrRarityUpgrade(requirements))
             return;
 
-        var requirements = GetBlueprintRequirementsForNextUpgrade();
+        SpendUpgradeRequirements(requirements);
 
-        foreach (var req in requirements)
-        {
-            CurrencySystem.Instance.TrySpendCurrency(req.Key, req.Value);
-        }
+        ApplyTierOrRarityUpgrade();
 
+        EventManager.Instance.QueueEvent(new WorkerTierOrRarityChangedEvent(this));
+    }
+
+    private void ApplyTierOrRarityUpgrade()
+    {
         int maxTier = Enum.GetValues(typeof(Tiers)).Length;
 
         if ((int)CurrentTier < maxTier)
@@ -225,8 +233,14 @@ public class WorkerData
             CurrentTier = Tiers.Tier1;
             CurrentRarity = NextRarity;
         }
+    }
 
-        EventManager.Instance.QueueEvent(new WorkerTierOrRarityChangedEvent(this));
+    private void SpendUpgradeRequirements(Dictionary<CurrencyType, int> requirements)
+    {
+        foreach (var requirement in requirements)
+        {
+            CurrencySystem.Instance.SpendCurrency(requirement.Key, requirement.Value);
+        }
     }
 
     public StarDisplayInfo GetStarDisplayInfo()

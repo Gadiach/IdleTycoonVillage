@@ -92,26 +92,24 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateStarUpgradeButton()
     {
-        addStarButton.interactable = currentWorker.CanUpgradeTierOrRarity();
+        addStarButton.interactable = currentWorker.CanUpgradeTierOrRarity;
     }
 
     private void UpdateBlueprintPriceUI()
     {
-        var requirements = currentWorker.GetBlueprintRequirementsForNextUpgrade();
+        var requirements = currentWorker.BlueprintRequirementsForNextUpgrade;
 
         int index = 0;
 
-        foreach (var req in requirements)
+        foreach (var requirement in requirements)
         {
             blueprintSlots[index].SetActive(true);
 
-            int owned = CurrencySystem.GetCurrencyAmount(req.Key);
+            int owned = CurrencySystem.GetCurrencyAmount(requirement.Key);
 
-            int required = req.Value;
+            upgradePriceTexts[index].text = $"{owned}/{requirement.Value}";
 
-            upgradePriceTexts[index].text = $"{owned}/{required}";
-
-            upgradePriceTexts[index].color = owned >= required ? Color.white : Color.red;
+            upgradePriceTexts[index].color = owned >= requirement.Value ? Color.white : Color.red;
 
             index++;
         }

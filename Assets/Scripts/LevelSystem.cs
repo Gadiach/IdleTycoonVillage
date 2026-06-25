@@ -97,8 +97,5 @@ public class LevelSystem : MonoBehaviour
         {
             Destroy(window);
         });
-
-        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(data.coinsReward, CurrencyType.Coins));
-        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(data.crystalsReward, CurrencyType.Crystals));
     }
 }

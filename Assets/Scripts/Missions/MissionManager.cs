@@ -8,9 +8,7 @@ public class MissionManager : MonoBehaviour
     [SerializeField] private MissionDatabase missionDatabase;
     [SerializeField] private MissionPanelUI missionPanelUI;
 
-    private readonly List<MissionRuntime> activeMissions = new();
-
-    private const int ActiveMissionCount = 3;
+    private readonly List<MissionRuntime> allMissions = new();
 
     private void Awake()
     {
@@ -30,39 +28,54 @@ public class MissionManager : MonoBehaviour
 
     private void InitializeMissions()
     {
-        activeMissions.Clear();
+        allMissions.Clear();
 
-        int count = Mathf.Min(ActiveMissionCount, missionDatabase.missions.Count);
+        CreateMissionRuntimes();
 
-        for (int i = 0; i < count; i++)
+        RefreshUI();
+    }
+
+    private void CreateMissionRuntimes()
+    {
+        foreach (var missionData in missionDatabase.missions)
         {
-            activeMissions.Add(new MissionRuntime(missionDatabase.missions[i]));
+            allMissions.Add(new MissionRuntime(missionData));
+        }
+    }
+
+    private List<MissionRuntime> GetVisibleMissions()
+    {
+        List<MissionRuntime> result = new();
+
+        foreach (var mission in allMissions)
+        {
+            if (mission.Claimed)
+                continue;
+
+            result.Add(mission);
+
+            if (result.Count >= 3)
+                break;
         }
 
-        missionPanelUI.ShowMissions(activeMissions);
+        return result;
+    }
+
+    
+
+    private void RefreshUI()
+    {
+        missionPanelUI.ShowMissions(GetVisibleMissions());
     }
 
     public void AddProgress(MissionType type, int amount)
     {
-        foreach (var mission in activeMissions)
+        foreach (var mission in allMissions)
         {
-            if (mission.Completed)
-                continue;
-
             if (mission.Data.missionType != type)
                 continue;
 
-            mission.Progress += amount;
-
-            if (mission.Progress >= mission.Data.targetValue)
-            {
-                mission.Progress = mission.Data.targetValue;
-                mission.Completed = true;
-
-                Debug.Log($"Mission completed: {mission.Data.missionName}");
-            }
+            mission.AddProgress(amount);
         }
-
-        missionPanelUI.Refresh(activeMissions);
     }
 }

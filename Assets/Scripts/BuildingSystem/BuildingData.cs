@@ -45,6 +45,8 @@ public class BuildingData : MonoBehaviour
 
     #region Calculated Properties
 
+    public bool CanUpgradeTierOrRarity => HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
+
     public int PriceToUpgrade
     {
         get
@@ -89,22 +91,36 @@ public class BuildingData : MonoBehaviour
     public bool StartProductionOnPlace => startProductionOnPlace;
     public int LevelOfWorkerNeededForAutomation => workerLevelNeededForAutomation;
 
-    #endregion
-    
-
-    public void SetPlaceable(BuildingPlaceable placeable)
+    public Dictionary<CurrencyType, int> BlueprintRequirementsForNextUpgrade
     {
-        Placeable = placeable;
-    }
+        get
+        {
+            Dictionary<CurrencyType, int> requirements = new();
 
-    public void Initialize(ShopItem item)
-    {
-        Name = item.Name;
-        Description = item.Description;
-        PurchasePrice = item.PurchasePrice;
-        Currency = item.Currency;
-        Type = item.Type;
-        Icon = item.Icon;
+            int currentRarityIndex = (int)CurrentRarity;
+            int currentTierIndex = (int)CurrentTier;
+
+            int maxTier = Enum.GetValues(typeof(Tiers)).Length;
+
+            if (currentTierIndex < maxTier)
+            {
+                CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
+
+                requirements[blueprint] = currentTierIndex + 1;
+
+                return requirements;
+            }
+
+            for (int r = 0; r <= currentRarityIndex; r++)
+            {
+                Rarities rarity = (Rarities)r;
+                CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(rarity);
+
+                requirements[blueprint] = r < currentRarityIndex ? maxTier : 1;
+            }
+
+            return requirements;
+        }
     }
 
     public Tiers NextTier
@@ -135,6 +151,24 @@ public class BuildingData : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+    public void SetPlaceable(BuildingPlaceable placeable)
+    {
+        Placeable = placeable;
+    }
+
+    public void Initialize(ShopItem item)
+    {
+        Name = item.Name;
+        Description = item.Description;
+        PurchasePrice = item.PurchasePrice;
+        Currency = item.Currency;
+        Type = item.Type;
+        Icon = item.Icon;
+    }
+
     public StarDisplayInfo GetStarDisplayInfo()
     {
         return new StarDisplayInfo
@@ -146,46 +180,14 @@ public class BuildingData : MonoBehaviour
         };
     }
 
-    public Dictionary<CurrencyType, int> GetBlueprintRequirementsForNextUpgrade()
+    private bool HasEnoughResourcesForTierOrRarityUpgrade(Dictionary<CurrencyType, int> requirements)
     {
-        Dictionary<CurrencyType, int> requirements = new();
-
-        int currentRarityIndex = (int)CurrentRarity;
-        int currentTierIndex = (int)CurrentTier;
-
-        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-        if (currentTierIndex < maxTier)
+        foreach (var requirement in requirements)
         {
-            CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
-
-            requirements[blueprint] = currentTierIndex + 1;
-            return requirements;
-        }
-
-        for (int r = 0; r <= currentRarityIndex; r++)
-        {
-            Rarities rarity = (Rarities)r;
-            CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(rarity);
-
-            if (r < currentRarityIndex)
-                requirements[blueprint] = maxTier;
-            else
-                requirements[blueprint] = 1; 
-        }
-
-        return requirements;
-    }
-
-    public bool CanUpgradeTierOrRarity()
-    {
-        var requirements = GetBlueprintRequirementsForNextUpgrade();
-
-        foreach (var req in requirements)
-        {
-            int owned = CurrencySystem.GetCurrencyAmount(req.Key);
-            if (owned < req.Value)
+            if (!CurrencySystem.Instance.HasEnoughCurrency(requirement.Key, requirement.Value))
+            {
                 return false;
+            }
         }
 
         return true;
@@ -193,16 +195,20 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeTierOrRarity()
     {
-        if (!CanUpgradeTierOrRarity())
+        var requirements = BlueprintRequirementsForNextUpgrade;
+
+        if (!HasEnoughResourcesForTierOrRarityUpgrade(requirements))
             return;
 
-        var requirements = GetBlueprintRequirementsForNextUpgrade();
+        SpendUpgradeRequirements(requirements);
 
-        foreach (var req in requirements)
-        {
-            CurrencySystem.Instance.TrySpendCurrency(req.Key, req.Value);
-        }
+        ApplyTierOrRarityUpgrade();
 
+        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
+    }
+
+    private void ApplyTierOrRarityUpgrade()
+    {
         int maxTier = Enum.GetValues(typeof(Tiers)).Length;
 
         if ((int)CurrentTier < maxTier)
@@ -214,8 +220,14 @@ public class BuildingData : MonoBehaviour
             CurrentTier = Tiers.Tier1;
             CurrentRarity = NextRarity;
         }
+    }    
 
-        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
+    private void SpendUpgradeRequirements(Dictionary<CurrencyType, int> requirements)
+    {
+        foreach (var requirement in requirements)
+        {
+            CurrencySystem.Instance.SpendCurrency(requirement.Key,requirement.Value);
+        }
     }
 
     public int CurrentProgressionMaxLevel
@@ -273,7 +285,7 @@ public class BuildingData : MonoBehaviour
 
     public void CollectIncome()
     {
-        EventManager.Instance.QueueEvent(new RequestCurrencyChangeEvent(TotalIncome, CurrencyType.Coins));
+        CurrencySystem.Instance.AddCurrency(CurrencyType.Coins,TotalIncome);
 
         ResetTotalIncomeCircles();
     }
@@ -286,7 +298,7 @@ public class BuildingData : MonoBehaviour
             return;
         }
 
-        if (CurrencySystem.Instance.TrySpendCurrency(Currency, PriceToUpgrade))
+        if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
             CurrentLevel++;
         }

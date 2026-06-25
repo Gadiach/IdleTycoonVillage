@@ -5,6 +5,7 @@ public class MissionPanelUI : MonoBehaviour
 {
     [SerializeField] private Transform content;
     [SerializeField] private MissionItemUI missionPrefab;
+    private readonly List<MissionItemUI> missionItems = new();
 
     public void ShowMissions(List<MissionRuntime> missions)
     {
@@ -15,6 +16,8 @@ public class MissionPanelUI : MonoBehaviour
             MissionItemUI item = Instantiate(missionPrefab, content);
 
             item.Initialize(mission);
+
+            missionItems.Add(item);
         }
     }
 
@@ -24,16 +27,7 @@ public class MissionPanelUI : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
 
-    public void Refresh(List<MissionRuntime> missions)
-    {
-        MissionItemUI[] items =
-            content.GetComponentsInChildren<MissionItemUI>();
-
-        for (int i = 0; i < items.Length; i++)
-        {
-            items[i].Refresh(missions[i]);
-        }
+        missionItems.Clear();
     }
 }

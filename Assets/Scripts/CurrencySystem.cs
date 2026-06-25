@@ -52,9 +52,6 @@ public class CurrencySystem : MonoBehaviour
     private void Start()
     {   
         UpdateUI();
-
-        EventManager.Instance.AddListener<RequestCurrencyChangeEvent>(HandleCurrencyChangeRequest);
-        EventManager.Instance.AddListener<NotEnoughCurrencyEvent>(OnNotEnough);
     }
 
     private void ApplyStartConfig()
@@ -79,6 +76,8 @@ public class CurrencySystem : MonoBehaviour
         }
     }
 
+    #region Get Data
+
     public static int GetCurrencyAmount(CurrencyType currencyType)
     {
         if (currencyAmounts.ContainsKey(currencyType))
@@ -88,73 +87,50 @@ public class CurrencySystem : MonoBehaviour
         return 0;
     }
 
-    private void HandleCurrencyChangeRequest(RequestCurrencyChangeEvent info)
+    public bool HasEnoughCurrency(CurrencyType currencyType, int amount)
     {
-        if (info.amount < 0)
-        {
-            if (!currencyAmounts.ContainsKey(info.currencyType) ||
-                currencyAmounts[info.currencyType] < Mathf.Abs(info.amount))
-            {
-                EventManager.Instance.QueueEvent(
-                    new NotEnoughCurrencyEvent(info.amount, info.currencyType)
-                );
-                return;
-            }
+        return currencyAmounts[currencyType] >= amount;
+    }
 
-            EventManager.Instance.QueueEvent(new EnoughCurrencyEvent());
-        }
+    #endregion
 
-        AddCurrency(info.currencyType, info.amount);
+    #region Spend Currency Logic
 
-        if (currencyTexts.TryGetValue(info.currencyType, out var text))
-        {
-            text.text = currencyAmounts[info.currencyType].ToString();
-        }
+    public bool SpendCurrency(CurrencyType currencyType, int amount)
+    {
+        if (!HasEnoughCurrency(currencyType, amount))
+            return false;
+        
+
+        currencyAmounts[currencyType] -= amount;
 
         UpdateUI();
+
         ShopManager.current.UpdateShopItems();
 
-        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(info.currencyType));
-    }
+        EventManager.Instance.QueueEvent(new CurrencySpentEvent(currencyType, amount));
 
-
-    private void AddCurrency(CurrencyType currencyType, int amount)
-    {
-        currencyAmounts[currencyType] += amount;
-    }
-
-    private void SubtractCurrency(CurrencyType currencyType, int amount)
-    {
-        currencyAmounts[currencyType] -= amount;
-    }
-
-    public bool IsEnoughMoneyForUpgrade(CurrencyType currencyType, int amount)
-    {
-        if (currencyAmounts.ContainsKey(currencyType) && currencyAmounts[currencyType] >= amount)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool TrySpendCurrency(CurrencyType currencyType, int amount)
-    {
-        if (!currencyAmounts.ContainsKey(currencyType))
-            return false;
-
-        if (currencyAmounts[currencyType] < amount)
-            return false;
-
-        SubtractCurrency (currencyType, amount);
-
-        if (currencyTexts.TryGetValue(currencyType, out var text))
-        {
-            text.text = currencyAmounts[currencyType].ToString();
-        }
-        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(currencyType));
-        UpdateUI();
         return true;
     }
+
+    #endregion
+
+
+
+    #region Add Currency Logic
+
+    public void AddCurrency(CurrencyType currencyType, int amount)
+    {
+        currencyAmounts[currencyType] += amount;
+
+        UpdateUI();
+
+        ShopManager.current.UpdateShopItems();
+
+        EventManager.Instance.QueueEvent(new CurrencyAddedEvent(currencyType, amount));
+    }
+
+    #endregion
 
     private void OnNotEnough(NotEnoughCurrencyEvent info)
     {

@@ -133,7 +133,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
                 Place(transform.position);
                 origin = transform.position;
 
-                CurrencySystem.Instance.TrySpendCurrency(CurrencyType.Coins, objectPrice);
+                CurrencySystem.Instance.SpendCurrency(CurrencyType.Coins, objectPrice);
                 EventManager.Instance.QueueEvent(new BuildingPlacedEvent(buildingData));
             }
             else
