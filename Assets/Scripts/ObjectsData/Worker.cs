@@ -1,7 +1,5 @@
 using UnityEngine;
 
-public enum BusinessType { Farming, Engineering, Science }
-
 public class Worker : MonoBehaviour
 {
     public BusinessType type;

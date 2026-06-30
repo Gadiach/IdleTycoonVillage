@@ -21,7 +21,24 @@ public class ShopManager : MonoBehaviour
     private Dictionary<ObjectType, List<ShopItem>> shopItems = new Dictionary<ObjectType, List<ShopItem>>(capacity: 3);
 
     [SerializeField] public TabGroup shopTabs;
-    [SerializeField] private float animationTime = 0.2f; 
+    [SerializeField] private float animationTime = 0.2f;
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyChanged);
+        EventManager.Instance.AddListener<CurrencySpentEvent>(OnCurrencyChanged);
+        EventManager.Instance.AddListener<LevelChangedEvent>(OnLevelChanged);
+    }
+
+    private void OnDisable()
+    {
+        if (EventManager.Instance == null)
+            return;
+
+        EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyChanged);
+        EventManager.Instance.RemoveListener<CurrencySpentEvent>(OnCurrencyChanged);
+        EventManager.Instance.RemoveListener<LevelChangedEvent>(OnLevelChanged);
+    }
 
     private void Awake()
     {
@@ -31,8 +48,6 @@ public class ShopManager : MonoBehaviour
 
         closedPos = prt.anchoredPosition;
         openedPos = closedPos + new Vector2(rt.sizeDelta.x, 0);
-
-        EventManager.Instance.AddListener<LevelChangedEvent>(OnLevelChanged);
     }
 
     private void Start()
@@ -70,6 +85,16 @@ public class ShopManager : MonoBehaviour
                 itemObject.GetComponent<ShopItemHolder>().Initialize(item);
             }
         }
+    }
+
+    private void OnCurrencyChanged(CurrencyAddedEvent info)
+    {
+        UpdateShopItems();
+    }
+
+    private void OnCurrencyChanged(CurrencySpentEvent info)
+    {
+        UpdateShopItems();
     }
 
     public void UpdateShopItems()

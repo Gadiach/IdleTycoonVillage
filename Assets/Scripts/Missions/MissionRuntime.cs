@@ -12,6 +12,8 @@ public class MissionRuntime
 
     public bool CanClaim => Completed && !Claimed;
 
+    public int RemainingProgress => Data.targetValue - Progress;
+
     public float ProgressPercentage => Data.targetValue > 0 ? Mathf.Clamp01((float)Progress / Data.targetValue) : 0f;
 
     public string ProgressText => $"{Progress}/{Data.targetValue}";

@@ -5,6 +5,7 @@ using UnityEngine;
 public class BuildingData : MonoBehaviour
 {
     #region Definition Data
+
     [Header("Definition Data")]
     public string Name;
     public string Description;

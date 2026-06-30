@@ -1282,6 +1282,7 @@ RectTransform:
   - {fileID: 233590809}
   - {fileID: 83141505}
   - {fileID: 1831794939}
+  - {fileID: 1587791519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1626,7 +1627,7 @@ GameObject:
   - component: {fileID: 93866000}
   - component: {fileID: 93865999}
   m_Layer: 0
-  m_Name: MissionManager
+  m_Name: MissionSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1645,7 +1646,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionDatabase: {fileID: 11400000, guid: ca10d9d21ae2a8740b0658f1eee29060, type: 2}
-  missionPanelUI: {fileID: 1831794942}
 --- !u!4 &93866000
 Transform:
   m_ObjectHideFlags: 0
@@ -52777,8 +52777,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042419565}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.4670835, y: 2.3115163, z: 5.8601413}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.467102, y: 2.3115234, z: 5.8601413}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52796,11 +52796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78acd2e75b793c94ea2e5ac8a339798e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyBindings:
-  - CurrencyType: 0
-    Text: {fileID: 1717462868}
-  - CurrencyType: 1
-    Text: {fileID: 1064742032}
   startConfig: {fileID: 11400000, guid: 90721fc0d9b8af348ac58b01965eb368, type: 2}
 --- !u!1 &1044873852
 GameObject:
@@ -62891,6 +62886,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575440250}
   m_CullTransparentMesh: 1
+--- !u!1 &1587791518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1587791519}
+  - component: {fileID: 1587791520}
+  m_Layer: 5
+  m_Name: CurrencyUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1587791519
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587791518}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 58912791}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1587791520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587791518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ff1460fed98aa4f8a4d10f3aced6d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencyBindings:
+  - CurrencyType: 0
+    Text: {fileID: 1717462868}
+  - CurrencyType: 1
+    Text: {fileID: 1064742032}
 --- !u!1 &1588080991
 GameObject:
   m_ObjectHideFlags: 0
@@ -78188,13 +78236,13 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 2062339399}
   - {fileID: 58912791}
+  - {fileID: 1042419567}
   - {fileID: 771083178}
   - {fileID: 1140456732}
   - {fileID: 1669170840}
   - {fileID: 1982822722}
   - {fileID: 761920469}
   - {fileID: 946652924}
-  - {fileID: 1042419567}
   - {fileID: 2063776784}
   - {fileID: 1537889341}
   - {fileID: 1529734146}

@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4665476dc4e4e4094f2540e8c19df9, type: 3}
   m_Name: Mission3
   m_EditorClassIdentifier: 
-  id: 1
-  order: 3
+  id: upgrade_farm
   missionName: 'Upgrade farm '
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ea6e10db2a15b764ea946a14a79f67fa, type: 3}
   missionType: 3
-  targetValue: 25
-  rewardCoins: 100
+  targetValue: 2
+  rewardCoins: 10

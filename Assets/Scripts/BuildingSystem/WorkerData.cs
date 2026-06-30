@@ -260,11 +260,4 @@ public class WorkerData
 
         IsAvailable = false;
     }
-
-    public void UnassignFromBuilding()
-    {
-        AssignedBuilding = null;
-
-        IsAvailable = true;
-    }
 }

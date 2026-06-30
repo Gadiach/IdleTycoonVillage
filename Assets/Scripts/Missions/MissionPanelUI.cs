@@ -7,7 +7,25 @@ public class MissionPanelUI : MonoBehaviour
     [SerializeField] private MissionItemUI missionPrefab;
     private readonly List<MissionItemUI> missionItems = new();
 
-    public void ShowMissions(List<MissionRuntime> missions)
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<MissionListChangedEvent>(OnMissionInitialized);
+    }
+
+    private void OnDisable()
+    {
+        if (EventManager.Instance == null)
+            return;
+
+        EventManager.Instance.RemoveListener<MissionListChangedEvent>(OnMissionInitialized);
+    }
+
+    private void OnMissionInitialized(MissionListChangedEvent info)
+    {
+        RebuildMissionUI(info.Missions);
+    }
+
+    public void RebuildMissionUI(List<MissionRuntime> missions)
     {
         Clear();
 

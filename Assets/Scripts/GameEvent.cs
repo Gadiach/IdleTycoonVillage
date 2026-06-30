@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 public abstract class GameEvent { }
 
 public class CurrencyAddedEvent : GameEvent
@@ -10,6 +12,26 @@ public class CurrencyAddedEvent : GameEvent
     {
         CurrencyType = currencyType;
         Amount = amount;
+    }
+}
+
+public class MissionProgressChangedEvent : GameEvent
+{
+    public MissionRuntime Mission { get; }
+
+    public MissionProgressChangedEvent(MissionRuntime mission)
+    {
+        Mission = mission;
+    }
+}
+
+public class MissionListChangedEvent : GameEvent
+{
+    public List<MissionRuntime> Missions { get; }
+
+    public MissionListChangedEvent(List<MissionRuntime> missions)
+    {
+        Missions = missions;
     }
 }
 
