@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ObjectDrag : MonoBehaviour
 {
+    private IPlaceable placeable;
+
     private Vector3 startPos;
     private float deltaX, deltaY;
 
@@ -12,6 +14,8 @@ public class ObjectDrag : MonoBehaviour
 
         deltaX = startPos.x - transform.position.x;
         deltaY = startPos.y - transform.position.y;
+
+        placeable = GetComponent<IPlaceable>();
     }
 
     private void Update()
@@ -19,28 +23,22 @@ public class ObjectDrag : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 pos = new Vector3(mousePos.x - deltaX, mousePos.y - deltaY);
 
-        Vector3Int cellPos = BuildingSystem.current.gridLayout.WorldToCell(pos);
-        transform.position = BuildingSystem.current.gridLayout.CellToLocalInterpolated(cellPos);
+        if (placeable.UseGridSnapping)
+        {
+            Vector3Int cellPos = BuildingSystem.current.gridLayout.WorldToCell(pos);
+            transform.position = BuildingSystem.current.gridLayout.CellToLocalInterpolated(cellPos);
+        }
+        else
+        {
+            transform.position = pos;
+        }
     }
-
-    //private void LateUpdate()
-    //{
-    //    if(Input.GetMouseButtonUp(0))
-    //    {
-    //        gameObject.GetComponent<PlaceableObject>().CheckPlacement();
-    //        Destroy(this);
-    //    }
-    //}
 
     private void LateUpdate()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            IPlaceable placeable = gameObject.GetComponent<IPlaceable>();
-            if (placeable != null)
-            {
-                placeable.CheckPlacement();
-            }
+            placeable?.CheckPlacement();
 
             Destroy(this);
         }

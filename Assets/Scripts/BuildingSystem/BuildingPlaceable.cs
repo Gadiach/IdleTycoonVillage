@@ -17,6 +17,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
+    public bool UseGridSnapping => true;
+
     [SerializeField] private Image buildingRoundIconImage;
 
     [SerializeField] private float autoWorkDurationHours = 8f;  
@@ -70,7 +72,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         if (assignedWorker != null)
         {
             WorkerUI.Instance.OpenWorkerPanel(assignedWorker);
-            Debug.Log("Open");
         }
         else
         {

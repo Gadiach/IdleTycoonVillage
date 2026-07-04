@@ -170,8 +170,13 @@ public class PanZoom : MonoBehaviour
     public void FollowObject(Transform objToFollow)
     {
         objectToFollow = objToFollow;
-        objectBounds = objectToFollow.GetComponent<PolygonCollider2D>().bounds;
-        prevPos = cam.ScreenToWorldPoint(Vector3.zero);
+
+        Collider2D collider = objectToFollow.GetComponent<Collider2D>();
+
+        if (collider != null)
+        {
+            objectBounds = collider.bounds;
+        }
     }
 
     public void UnfollowObject()

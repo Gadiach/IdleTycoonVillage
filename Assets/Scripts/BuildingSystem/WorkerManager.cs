@@ -7,14 +7,26 @@ public class WorkerManager : MonoBehaviour
 
     public List<WorkerData> allWorkers = new List<WorkerData>();
 
-    [SerializeField] private WorkerIconLibrary iconLibrary;
-
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
+    [SerializeField] private WorkerDefinition[] workerDefinitions;
+
     private void Awake()
     {
         current = this;
+    }
+
+    private WorkerDefinition GetDefinition(BusinessType type)
+    {
+        foreach (var definition in workerDefinitions)
+        {
+            if (definition.Type == type)
+                return definition;
+        }
+
+        Debug.LogError($"WorkerDefinition for {type} not found.");
+        return null;
     }
 
     public void AddWorker(WorkerData worker)
@@ -27,19 +39,13 @@ public class WorkerManager : MonoBehaviour
 
     public WorkerData CreateWorker(BusinessType type, bool register)
     {
-        var w = new WorkerData(progressionConfig,upgradeCostConfig, economyConfig)
-        {
-            Type = type,
+        WorkerDefinition definition = GetDefinition(type);
 
-            Currency = CurrencyType.Coins,
+        WorkerData worker = new WorkerData(definition,progressionConfig,upgradeCostConfig,economyConfig);
 
-            Icon = iconLibrary.GetIcon(type),
+        if (register)
+            AddWorker(worker);
 
-            RoundIcon = iconLibrary.GetRoundIcon(type),
-        };
-
-        if (register) AddWorker(w);
-
-        return w;
+        return worker;
     }
 }

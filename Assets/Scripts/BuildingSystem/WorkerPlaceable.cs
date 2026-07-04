@@ -12,6 +12,8 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private LayerMask placeableLayer;
     [SerializeField] private Sprite workerIcon;
 
+    public bool UseGridSnapping => false;
+
     [SerializeField] private BusinessType workerType = BusinessType.Farming;   
 
     private void Awake()

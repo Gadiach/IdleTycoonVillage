@@ -92,14 +92,14 @@ public class BuildingSystem : MonoBehaviour
             }
 
             placeable.Initialize(item.PurchasePrice, item.Currency);
-            PanZoom.current.FollowObject(obj.transform);
+            //PanZoom.current.FollowObject(obj.transform);
             return;
         }
 
         var workerPlaceable = obj.GetComponent<WorkerPlaceable>();
         if (workerPlaceable != null)
         {
-            PanZoom.current.FollowObject(obj.transform);
+            //PanZoom.current.FollowObject(obj.transform);
             return;
         }
     }

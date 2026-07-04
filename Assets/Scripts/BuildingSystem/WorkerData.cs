@@ -5,17 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class WorkerData
 {
-    #region Definition Data
-    
-    public BusinessType Type;
+    #region Definition Properties
+    public BusinessType Type => Definition.Type;
 
-    public Sprite RoundIcon;
-    public Sprite Icon;
+    public Sprite Icon => Definition.Icon;
 
-    public CurrencyType Currency;
-    [SerializeField] private float baseProductionDuration = 10f;
-    [SerializeField] private float baseUpgradePrice = 3f;
-    [SerializeField] private float productionTimeReductionPerLevel = 0.0015f;
+    public Sprite RoundIcon => Definition.RoundIcon;
+
+    public CurrencyType Currency => Definition.Currency;
+
+    private float BaseProductionDuration => Definition.BaseProductionDuration;
+
+    private float BaseUpgradePrice => Definition.BaseUpgradePrice;
+
+    private float ProductionTimeReductionPerLevel => Definition.ProductionTimeReductionPerLevel;
 
     #endregion
 
@@ -28,7 +31,7 @@ public class WorkerData
     #endregion
 
     #region Runtime State
-
+    public WorkerDefinition Definition { get; private set; }
     public int CurrentLevel { get; private set; } = 1;
 
     public Rarities CurrentRarity { get; private set; } = Rarities.Primitive;
@@ -117,7 +120,7 @@ public class WorkerData
     {
         get
         {
-            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
+            return Mathf.RoundToInt(BaseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
         }
     }
 
@@ -161,8 +164,10 @@ public class WorkerData
 
     #endregion
 
-    public WorkerData(ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
+    public WorkerData(WorkerDefinition definition, ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
     {
+        Definition = definition;
+
         this.progressionConfig = progressionConfig;
         this.upgradeCostConfig = upgradeCostConfig;
         this.economyConfig = economyConfig;
@@ -188,9 +193,9 @@ public class WorkerData
 
         float tierMultiplier = economyConfig.GetTierProductionTimeMultiplier(tier);
 
-        float levelMultiplier = 1f - ((level - 1) * productionTimeReductionPerLevel);
+        float levelMultiplier = 1f - ((level - 1) * ProductionTimeReductionPerLevel);
 
-        return baseProductionDuration * rarityMultiplier * tierMultiplier * levelMultiplier;
+        return BaseProductionDuration * rarityMultiplier * tierMultiplier * levelMultiplier;
     }
 
     private bool HasEnoughResourcesForTierOrRarityUpgrade(Dictionary<CurrencyType, int> requirements)
