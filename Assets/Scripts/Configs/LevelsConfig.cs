@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelConfig", menuName = "Game Configs/Level Config")]
+[CreateAssetMenu(fileName = "LevelConfig", menuName = "Configs/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
     [Serializable]

@@ -57,7 +57,7 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
             {
                 Destroy(gameObject); 
             }
-            ShopManager.current.ShopButton_Click();
+            ShopSystem.Instance.ShopButton_Click();
         }
     }
 

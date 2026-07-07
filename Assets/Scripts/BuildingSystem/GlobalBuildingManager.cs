@@ -31,12 +31,12 @@ public class GlobalBuildingManager : MonoBehaviour
         }
     }
 
-    public BuildingGlobalData GetGlobalBuilding(ObjectType type)
+    public BuildingGlobalData GetGlobalBuilding(ShopCategory type)
     {
         return globalBuildings.Find(b => b.Type == type);
     }
 
-    public bool IsBuildingUnlocked(ObjectType type)
+    public bool IsBuildingUnlocked(ShopCategory type)
     {
         return globalBuildings.Exists(b => b.Type == type);
     }
@@ -45,6 +45,6 @@ public class GlobalBuildingManager : MonoBehaviour
 [System.Serializable]
 public class BuildingGlobalData
 {
-    public ObjectType Type;
+    public ShopCategory Type;
     public Rarities Rarity;
 }

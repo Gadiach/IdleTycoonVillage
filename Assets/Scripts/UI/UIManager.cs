@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour
     {
         buildingPanel.SetActive(false);
 
-        ShopManager.current.OpenShop(ObjectType.Workers);
+        ShopSystem.Instance.OpenShop(ShopCategory.Workers);
     }
 
     public void OpenMainBuildingPanel(BuildingData building)

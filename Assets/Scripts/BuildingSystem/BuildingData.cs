@@ -10,7 +10,7 @@ public class BuildingData : MonoBehaviour
     public string Name;
     public string Description;
     public CurrencyType Currency;
-    public ObjectType Type;
+    public ShopCategory Type;
     public BusinessType BusinessType;
     public Sprite Icon;
     public int PurchasePrice;
@@ -163,7 +163,6 @@ public class BuildingData : MonoBehaviour
     public void Initialize(ShopItem item)
     {
         Name = item.Name;
-        Description = item.Description;
         PurchasePrice = item.PurchasePrice;
         Currency = item.Currency;
         Type = item.Type;

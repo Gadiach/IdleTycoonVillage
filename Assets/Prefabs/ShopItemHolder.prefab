@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7332725264070175101}
   - component: {fileID: 370418762961205511}
   - component: {fileID: 6178218994191641256}
+  - component: {fileID: 3508367782211421258}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -124,6 +125,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &3508367782211421258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126689615061671125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138bf795cdbd3824983aaf71ba922d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &985307491598831438
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,14 +321,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2420789640511823449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f112549fca8a5d4fa08702ee4ca63d1, type: 3}
+  m_Script: {fileID: 11500000, guid: acfad0c288d8e4b4caf74281fb29b475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 751770311003675419}
-  descriptionText: {fileID: 5683332024908434731}
   iconImage: {fileID: 7332725264070175101}
   currencyImage: {fileID: 1848586253481850250}
   priceText: {fileID: 6057722829346178855}
+  dragComponent: {fileID: 3508367782211421258}
 --- !u!1 &4649837089658354406
 GameObject:
   m_ObjectHideFlags: 0

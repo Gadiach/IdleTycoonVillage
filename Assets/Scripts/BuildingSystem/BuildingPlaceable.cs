@@ -75,7 +75,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         }
         else
         {
-            ShopManager.current.OpenShop(ObjectType.Workers);
+            ShopSystem.Instance.OpenShop(ShopCategory.Workers);
         }
     }
 
@@ -142,7 +142,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
                 Destroy(transform.gameObject);
             }           
 
-            ShopManager.current.ShopButton_Click();
+            ShopSystem.Instance.ShopButton_Click();
         }
         else
         {
