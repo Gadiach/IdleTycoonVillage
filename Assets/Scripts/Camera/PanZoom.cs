@@ -15,6 +15,10 @@ public class PanZoom : MonoBehaviour
     [SerializeField] private float zoomMax;
     [SerializeField] private float zoomSencitivity;
 
+    [SerializeField] private float dragThreshold = 10f;
+
+    private Vector3 mouseDownPosition;
+
     private Camera cam;
 
     private bool moveAllowed;
@@ -93,18 +97,29 @@ public class PanZoom : MonoBehaviour
             {
                 moveAllowed = true;
             }
+
+            mouseDownPosition = Input.mousePosition;
             touchPos = cam.ScreenToWorldPoint(Input.mousePosition);
         }
         else if (Input.GetMouseButton(0) && moveAllowed)
         {
             Vector3 direction = touchPos - cam.ScreenToWorldPoint(Input.mousePosition);
+
             cam.transform.position += direction;
 
-            cam.transform.position = new Vector3(
-                Mathf.Clamp(cam.transform.position.x, leftLimit, rightLimit),
-                Mathf.Clamp(cam.transform.position.y, bottomLimit, upperLimit),
-                cam.transform.position.z
-            );
+            ClampCameraPosition();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (!moveAllowed)
+                return;
+
+            float distance = Vector3.Distance(mouseDownPosition, Input.mousePosition);
+
+            if (distance < dragThreshold)
+            {
+                ShopSystem.Instance.CloseShop();
+            }
         }
     }
 

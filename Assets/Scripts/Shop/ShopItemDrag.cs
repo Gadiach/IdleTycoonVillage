@@ -4,20 +4,17 @@ using UnityEngine.UI;
 
 public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    private ShopItem Item;
-
-    public static Canvas canvas;
+    private ShopItem shopItem;
 
     private RectTransform rt;
     private CanvasGroup cg;
     private Image img;
 
     private Vector3 originPos;
-    private bool drag;
 
     public void Initialize(ShopItem item)
     {
-        Item = item;
+        shopItem = item;
     }
 
     private void Awake()
@@ -31,7 +28,6 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        drag = true;
         cg.blocksRaycasts = false;
         img.maskable = false;
     }
@@ -43,7 +39,6 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        drag = false;
         cg.blocksRaycasts = true;
         img.maskable = true; 
         rt.anchoredPosition = originPos;
@@ -60,12 +55,11 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         Vector3 position = new Vector3(transform.position.x, transform.position.y);
         position = Camera.main.ScreenToWorldPoint(position);
 
-        BuildingSystem.current.InitializeWithObject(Item.Prefab, position, Item);
+        BuildingSystem.current.InitializeWithObject(shopItem.Prefab, position, shopItem);
     }
 
     private void OnEnable()
     {
-        drag = false;
         cg.blocksRaycasts = true;
         img.maskable = true;
         rt.anchoredPosition = originPos;

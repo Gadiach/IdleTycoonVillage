@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 public class ShopSystem : MonoBehaviour 
 {
@@ -57,13 +55,6 @@ public class ShopSystem : MonoBehaviour
             shopItems.Add(category, new List<ShopItem>());
         }
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            ShopButton_Click();
-        }
-    }
 
     private void Load()
     {
@@ -90,8 +81,6 @@ public class ShopSystem : MonoBehaviour
             CloseShop();
         else
             OpenShop(ShopCategory.Buildings);
-
-        Debug.Log("Button clicked");
     }
 
     public void OpenShop(ShopCategory category)
@@ -104,16 +93,5 @@ public class ShopSystem : MonoBehaviour
     public void CloseShop()
     {
         shopUI.Close();
-    }
-
-    private bool dragging; 
-    public void OnBeginDrag() { dragging = true; }
-    public void OnEndDrag() { dragging = false; }
-    public void OnPointerClick() 
-    { 
-        if (!dragging) 
-        { 
-            ShopButton_Click(); 
-        } 
     }
 }

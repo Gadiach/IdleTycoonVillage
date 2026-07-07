@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b17d5cb57f588f749a7bc3d7d9f561e8, type: 3}
-  m_Name: "\u041B\u044C\u043E\u0445\u0430"
+  m_Name: Farmhand
   m_EditorClassIdentifier: 
-  Name: "\u041B\u044C\u043E\u0445\u0430"
+  Name: Farmhand
   PurchasePrice: 0
   Currency: 0
-  Type: 0
-  Icon: {fileID: 21300000, guid: 80d0ed58802b7cb47a477cfb4987b7c3, type: 3}
-  Prefab: {fileID: 0}
+  Type: 1
+  Icon: {fileID: 21300000, guid: 1e138140b1af60d4b9060a5e5e7edd81, type: 3}
+  Prefab: {fileID: 3285537844617060477, guid: 33911a4780d32f349972dc1cc5933d2b, type: 3}

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "How to create a Shop Item/How to create a Shop Item(Building, Worker etc.).md",
+                "file": "How to create a new prefab(building, worker, etc.).md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "How to create a Shop Item(Building, Worker etc.)"
+              "title": "How to create a new prefab(building, worker, etc.)"
             }
           }
         ]
@@ -180,11 +180,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "7ccc4096e4e3254f",
+  "active": "f0fa87368f116030",
   "lastOpenFiles": [
-    "How to create",
+    "How to edit a Shop Item().md",
+    "How to create a new prefab(building, worker, etc.).md",
+    "How to create a Shop Item(Building, Worker etc.).md",
+    "How to change a Shop Item Icon",
     "Game/Architecture/Shop/ShopManager.md",
-    "How to create a Shop Item/How to create a Shop Item(Building, Worker etc.).md",
     "How to create a Shop Item",
     "Game/Architecture/Workers/WorkerManager.md",
     "Game/Architecture/Core/LevelSystem.md",
@@ -208,7 +210,6 @@
     "Game/Architecture/Shop/ShopItemHolder.md",
     "Game/Architecture/Shop/ShopItem.md",
     "Game/Architecture/Missions/MissionItemUI.md",
-    "Game/Architecture/Missions/MissionPanelUI.md",
     "Game/Architecture/Buildings/BuildingUI",
     "Game/Architecture/UI",
     "Game/Architecture/World",
@@ -216,7 +217,6 @@
     "Game/Architecture/Shop",
     "Game/Architecture/Missions",
     "Game/Architecture/University",
-    "Game/Architecture/Workers",
-    "Game/Architecture/Buildings"
+    "Game/Architecture/Workers"
   ]
 }

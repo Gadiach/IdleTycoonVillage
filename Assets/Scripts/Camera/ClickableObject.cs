@@ -14,6 +14,8 @@ public class ClickableObject : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
+        ShopSystem.Instance.CloseShop();
+
         if (PanZoom.current != null)
         {
             PanZoom.current.FocusOnObject(transform);
