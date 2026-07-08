@@ -13,6 +13,8 @@ public class TabGroup : MonoBehaviour
     public List<TabButton> tabButtons = new List<TabButton>();
     public List<GameObject> objectsToSwap = new List<GameObject>();
 
+    public event Action<int> TabSelected;
+
     [NonSerialized]
     public TabButton selectedTab;
 
@@ -63,7 +65,7 @@ public class TabGroup : MonoBehaviour
 
         int index = button.transform.GetSiblingIndex();
 
-        UniversityManager.Instance.ShowTab(index);
+        TabSelected?.Invoke(index);
 
         for (int i = 0; i < objectsToSwap.Count; i++)
         {

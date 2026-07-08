@@ -25,8 +25,8 @@ public class ObjectDrag : MonoBehaviour
 
         if (placeable.UseGridSnapping)
         {
-            Vector3Int cellPos = BuildingSystem.current.gridLayout.WorldToCell(pos);
-            transform.position = BuildingSystem.current.gridLayout.CellToLocalInterpolated(cellPos);
+            Vector3Int cellPos = GridPlacementSystem.current.gridLayout.WorldToCell(pos);
+            transform.position = GridPlacementSystem.current.gridLayout.CellToLocalInterpolated(cellPos);
         }
         else
         {

@@ -35,7 +35,7 @@ public class BlueprintItemUI : MonoBehaviour
 
     public void OnStudyClicked()
     {
-        UniversityManager.Instance.StartStudy(item);
+        UniversitySystem.Instance.StartStudy(item);
     }
 
     public void UpdateOwnedText()
@@ -49,7 +49,7 @@ public class BlueprintItemUI : MonoBehaviour
     {
         bool canAfford = CurrencySystem.Instance.HasEnoughCurrency(item.StudyCurrency, item.StudyCost);
 
-        bool noStudyRunning = !UniversityManager.Instance.IsStudyInProgress;
+        bool noStudyRunning = !UniversitySystem.Instance.IsStudyInProgress;
 
         studyButton.interactable = canAfford && noStudyRunning;
     }

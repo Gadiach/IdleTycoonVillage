@@ -16,7 +16,7 @@ public class BlueprintRewardCollect : MonoBehaviour
 
         productionController.ClearCurrentBlueprint();
 
-        UniversityManager.Instance.FinishStudy();
+        UniversitySystem.Instance.FinishStudy();
 
         productionController.HideReward();
     }

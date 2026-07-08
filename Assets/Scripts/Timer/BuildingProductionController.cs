@@ -49,7 +49,7 @@ public class BuildingProductionController : MonoBehaviour
 
         if (!buildingData.StartProductionOnPlace)       
         {
-            UniversityManager.Instance.RegisterProduction(this);
+            UniversitySystem.Instance.RegisterProduction(this);
         }
 
         if (buildingData.Placeable != null && buildingData.Placeable.HasWorker())

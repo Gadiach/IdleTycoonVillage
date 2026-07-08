@@ -32,6 +32,7 @@ public class MissionItemUI : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.AddListener<MissionProgressChangedEvent>(OnMissionProgressChanged);
+        claimButton.onClick.AddListener(OnClaimButtonClicked);
     }
 
     private void OnDisable()
@@ -42,6 +43,11 @@ public class MissionItemUI : MonoBehaviour
         claimButton.transform.DOKill();
 
         EventManager.Instance.RemoveListener<MissionProgressChangedEvent>(OnMissionProgressChanged);
+    }
+
+    private void OnClaimButtonClicked()
+    {
+        MissionRewardUI.Instance.Open(mission);
     }
 
     private void OnMissionProgressChanged(MissionProgressChangedEvent info)

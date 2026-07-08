@@ -94,11 +94,11 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     public bool CanBePlaced(Vector3 position)
     {
-        Vector3Int cellPos = BuildingSystem.current.gridLayout.LocalToCell(position);
+        Vector3Int cellPos = GridPlacementSystem.current.gridLayout.LocalToCell(position);
         BoundsInt areaTemp = area;
         areaTemp.position = cellPos + area.position;
 
-        return BuildingSystem.current.CanTakeArea(areaTemp);
+        return GridPlacementSystem.current.CanTakeArea(areaTemp);
     }
 
     private void CheckPlacementAndSetColor()
@@ -112,17 +112,15 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
 
     public void Place(Vector3 position)
     {
-        Vector3Int cellPos = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
+        Vector3Int cellPos = GridPlacementSystem.current.gridLayout.LocalToCell(transform.position);
         BoundsInt areaTemp = area;
         areaTemp.position = cellPos + area.position;
 
         Placed = true;
 
-        BuildingSystem.current.TakeArea(areaTemp);
+        GridPlacementSystem.current.TakeArea(areaTemp);
 
         PanZoom.current.UnfollowObject();
-
-        BuildingManager.Instance.AddBuildingToList(buildingData);
     }
 
     public void CheckPlacement()

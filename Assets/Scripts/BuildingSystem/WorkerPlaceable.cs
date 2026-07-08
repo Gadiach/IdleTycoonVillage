@@ -65,7 +65,7 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
     {
         placed = true;
 
-        WorkerData worker = WorkerManager.current.CreateWorker(workerType, register: true);
+        WorkerData worker = WorkerSystem.Instance.CreateWorker(workerType, register: true);
 
         assignedBuilding.AssignWorker(worker);
         worker.AssignToBuilding(assignedBuilding.buildingData);

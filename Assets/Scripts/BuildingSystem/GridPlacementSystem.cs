@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class BuildingSystem : MonoBehaviour
+public class GridPlacementSystem : MonoBehaviour
 {
-    public static BuildingSystem current;
+    public static GridPlacementSystem current;
 
     public GridLayout gridLayout;
     public Tilemap MainTilemap;

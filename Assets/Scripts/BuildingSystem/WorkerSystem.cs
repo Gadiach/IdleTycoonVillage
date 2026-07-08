@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkerManager : MonoBehaviour
+public class WorkerSystem : MonoBehaviour
 {
-    public static WorkerManager current;
+    public static WorkerSystem Instance;
 
     public List<WorkerData> allWorkers = new List<WorkerData>();
 
@@ -14,7 +14,7 @@ public class WorkerManager : MonoBehaviour
 
     private void Awake()
     {
-        current = this;
+        Instance = this;
     }
 
     private WorkerDefinition GetDefinition(BusinessType type)
