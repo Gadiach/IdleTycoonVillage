@@ -22,6 +22,7 @@ public class MissionSystem : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyAdded);
+        EventManager.Instance.AddListener<MissionClaimedEvent>(OnMissionClaimed);
     }
 
     private void OnDisable()
@@ -30,6 +31,7 @@ public class MissionSystem : MonoBehaviour
             return;
 
         EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyAdded);
+        EventManager.Instance.RemoveListener<MissionClaimedEvent>(OnMissionClaimed);
     }
 
     #region Initialization
@@ -93,6 +95,11 @@ public class MissionSystem : MonoBehaviour
         {
             UpdateMissionProgress(MissionType.CollectCoins, info.Amount);
         }
+    }
+
+    private void OnMissionClaimed(MissionClaimedEvent info)
+    {
+        EventManager.Instance.QueueEvent(new MissionListChangedEvent(GetActiveMissions()));
     }
 
     private void UpdateMissionProgress(MissionType missionType, int amount)

@@ -41,13 +41,17 @@ public class MissionItemUI : MonoBehaviour
             return;
         progressTween?.Kill();
         claimButton.transform.DOKill();
+        claimButton.onClick.RemoveListener(OnClaimButtonClicked);
 
         EventManager.Instance.RemoveListener<MissionProgressChangedEvent>(OnMissionProgressChanged);
     }
 
     private void OnClaimButtonClicked()
     {
-        MissionRewardUI.Instance.Open(mission);
+        mission.ClaimReward();
+
+        claimButton.transform.DOKill();
+        claimButton.gameObject.SetActive(false);
     }
 
     private void OnMissionProgressChanged(MissionProgressChangedEvent info)

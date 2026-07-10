@@ -9,7 +9,7 @@ public class MissionPanelUI : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<MissionListChangedEvent>(OnMissionInitialized);
+        EventManager.Instance.AddListener<MissionListChangedEvent>(OnMissionListChanged);
     }
 
     private void OnDisable()
@@ -17,10 +17,10 @@ public class MissionPanelUI : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<MissionListChangedEvent>(OnMissionInitialized);
+        EventManager.Instance.RemoveListener<MissionListChangedEvent>(OnMissionListChanged);
     }
 
-    private void OnMissionInitialized(MissionListChangedEvent info)
+    private void OnMissionListChanged(MissionListChangedEvent info)
     {
         RebuildMissionUI(info.Missions);
     }

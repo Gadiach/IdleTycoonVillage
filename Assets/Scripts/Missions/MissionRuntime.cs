@@ -32,4 +32,16 @@ public class MissionRuntime
 
         Progress = Mathf.Min(Progress, Data.targetValue);
     }
+
+    public void ClaimReward()
+    {
+        if (!CanClaim)
+            return;
+
+        CurrencySystem.Instance.AddCurrency(Data.rewardCurrency, Data.rewardAmount);
+
+        Claimed = true;
+
+        EventManager.Instance.QueueEvent(new MissionClaimedEvent(this));
+    }
 }

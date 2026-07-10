@@ -14,5 +14,6 @@ public class MissionData : ScriptableObject
     public int targetValue;
 
     [Header("Reward")]
-    public int rewardCoins;
+    public CurrencyType rewardCurrency;
+    public int rewardAmount;
 }

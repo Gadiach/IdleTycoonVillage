@@ -25,6 +25,16 @@ public class MissionProgressChangedEvent : GameEvent
     }
 }
 
+public class MissionClaimedEvent : GameEvent
+{
+    public MissionRuntime Mission { get; }
+
+    public MissionClaimedEvent(MissionRuntime mission)
+    {
+        Mission = mission;
+    }
+}
+
 public class MissionListChangedEvent : GameEvent
 {
     public List<MissionRuntime> Missions { get; }
