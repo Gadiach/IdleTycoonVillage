@@ -1,0 +1,7 @@
+1. **Форма** (Shape Language)
+2. **Колір** (Color Language)
+3. **Світло** (Lighting)
+4. **Матеріал** (Material)
+5. **Типографіка** (Typography)
+6. **Іконографія** (Iconography)
+7. **Ритм** (Spacing & Layout)

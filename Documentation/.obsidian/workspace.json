@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "How to create a new prefab(building, worker, etc.).md",
+                "file": "How to make UI consistent.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "How to create a new prefab(building, worker, etc.)"
+              "title": "How to make UI consistent"
             }
           }
         ]
@@ -182,8 +182,9 @@
   },
   "active": "f0fa87368f116030",
   "lastOpenFiles": [
-    "How to edit a Shop Item().md",
     "How to create a new prefab(building, worker, etc.).md",
+    "How to make UI consistent.md",
+    "How to edit a Shop Item().md",
     "How to create a Shop Item(Building, Worker etc.).md",
     "How to change a Shop Item Icon",
     "Game/Architecture/Shop/ShopManager.md",
@@ -209,7 +210,6 @@
     "Game/Architecture/Shop/ShopItemDrag.md",
     "Game/Architecture/Shop/ShopItemHolder.md",
     "Game/Architecture/Shop/ShopItem.md",
-    "Game/Architecture/Missions/MissionItemUI.md",
     "Game/Architecture/Buildings/BuildingUI",
     "Game/Architecture/UI",
     "Game/Architecture/World",
