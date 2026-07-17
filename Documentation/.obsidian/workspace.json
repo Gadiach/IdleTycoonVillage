@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "How to make UI consistent.md",
+                "file": "UI Style Guide/6. Components.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "How to make UI consistent"
+              "title": "6. Components"
             }
           }
         ]
@@ -182,10 +182,26 @@
   },
   "active": "f0fa87368f116030",
   "lastOpenFiles": [
-    "How to create a new prefab(building, worker, etc.).md",
+    "UI Style Guide/1. Shape/1. Corner Radius.md",
+    "UI Style Guide/6. Components.md",
+    "UI Style Guide/1. Shape/7. Safe Area.md",
+    "UI Style Guide/1. Shape/0. Grid and sizes.md",
+    "UI Style Guide/Export.md",
+    "UI Style Guide/Unity Import.md",
+    "UI Style Guide/5. Icons.md",
+    "UI Style Guide/4. Typography.md",
+    "UI Style Guide/3. Lighting.md",
+    "UI Style Guide/2. Color.md",
+    "UI Style Guide/1. Shape/4. Shadow.md",
+    "UI Style Guide/1. Shape/5. Panel Padding.md",
+    "UI Style Guide/1. Shape/2. Border Thickness.md",
+    "UI Style Guide/1. Shape/3. Inner Stroke.md",
+    "UI Style Guide/1. Shape",
     "How to make UI consistent.md",
+    "UI Style Guide",
     "How to edit a Shop Item().md",
     "How to create a Shop Item(Building, Worker etc.).md",
+    "How to create a new prefab(building, worker, etc.).md",
     "How to change a Shop Item Icon",
     "Game/Architecture/Shop/ShopManager.md",
     "How to create a Shop Item",
@@ -196,27 +212,11 @@
     "Game/Architecture/Core/GameManager.md",
     "Game/Architecture/UI/ScrollReset.md",
     "Game/Architecture/UI/TabGroup.md",
-    "Game/Architecture/UI/TimerUI.md",
-    "Game/Architecture/UI/CurrencyUI.md",
-    "Game/Architecture/UI/UIManager.md",
-    "Game/Architecture/World/IsoCanvasSorting.md",
-    "Game/Architecture/World/IsoSorting.md",
-    "Game/Architecture/World/PanZoom.md",
-    "Game/Architecture/World/BuildingSystem.md",
-    "Game/Architecture/Economy/CurrencyHelper.md",
-    "Game/Architecture/Economy/ProgressionConfig.md",
-    "Game/Architecture/Economy/UpgradeCostConfig.md",
-    "Game/Architecture/Economy/EconomyProgressionConfig.md",
-    "Game/Architecture/Shop/ShopItemDrag.md",
-    "Game/Architecture/Shop/ShopItemHolder.md",
-    "Game/Architecture/Shop/ShopItem.md",
     "Game/Architecture/Buildings/BuildingUI",
     "Game/Architecture/UI",
     "Game/Architecture/World",
     "Game/Architecture/Economy",
     "Game/Architecture/Shop",
-    "Game/Architecture/Missions",
-    "Game/Architecture/University",
-    "Game/Architecture/Workers"
+    "Game/Architecture/Missions"
   ]
 }
