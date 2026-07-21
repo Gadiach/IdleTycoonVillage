@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "UI Style Guide/1. Shape/0. Grid and sizes.md",
+                "file": "UI Style Guide/6. Components.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "0. Grid and sizes"
+              "title": "6. Components"
             }
           }
         ]
@@ -182,8 +182,8 @@
   },
   "active": "f0fa87368f116030",
   "lastOpenFiles": [
-    "UI Style Guide/6. Components.md",
     "UI Style Guide/1. Shape/0. Grid and sizes.md",
+    "UI Style Guide/6. Components.md",
     "UI Style Guide/1. Shape/1. Corner Radius.md",
     "UI Style Guide/1. Shape/7. Safe Area.md",
     "UI Style Guide/Export.md",
