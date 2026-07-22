@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
+    public ScrollRect itemView;
     public Sprite tabIdle;
     public Sprite tabActive;
-    public ScrollRect itemView;
 
     public List<RectTransform> tabContents = new List<RectTransform>();
     public List<TabButton> tabButtons = new List<TabButton>();
@@ -38,11 +38,12 @@ public class TabGroup : MonoBehaviour
     {
         foreach (var button in tabButtons)
         {
-            if(selectedTab != null && button == selectedTab)
-            {
+            if (selectedTab != null && button == selectedTab)
                 continue;
-            }
+
             button.background.sprite = tabIdle;
+
+            button.SetSelected(false);
         }
     }
 
@@ -60,29 +61,26 @@ public class TabGroup : MonoBehaviour
     public void OnTabSelected(TabButton button)
     {
         selectedTab = button;
+
         ResetTabs();
+
         button.background.sprite = tabActive;
 
-        int index = button.transform.GetSiblingIndex();
+        button.SetSelected(true);
+
+        int index = tabButtons.IndexOf(button);
 
         TabSelected?.Invoke(index);
 
         for (int i = 0; i < objectsToSwap.Count; i++)
         {
-            if (i == index)
-            {
-                objectsToSwap[i].SetActive(true);
-            }
-            else
-            {
-                objectsToSwap[i].SetActive(false);
-            }
+            objectsToSwap[i].SetActive(i == index);
         }
 
         if (itemView != null && tabContents.Count > index && tabContents[index] != null)
         {
             itemView.content = tabContents[index];
-            itemView.normalizedPosition = new Vector2(0, 1); 
+            itemView.normalizedPosition = new Vector2(0, 1);
         }
     }
 }

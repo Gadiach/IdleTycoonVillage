@@ -1,25 +1,38 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-
 public class TabButton : MonoBehaviour, IPointerClickHandler
 {
     public TabGroup TabGroup;
-    [NonSerialized] public Image background;
+
+    [Header("UI")]
+    public Image background;
+    public Image icon;
+
+    [Header("Icons")]
+    [SerializeField] private Sprite selectedIcon;
+    [SerializeField] private Sprite unselectedIcon;
+
+    [NonSerialized] public bool IsSelected;
 
     private void Awake()
     {
-        background = GetComponent<Image>();
-        TabGroup.Subscribe(button: this);
+        if (background == null) background = GetComponent<Image>();
+
+        TabGroup.Subscribe(this);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        IsSelected = selected;
+        icon.sprite = selected ? selectedIcon : unselectedIcon;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        TabGroup.OnTabSelected(button: this);
+        TabGroup.OnTabSelected(this);
     }
 }
