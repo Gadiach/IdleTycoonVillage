@@ -13,21 +13,28 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI TimeText;
     [SerializeField] private GameObject workerPanel;
     [SerializeField] private GameObject noWorkerPanel;
+    [SerializeField] private Sprite upgradeButtonActiveSprite;
+    [SerializeField] private Sprite upgradeButtonInactiveSprite;
+    [SerializeField] private Sprite activeUpgradeArrows;
+    [SerializeField] private Sprite inactiveUpgradeArrows;
+    [SerializeField] private GameObject blackBackground;
 
     [Header("Building UI Elements")]
 
     public TextMeshProUGUI BuildingLevelText;
     public TextMeshProUGUI BuildingUpgradePriceText;
     public Image BuildingImage;
-    public Button BuildingUpgradeButton;
+    [SerializeField] private Image BuildingUpgradeArrowImage;
+    [SerializeField] private Button BuildingUpgradeButton;
     [SerializeField] private Image[] colorStarsBuilding;
 
     [Header("Worker UI Elements")]
 
     public TextMeshProUGUI WorkerLevelText;             
     public TextMeshProUGUI WorkerUpgradePriceText;      
-    public Image WorkerImage;                           
-    public Button WorkerUpgradeButton;                  
+    public Image WorkerImage;
+    [SerializeField] private Image WorkerUpgradeArrowImage;
+    [SerializeField] private Button WorkerUpgradeButton;
     [SerializeField] private Image[] colorStarsWorker;  
 
     [Header("Buttons to open panels")]
@@ -94,6 +101,24 @@ public class UIManager : MonoBehaviour
         UpdateWorkerStarUI(currentWorker);
     }
 
+    private void SetUpgradeButtonState(Button button,Image arrowImage,bool interactable)
+    {
+        button.interactable = interactable;
+
+        UpdateUpgradeButtonSprite(button, interactable);
+        UpdateUpgradeArrowSprite(arrowImage, interactable);
+    }
+
+    private void UpdateUpgradeButtonSprite(Button button, bool interactable)
+    {
+        button.image.sprite = interactable ? upgradeButtonActiveSprite : upgradeButtonInactiveSprite;
+    }
+
+    private void UpdateUpgradeArrowSprite(Image arrowImage, bool interactable)
+    {
+        arrowImage.sprite = interactable ? activeUpgradeArrows : inactiveUpgradeArrows;
+    }
+
     public void OpenWorkerShop()
     {
         buildingPanel.SetActive(false);
@@ -132,6 +157,7 @@ public class UIManager : MonoBehaviour
                                                                                 
 
         buildingPanel.SetActive(true);
+        blackBackground.SetActive(true);
 
         UpdateBuildingStarUI(building);                                    
 
@@ -256,7 +282,8 @@ public class UIManager : MonoBehaviour
     {
         SetWorkerLevelTextMaxed();
 
-        WorkerUpgradeButton.interactable = false;
+        SetUpgradeButtonState(WorkerUpgradeButton,WorkerUpgradeArrowImage,false);
+
         WorkerUpgradePriceText.color = Color.gray;
 
     }
@@ -269,7 +296,7 @@ public class UIManager : MonoBehaviour
 
         WorkerUpgradePriceText.color = canAfford ? Color.white : Color.red;
 
-        WorkerUpgradeButton.interactable = canAfford;
+        SetUpgradeButtonState(WorkerUpgradeButton, WorkerUpgradeArrowImage, canAfford);
     }
 
     private void SetBuildingUpgradeState(UpgradeUIState state)
@@ -294,7 +321,7 @@ public class UIManager : MonoBehaviour
 
         BuildingUpgradePriceText.color = canAfford ? Color.white : Color.red;
 
-        BuildingUpgradeButton.interactable = canAfford;
+        SetUpgradeButtonState(BuildingUpgradeButton, BuildingUpgradeArrowImage, canAfford);
     }
 
     private void SetBuildingLevelTextWithRedMaxLevel()
@@ -311,7 +338,8 @@ public class UIManager : MonoBehaviour
     {
         SetBuildingLevelTextMaxed();
 
-        BuildingUpgradeButton.interactable = false;
+        SetUpgradeButtonState(BuildingUpgradeButton, BuildingUpgradeArrowImage, false);
+
         BuildingUpgradePriceText.color = Color.gray;
 
     }
@@ -368,6 +396,7 @@ public class UIManager : MonoBehaviour
     public void CloseBuildingPanel()
     {
         buildingPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 
     private void UpdateAutomationUI(BuildingData building)
@@ -394,6 +423,8 @@ public class UIManager : MonoBehaviour
     {
         return CurrencySystem.Instance.HasEnoughCurrency(currentBuilding.Currency, currentBuilding.PriceToUpgrade);
     }
+
+    
 
     private bool HasWorker()
     {
