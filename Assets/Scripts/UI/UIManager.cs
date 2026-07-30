@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenWorkerShop()
     {
-        buildingPanel.SetActive(false);
+        CloseBuildingPanel();
 
         ShopSystem.Instance.OpenShop(ShopCategory.Workers);
     }
