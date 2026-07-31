@@ -20,6 +20,13 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentMinCycleDurationText;
     [SerializeField] private TextMeshProUGUI nextMinCycleDurationText;
 
+    [SerializeField] private Sprite addStarButtonActiveSprite;
+    [SerializeField] private Sprite addStarButtonInactiveSprite;
+
+    [SerializeField] private Sprite activeStarSprite;
+    [SerializeField] private Sprite inactiveStarSprite;
+
+    [SerializeField] private Image starIcon;
     [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject workerPanel;
@@ -92,7 +99,25 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateStarUpgradeButton()
     {
-        addStarButton.interactable = currentWorker.CanUpgradeTierOrRarity;
+        SetAddStarButtonState(currentWorker.CanUpgradeTierOrRarity);
+    }
+
+    private void SetAddStarButtonState(bool interactable)
+    {
+        addStarButton.interactable = interactable;
+
+        UpdateAddStarButtonSprite(interactable);
+        UpdateAddStarIcon(interactable);
+    }
+
+    private void UpdateAddStarButtonSprite(bool interactable)
+    {
+        addStarButton.image.sprite = interactable ? addStarButtonActiveSprite : addStarButtonInactiveSprite;
+    }
+
+    private void UpdateAddStarIcon(bool interactable)
+    {
+        starIcon.sprite = interactable ? activeStarSprite : inactiveStarSprite;
     }
 
     private void UpdateBlueprintPriceUI()

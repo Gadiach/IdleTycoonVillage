@@ -20,6 +20,14 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentMaxIncomeText;
     [SerializeField] private TextMeshProUGUI nextMaxIncomeText;
 
+    [SerializeField] private Sprite addStarButtonActiveSprite;
+    [SerializeField] private Sprite addStarButtonInactiveSprite;
+
+    [SerializeField] private Sprite activeStarSprite;
+    [SerializeField] private Sprite inactiveStarSprite;
+
+    [SerializeField] private Image starIcon;
+
     [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject buildingPanel;
@@ -132,7 +140,7 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateStarUpgradeButton()
     {
-        addStarButton.interactable = currentBuilding.CanUpgradeTierOrRarity;
+        SetAddStarButtonState(currentBuilding.CanUpgradeTierOrRarity);
     }
 
     public void OnAddStarButtonClicked()
@@ -140,6 +148,24 @@ public class BuildingUI : MonoBehaviour
         currentBuilding.UpgradeTierOrRarity();
 
         UpdateBuildingPanelUI();
+    }
+
+    private void SetAddStarButtonState(bool interactable)
+    {
+        addStarButton.interactable = interactable;
+
+        UpdateAddStarButtonSprite(interactable);
+        UpdateAddStarImage(interactable);
+    }
+
+    private void UpdateAddStarButtonSprite(bool interactable)
+    {
+        addStarButton.image.sprite = interactable ? addStarButtonActiveSprite : addStarButtonInactiveSprite;
+    }
+
+    private void UpdateAddStarImage(bool interactable)
+    {
+        starIcon.sprite = interactable ? activeStarSprite : inactiveStarSprite;
     }
 
     private void UpdateStarUI(BuildingData building)
