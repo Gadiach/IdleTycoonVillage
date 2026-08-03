@@ -10,10 +10,8 @@ public class BlueprintItem : ScriptableObject
     [SerializeField] private float studyTime;
     [SerializeField] private CurrencyType type;
     [SerializeField] private Sprite mainIcon;
-    [SerializeField] private Sprite smallIcon;
 
     public Sprite MainIcon => mainIcon;
-    public Sprite SmallIcon => smallIcon;
 
     public CurrencyType Type => type;
     public int StudyCost => studyCost;

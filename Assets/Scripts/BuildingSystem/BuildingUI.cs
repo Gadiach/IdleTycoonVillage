@@ -35,12 +35,15 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private GameObject[] blueprintSlots;
     [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
 
+    [SerializeField] private GameObject blackBackground;
+
     private BuildingData currentBuilding;
 
     private void Awake()
     {
         Instance = this;
         buildingPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 
     public void OpenBuildingPanel(BuildingData building)
@@ -52,6 +55,8 @@ public class BuildingUI : MonoBehaviour
         UpdateBuildingPanelUI();
 
         buildingPanel.SetActive(true);
+
+        blackBackground.SetActive(true);
     }
 
     private void UpdateBuildingPanelUI()
@@ -211,5 +216,6 @@ public class BuildingUI : MonoBehaviour
     public void ClosePanel()
     {
         buildingPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 }

@@ -8,10 +8,15 @@ public class BlueprintItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ownedText;
     [SerializeField] private TextMeshProUGUI studyPriceText;
     [SerializeField] private TextMeshProUGUI studyTimeText;
-    [SerializeField] private TextMeshProUGUI blueprintName;
+    [SerializeField] private Sprite studyButtonActiveSprite;
+    [SerializeField] private Sprite studyButtonInactiveSprite;
+
+    [SerializeField] private Sprite studyIconActive;
+    [SerializeField] private Sprite studyIconInactive;
+
+    [SerializeField] private Image studyIcon;
     [SerializeField] private Button studyButton;
     [SerializeField] private Image pazzleMainImg;
-    [SerializeField] private Image pazzleSmallImg;
 
     private BlueprintItem item;
 
@@ -23,10 +28,8 @@ public class BlueprintItemUI : MonoBehaviour
         item = blueprintItem;
         studyPriceText.text = item.StudyCost.ToString();
         studyTimeText.text =  item.StudyTime.ToString() + "m";
-        blueprintName.text = item.BlueprintName.ToString();
 
         pazzleMainImg.sprite = item.MainIcon;
-        pazzleSmallImg.sprite = item.SmallIcon;
 
 
         UpdateOwnedText();
@@ -48,9 +51,26 @@ public class BlueprintItemUI : MonoBehaviour
     public void UpdateStudyButtonState()
     {
         bool canAfford = CurrencySystem.Instance.HasEnoughCurrency(item.StudyCurrency, item.StudyCost);
-
         bool noStudyRunning = !UniversitySystem.Instance.IsStudyInProgress;
 
-        studyButton.interactable = canAfford && noStudyRunning;
+        SetStudyButtonState(canAfford && noStudyRunning);
+    }
+
+    private void SetStudyButtonState(bool interactable)
+    {
+        studyButton.interactable = interactable;
+
+        UpdateStudyButtonSprite(interactable);
+        UpdateStudyIcon(interactable);
+    }
+
+    private void UpdateStudyButtonSprite(bool interactable)
+    {
+        studyButton.image.sprite = interactable ? studyButtonActiveSprite : studyButtonInactiveSprite;
+    }
+
+    private void UpdateStudyIcon(bool interactable)
+    {
+        studyIcon.sprite = interactable ? studyIconActive : studyIconInactive;
     }
 }

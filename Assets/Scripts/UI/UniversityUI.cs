@@ -4,7 +4,8 @@ public class UniversityUI : MonoBehaviour
 {
     public static UniversityUI Instance;
 
-    [SerializeField] private GameObject panel;
+    [SerializeField] private GameObject universityPanel;
+    [SerializeField] private GameObject blackBackground;
     [SerializeField] private BlueprintItemUI[] blueprintItems;
 
     [SerializeField] private BlueprintItem[] buildingBlueprints;
@@ -25,7 +26,8 @@ public class UniversityUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        panel.SetActive(false);
+        universityPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 
     private void ShowBlueprints(BlueprintItem[] blueprints)
@@ -88,11 +90,13 @@ public class UniversityUI : MonoBehaviour
     }
     public void OpenUniversityPanel()
     {
-        panel.SetActive(true);
+        universityPanel.SetActive(true);
+        blackBackground.SetActive(true);
     }
 
     public void CloseUniversityPanel()
     {
-        panel.SetActive(false);
+        universityPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 }

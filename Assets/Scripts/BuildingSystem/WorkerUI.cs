@@ -34,12 +34,15 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private GameObject[] blueprintSlots;
     [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
 
+    [SerializeField] private GameObject blackBackground;
+
     private WorkerData currentWorker;
 
     private void Awake()
     {
         Instance = this;
         workerPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 
     public void OpenWorkerPanel(WorkerData worker)
@@ -51,6 +54,8 @@ public class WorkerUI : MonoBehaviour
         UpdateWorkerPanelUI();
 
         workerPanel.SetActive(true);
+
+        blackBackground.SetActive(true);
     }
 
     private void UpdateWorkerPanelUI()
@@ -155,6 +160,7 @@ public class WorkerUI : MonoBehaviour
     public void ClosePanel()
     {
         workerPanel.SetActive(false);
+        blackBackground.SetActive(false);
     }
 
     private Color GetColorByRarity(Rarities rarity)

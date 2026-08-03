@@ -17,5 +17,4 @@ MonoBehaviour:
   studyCost: 50
   studyTime: 0
   type: 8
-  mainIcon: {fileID: 21300000, guid: 048ac5a4e3c0f4b4bad8161ad82e081b, type: 3}
-  smallIcon: {fileID: 21300000, guid: 4d23a72aae56b4f488331223833311e7, type: 3}
+  mainIcon: {fileID: 21300000, guid: cb7b674460f06454f8b81d8a7d011609, type: 3}
