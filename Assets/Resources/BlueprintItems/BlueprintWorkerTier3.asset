@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56b77bc2fcd83da44bf1878bbaaf3b6d, type: 3}
-  m_Name: BlueprintWorkerTier2
+  m_Name: BlueprintWorkerTier3
   m_EditorClassIdentifier: 
-  blueprintName: Developed blueprint
-  Rarity: 1
-  studyCost: 50
+  blueprintName: Industrial blueprint
+  Rarity: 2
+  studyCost: 70
   studyTime: 0
-  type: 8
-  mainIcon: {fileID: 21300000, guid: cb7b674460f06454f8b81d8a7d011609, type: 3}
+  type: 9
+  category: 1

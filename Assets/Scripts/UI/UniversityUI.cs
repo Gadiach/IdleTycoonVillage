@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UniversityUI : MonoBehaviour
@@ -6,59 +7,57 @@ public class UniversityUI : MonoBehaviour
 
     [SerializeField] private GameObject universityPanel;
     [SerializeField] private GameObject blackBackground;
-    [SerializeField] private BlueprintItemUI[] blueprintItems;
 
-    [SerializeField] private BlueprintItem[] buildingBlueprints;
-    [SerializeField] private BlueprintItem[] workerBlueprints;
+    [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
+    [SerializeField] private BlueprintItemUI blueprintItemPrefab;
+
+    private readonly List<BlueprintItemUI> blueprintItemUIs = new();
 
     [SerializeField] private TabGroup tabGroup;
-
-    private void OnEnable()
-    {
-        tabGroup.TabSelected += ShowTab;
-    }
-
-    private void OnDisable()
-    {
-        tabGroup.TabSelected -= ShowTab;
-    }
 
     private void Awake()
     {
         Instance = this;
+
         universityPanel.SetActive(false);
         blackBackground.SetActive(false);
     }
 
-    private void ShowBlueprints(BlueprintItem[] blueprints)
-    {
-        for (int i = 0; i < blueprintItems.Length; i++)
-        {
-            if (i < blueprints.Length)
-            {
-                blueprintItems[i].gameObject.SetActive(true);
-                blueprintItems[i].Initialize(blueprints[i]);
-            }
-            else
-            {
-                blueprintItems[i].gameObject.SetActive(false);
-            }
-        }
 
-        RefreshStudyButtons();
+    public void CreateAndInitializeBlueprintItems(Dictionary<ShopCategory, List<BlueprintItem>> blueprintItems)
+    {
+        foreach (var pair in blueprintItems)
+        {
+            CreateCategoryItems(pair.Value, pair.Key);
+        }
     }
+
+    private void CreateCategoryItems(List<BlueprintItem> items, ShopCategory category)
+    {
+        Transform parent = tabGroup.objectsToSwap[(int)category].transform;
+
+        foreach (var item in items)
+        {
+            BlueprintItemUI itemUI = Instantiate(blueprintItemPrefab, parent);
+
+            blueprintItemUIs.Add(itemUI);
+
+            itemUI.Initialize(item, currencyIconDatabase.GetIcon(item.Type));
+        }
+    }
+
 
     public void RefreshStudyButtons()
     {
-        foreach (var item in blueprintItems)
+        foreach (var itemUI in blueprintItemUIs)
         {
-            item.UpdateStudyButtonState();
+            itemUI.UpdateStudyButtonState();
         }
     }
 
     public void UpdateUI(CurrencyType currencyType)
     {
-        foreach (var itemUI in blueprintItems)
+        foreach (var itemUI in blueprintItemUIs)
         {
             if (itemUI.Item == null)
                 continue;
@@ -75,19 +74,6 @@ public class UniversityUI : MonoBehaviour
         }
     }
 
-    public void ShowTab(int index)
-    {
-        switch (index)
-        {
-            case 0:
-                ShowBlueprints(buildingBlueprints);
-                break;
-
-            case 1:
-                ShowBlueprints(workerBlueprints);
-                break;
-        }
-    }
     public void OpenUniversityPanel()
     {
         universityPanel.SetActive(true);

@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,20 +17,15 @@ public class PanZoom : MonoBehaviour
 
     [SerializeField] private float dragThreshold = 10f;
 
+    private float focusDuration = 1f;
+    private float focusYOffset = 3f;
+
     private Vector3 mouseDownPosition;
 
     private Camera cam;
 
     private bool moveAllowed;
     private Vector3 touchPos;
-
-    [SerializeField] private Transform objectToFollow;
-    private bool isFocusing = false;
-    private Bounds objectBounds;
-    private Vector3 prevPos;
-
-    private Vector3 velocity = Vector3.zero; 
-    [SerializeField] private float smoothTime = 0.3f;
 
     private void Awake()
     {
@@ -40,34 +35,6 @@ public class PanZoom : MonoBehaviour
 
     private void Update()
     {
-        if (isFocusing) return;
-        //if (objectToFollow != null)
-        //{
-        //    Vector3 objPos = cam.WorldToViewportPoint(objectToFollow.position + objectBounds.max);
-
-        //    if (objPos.x >= 0.8f || objPos.x <= 0.2f || objPos.y >= 0.8f || objPos.y <= 0.2f)
-        //    {
-        //        Vector3 pos = cam.ScreenToWorldPoint(objectToFollow.position);
-        //        Vector3 direction = pos - prevPos;
-
-        //        cam.transform.position += direction;
-
-        //        prevPos = pos;
-
-        //        transform.position = new Vector3
-        //                    (
-        //                    Mathf.Clamp(transform.position.x, leftLimit, rightLimit),
-        //                    Mathf.Clamp(transform.position.y, bottomLimit, upperLimit),
-        //                    transform.position.z
-        //                    );
-        //    }
-        //    else
-        //    {
-        //        Vector3 pos = cam.ScreenToWorldPoint(objectToFollow.position);
-        //        prevPos = pos;
-        //    }
-        //    return;
-        //}
 
         if (Input.touchCount > 0)
         {
@@ -182,23 +149,6 @@ public class PanZoom : MonoBehaviour
         }
     }
 
-    public void FollowObject(Transform objToFollow)
-    {
-        objectToFollow = objToFollow;
-
-        Collider2D collider = objectToFollow.GetComponent<Collider2D>();
-
-        if (collider != null)
-        {
-            objectBounds = collider.bounds;
-        }
-    }
-
-    public void UnfollowObject()
-    {
-        objectToFollow = null;
-    }
-
     private void Zoom(float increment)
     {
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - increment, zoomMin, zoomMax);
@@ -215,36 +165,17 @@ public class PanZoom : MonoBehaviour
 
     public void FocusOnObject(Transform target)
     {
-        if (target == null) return;
+        if (target == null)
+            return;
 
-        objectToFollow = target;
-        StartCoroutine(FocusRoutine(target.position));
-    }
+        cam.transform.DOKill();
 
-    private IEnumerator FocusRoutine(Vector3 targetPosition)
-    {
-        isFocusing = true;
+        Vector3 targetPosition = new Vector3(
+         Mathf.Clamp(target.position.x, leftLimit, rightLimit),
+         Mathf.Clamp(target.position.y + focusYOffset, bottomLimit, upperLimit),
+         cam.transform.position.z);
 
-        Vector3 startPosition = cam.transform.position;
-        float startZoom = cam.orthographicSize;
-        float targetZoom = zoomMin;
-        float elapsedTime = 0f;
-        float duration = 0.5f; 
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;
-
-            cam.transform.position = Vector3.Lerp(startPosition, new Vector3(targetPosition.x, targetPosition.y, startPosition.z), t);
-            cam.orthographicSize = Mathf.Lerp(startZoom, targetZoom, t);
-
-            yield return null;
-        }
-
-        cam.transform.position = new Vector3(targetPosition.x, targetPosition.y, startPosition.z);
-        cam.orthographicSize = targetZoom;
-        isFocusing = false;
+        cam.transform.DOMove(targetPosition, focusDuration).SetEase(Ease.OutCubic);
     }
 
     private void OnDrawGizmos()

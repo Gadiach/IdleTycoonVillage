@@ -119,8 +119,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         Placed = true;
 
         GridPlacementSystem.current.TakeArea(areaTemp);
-
-        PanZoom.current.UnfollowObject();
     }
 
     public void CheckPlacement()

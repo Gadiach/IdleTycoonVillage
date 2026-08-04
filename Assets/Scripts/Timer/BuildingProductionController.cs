@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,8 @@ public class BuildingProductionController : MonoBehaviour
 
     [SerializeField] private BlueprintItem currentBlueprint;
     public BlueprintItem CurrentBlueprint => currentBlueprint;
+
+    [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
 
     private DateTime finishTime;
 
@@ -98,7 +99,7 @@ public class BuildingProductionController : MonoBehaviour
     {
         currentBlueprint = blueprintItem;
 
-        rewardIconImage.sprite = blueprintItem.MainIcon;
+        rewardIconImage.sprite = currencyIconDatabase.GetIcon(blueprintItem.Type);
 
         StartProduction();
     }
@@ -107,7 +108,7 @@ public class BuildingProductionController : MonoBehaviour
     {
         currentBlueprint = item;
 
-        rewardIconImage.sprite = item.MainIcon;
+        rewardIconImage.sprite = currencyIconDatabase.GetIcon(item.Type);
 
         finishTime = DateTime.Now.AddSeconds(item.StudyTime);
 

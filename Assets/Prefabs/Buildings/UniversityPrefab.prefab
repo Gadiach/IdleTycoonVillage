@@ -832,6 +832,7 @@ MonoBehaviour:
   rewardIconImage: {fileID: 349572702383049829}
   rewardObject: {fileID: 1286772948864659358}
   currentBlueprint: {fileID: 0}
+  currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
 --- !u!114 &598023031958499906
 MonoBehaviour:
   m_ObjectHideFlags: 0

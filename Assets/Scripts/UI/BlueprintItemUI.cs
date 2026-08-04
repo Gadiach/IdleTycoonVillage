@@ -23,14 +23,14 @@ public class BlueprintItemUI : MonoBehaviour
     public BlueprintItem Item => item;
 
 
-    public void Initialize(BlueprintItem blueprintItem)
+    public void Initialize(BlueprintItem blueprintItem, Sprite blueprintIcon)
     {
         item = blueprintItem;
+
         studyPriceText.text = item.StudyCost.ToString();
-        studyTimeText.text =  item.StudyTime.ToString() + "m";
+        studyTimeText.text = item.StudyTime + "m";
 
-        pazzleMainImg.sprite = item.MainIcon;
-
+        pazzleMainImg.sprite = blueprintIcon;
 
         UpdateOwnedText();
         UpdateStudyButtonState();

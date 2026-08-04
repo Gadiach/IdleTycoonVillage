@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72e14aad34576a44897ce10bfc4458b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisHouseObject: {fileID: 9193094272671895835}
+  buildingData: {fileID: 0}
   productionController: {fileID: 1214927713397149555}
   audioSource: {fileID: 7979416346430321622}
 --- !u!1 &1852522769249408974
@@ -755,6 +755,7 @@ MonoBehaviour:
   rewardIconImage: {fileID: 0}
   rewardObject: {fileID: 1837367204515019154}
   currentBlueprint: {fileID: 0}
+  currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
 --- !u!1 &7452024471405056485
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +913,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &9037011217994335147
@@ -1560,20 +1561,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  Level: 0
-  Price: 0
   Currency: 0
   Type: 0
   BusinessType: 0
   Icon: {fileID: 0}
-  PriceToUpgrade: 5
-  LevelOfBuilding: 1
-  Income: 0
-  LevelOfWorkerNeededForAutomation: 5
-  IsAutomated: 0
-  TotalIncomeCircles: 0
-  CurrentRarity: 0
-  CurrentTier: 1
-  startProductionOnPlace: 1
-  productionDuration: 8
+  PurchasePrice: 0
+  baseUpgradePrice: 5
+  baseIncomePerCycle: 5
+  workerLevelNeededForAutomation: 5
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
+  economyConfig: {fileID: 0}
+  upgradeCostConfig: {fileID: 0}
+  startProductionOnPlace: 1

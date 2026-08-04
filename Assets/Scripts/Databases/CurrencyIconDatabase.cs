@@ -6,6 +6,8 @@ public class CurrencyIconDatabase : ScriptableObject
 {
     [SerializeField] private CurrencyIcon[] currencyIcons;
 
+    
+
     public Sprite GetIcon(CurrencyType currencyType)
     {
         foreach (var currencyIcon in currencyIcons)

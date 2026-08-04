@@ -15,3 +15,23 @@ MonoBehaviour:
   currencyIcons:
   - CurrencyType: 0
     Icon: {fileID: 21300000, guid: 521b2191ad8c5ab499d5d86302d2f12f, type: 3}
+  - CurrencyType: 2
+    Icon: {fileID: 21300000, guid: 49d80eb298f40b1408f99c5356a23526, type: 3}
+  - CurrencyType: 3
+    Icon: {fileID: 21300000, guid: 8380ed0c48c795042a1f1a93ba61281c, type: 3}
+  - CurrencyType: 4
+    Icon: {fileID: 21300000, guid: 74b9e951d694cec41821cd777153a9d8, type: 3}
+  - CurrencyType: 5
+    Icon: {fileID: 21300000, guid: 58284b4eeec17284b98c4f557689ac8c, type: 3}
+  - CurrencyType: 6
+    Icon: {fileID: 21300000, guid: a32ff4f32a03d3f4ab465c70ea8a058e, type: 3}
+  - CurrencyType: 7
+    Icon: {fileID: 21300000, guid: 0779b144806b948449c76913941ee47b, type: 3}
+  - CurrencyType: 8
+    Icon: {fileID: 21300000, guid: cb7b674460f06454f8b81d8a7d011609, type: 3}
+  - CurrencyType: 9
+    Icon: {fileID: 21300000, guid: 85aa2c0eea12aa842b8cb05c5cd8b156, type: 3}
+  - CurrencyType: 10
+    Icon: {fileID: 21300000, guid: a35bfc34aca9a434095e4f7d31d595ca, type: 3}
+  - CurrencyType: 11
+    Icon: {fileID: 21300000, guid: 3ff61ed760044e54eb06d9d4aee968db, type: 3}

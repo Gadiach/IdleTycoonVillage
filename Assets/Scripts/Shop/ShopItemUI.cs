@@ -13,11 +13,11 @@ public class ShopItemUI : MonoBehaviour
     [SerializeField] private ShopItemDrag dragComponent;
 
     #region Initialization
-    public void Initialize(ShopItem item, Sprite currencyIcon)
+    public void Initialize(ShopItem item, Sprite currencyIcon, RectTransform itemView)
     {
         shopItem = item;
 
-        dragComponent.Initialize(item);
+        dragComponent.Initialize(item, itemView);
 
         InitializeUI(currencyIcon);
 

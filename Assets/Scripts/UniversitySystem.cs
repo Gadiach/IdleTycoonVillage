@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UniversitySystem : MonoBehaviour
@@ -5,6 +6,12 @@ public class UniversitySystem : MonoBehaviour
     public static UniversitySystem Instance;
 
     private BuildingProductionController activeProduction;
+
+    [SerializeField] private UniversityUI universityUI;
+
+    private const string BlueprintItemsPath = "BlueprintItems";
+
+    private Dictionary<ShopCategory, List<BlueprintItem>> blueprintItems = new(capacity: 2);
 
     public bool IsStudyInProgress => activeProduction != null && activeProduction.HasActiveStudy;
 
@@ -20,6 +27,15 @@ public class UniversitySystem : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        InitializeCategories();
+
+        Load();
+
+        universityUI.CreateAndInitializeBlueprintItems(blueprintItems);
+    }
+
     private void OnEnable()
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyAdded);
@@ -33,6 +49,24 @@ public class UniversitySystem : MonoBehaviour
 
         EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyAdded);
         EventManager.Instance.RemoveListener<CurrencySpentEvent>(OnCurrencySpent);
+    }
+
+    private void InitializeCategories()
+    {
+        foreach (ShopCategory category in System.Enum.GetValues(typeof(ShopCategory)))
+        {
+            blueprintItems.Add(category, new List<BlueprintItem>());
+        }
+    }
+
+    private void Load()
+    {
+        BlueprintItem[] items = Resources.LoadAll<BlueprintItem>(BlueprintItemsPath);
+
+        foreach (var item in items)
+        {
+            blueprintItems[item.Category].Add(item);
+        }
     }
 
     public void FinishStudy()

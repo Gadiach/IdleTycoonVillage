@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShopUI : MonoBehaviour
 {
     [SerializeField] private RectTransform shopPanel;
+    [SerializeField] private RectTransform itemView;
     [SerializeField] private RectTransform shopRoot;
 
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
@@ -53,7 +54,7 @@ public class ShopUI : MonoBehaviour
 
                 Sprite currencyIcon = currencyIconDatabase.GetIcon(item.Currency);
 
-                itemUI.Initialize(item, currencyIcon);
+                itemUI.Initialize(item, currencyIcon, itemView);
             }
         }
     }
@@ -68,7 +69,7 @@ public class ShopUI : MonoBehaviour
         isAnimating = true;
 
         shopRoot.DOAnchorPos(openedPosition, animationTime)
-            .OnComplete(() =>
+        .OnComplete(() =>
             {
                 isAnimating = false;
                 opened = true;
