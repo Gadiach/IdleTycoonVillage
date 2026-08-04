@@ -6,6 +6,7 @@ public class MissionPanelUI : MonoBehaviour
     [SerializeField] private Transform content;
     [SerializeField] private MissionItemUI missionPrefab;
     private readonly List<MissionItemUI> missionItems = new();
+    [SerializeField] private MissionIconDatabase missionIconDatabase;
 
     private void OnEnable()
     {
@@ -33,7 +34,9 @@ public class MissionPanelUI : MonoBehaviour
         {
             MissionItemUI item = Instantiate(missionPrefab, content);
 
-            item.Initialize(mission);
+            Sprite missionIcon = missionIconDatabase.GetIcon(mission.Data.missionType);
+
+            item.Initialize(mission, missionIcon);
 
             missionItems.Add(item);
         }

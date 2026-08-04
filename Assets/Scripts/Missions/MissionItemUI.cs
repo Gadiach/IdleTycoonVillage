@@ -11,16 +11,15 @@ public class MissionItemUI : MonoBehaviour
     [SerializeField] private Image progressFillImage;
     [SerializeField] private Button claimButton;
     private Tween progressTween;
-    
 
     private MissionRuntime mission;
 
-    public void Initialize(MissionRuntime missionRuntime)
+    public void Initialize(MissionRuntime missionRuntime, Sprite missionIcon)
     {
         mission = missionRuntime;
 
         missionNameText.text = mission.Data.missionName;
-        iconImage.sprite = mission.Data.icon;
+        iconImage.sprite = missionIcon;
 
         progressText.text = mission.ProgressText;
         progressFillImage.fillAmount = mission.ProgressPercentage;

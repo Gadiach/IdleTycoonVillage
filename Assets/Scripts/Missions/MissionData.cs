@@ -7,7 +7,6 @@ public class MissionData : ScriptableObject
 
     [Header("UI")]
     public string missionName;
-    public Sprite icon;
 
     [Header("Mission")]
     public MissionType missionType;

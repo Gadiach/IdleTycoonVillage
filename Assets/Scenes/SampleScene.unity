@@ -58878,6 +58878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 1197147137}
   missionPrefab: {fileID: -3213335824537877886, guid: 5703ca088d2858645896a07e1a0057ab, type: 3}
+  missionIconDatabase: {fileID: 11400000, guid: 3fe0dd3c37a5b3b4faefbcd71752907b, type: 2}
 --- !u!1 &1846996390
 GameObject:
   m_ObjectHideFlags: 0
