@@ -34,7 +34,7 @@ public class MissionPanelUI : MonoBehaviour
         {
             MissionItemUI item = Instantiate(missionPrefab, content);
 
-            Sprite missionIcon = missionIconDatabase.GetIcon(mission.Data.missionType);
+            Sprite missionIcon = missionIconDatabase.GetIcon(mission.Data.missionType,mission.Data.TargetBusinessType, mission.Data.TargetRarity);
 
             item.Initialize(mission, missionIcon);
 

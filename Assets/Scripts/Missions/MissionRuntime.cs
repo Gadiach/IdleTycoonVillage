@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MissionRuntime
 {
-    public MissionData Data;
+    public MissionData Data { get; }
 
     public int Progress { get; private set; }
 
