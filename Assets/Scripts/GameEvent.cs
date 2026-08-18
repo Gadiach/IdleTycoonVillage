@@ -1,5 +1,5 @@
-
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class GameEvent { }
 
@@ -42,6 +42,20 @@ public class MissionListChangedEvent : GameEvent
     public MissionListChangedEvent(List<MissionRuntime> missions)
     {
         Missions = missions;
+    }
+}
+
+public class CurrencyClaimedEvent : GameEvent
+{
+    public CurrencyType CurrencyType { get; private set; }
+    public int Amount { get; private set; }
+    public Vector3 SourcePosition { get; private set; }
+
+    public CurrencyClaimedEvent(CurrencyType currencyType, int amount,Vector3 sourcePosition)
+    {
+        CurrencyType = currencyType;
+        Amount = amount;
+        SourcePosition = sourcePosition;
     }
 }
 

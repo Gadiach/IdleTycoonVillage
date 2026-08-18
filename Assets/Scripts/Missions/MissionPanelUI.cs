@@ -8,6 +8,7 @@ public class MissionPanelUI : MonoBehaviour
     private readonly List<MissionItemUI> missionItems = new();
     [SerializeField] private MissionIconDatabase missionIconDatabase;
 
+
     private void OnEnable()
     {
         EventManager.Instance.AddListener<MissionListChangedEvent>(OnMissionListChanged);

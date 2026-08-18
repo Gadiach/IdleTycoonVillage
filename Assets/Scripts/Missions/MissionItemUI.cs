@@ -10,6 +10,9 @@ public class MissionItemUI : MonoBehaviour
     [SerializeField] private Image iconImage;
     [SerializeField] private Image progressFillImage;
     [SerializeField] private Button claimButton;
+    [SerializeField] private TextMeshProUGUI claimRewardText; 
+    [SerializeField] private RectTransform rewardIcon;
+
     private Tween progressTween;
 
     private MissionRuntime mission;
@@ -26,6 +29,8 @@ public class MissionItemUI : MonoBehaviour
 
         claimButton.gameObject.SetActive(false);
         claimButton.transform.localScale = Vector3.one;
+
+        claimRewardText.text = mission.Data.rewardAmount.ToString();
     }
 
     private void OnEnable()
@@ -49,6 +54,8 @@ public class MissionItemUI : MonoBehaviour
     {
         mission.ClaimReward();
 
+        EventManager.Instance.QueueEvent(new CurrencyClaimedEvent(CurrencyType.Coins, mission.Data.rewardAmount, rewardIcon.position));
+
         claimButton.transform.DOKill();
         claimButton.gameObject.SetActive(false);
     }
@@ -65,7 +72,7 @@ public class MissionItemUI : MonoBehaviour
     {
         claimButton.gameObject.SetActive(true);
 
-        claimButton.transform.DOScale(1.1f, 0.6f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        claimButton.transform.DOScale(1.04f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     private void UpdateProgressUI(MissionRuntime missionRuntime)
