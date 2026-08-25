@@ -59024,9 +59024,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008a09cef9ab8534f859703f4b96ea75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currencyTargets:
+  - currencyType: 0
+    targetIcon: {fileID: 1435546909}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
   flyingCurrencyPrefabsContainer: {fileID: 655796525}
-  flyingCurrencyIconPrefab: {fileID: 1584205891224088554, guid: 386c34ef7d08a7e4097658e6913bbfb5, type: 3}
+  flyingCurrencyIconPrefab: {fileID: 7295858580462979251, guid: 312e06c3e261b0a4e85acec75dd76561, type: 3}
   flyingIconCount: 8
   scatterDuration: 0.15
   flyDuration: 0.6
