@@ -59,6 +59,26 @@ public class ShopUI : MonoBehaviour
         }
     }
 
+    public RectTransform GetWorkerItemTransform(BusinessType businessType)
+    {
+        foreach (ShopItemUI itemUI in shopItemUIs)
+        {
+            ShopItem item = itemUI.ShopItem;
+
+            if (item.Type != ShopCategory.Workers)
+                continue;
+
+            if (item.BusinessType != businessType)
+                continue;
+
+            return itemUI.transform as RectTransform;
+        }
+
+        Debug.LogWarning($"Worker shop item not found: {businessType}");
+
+        return null;
+    }
+
     public void Open()
     {
         if (opened || isAnimating)
@@ -68,8 +88,9 @@ public class ShopUI : MonoBehaviour
 
         isAnimating = true;
 
-        shopRoot.DOAnchorPos(openedPosition, animationTime)
-        .OnComplete(() =>
+        shopRoot
+            .DOAnchorPos(openedPosition, animationTime)
+            .OnComplete(() =>
             {
                 isAnimating = false;
                 opened = true;

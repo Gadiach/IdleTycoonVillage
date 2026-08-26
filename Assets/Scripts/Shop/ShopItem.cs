@@ -10,6 +10,7 @@ public class ShopItem : ScriptableObject
     public ShopCategory Type;
     public Sprite Icon;
     public GameObject Prefab;
+    public BusinessType BusinessType;
 }
 
 

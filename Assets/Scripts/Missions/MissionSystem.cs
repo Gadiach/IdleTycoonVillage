@@ -23,6 +23,8 @@ public class MissionSystem : MonoBehaviour
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyAdded);
         EventManager.Instance.AddListener<MissionClaimedEvent>(OnMissionClaimed);
+        EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
+        EventManager.Instance.AddListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
     }
 
     private void OnDisable()
@@ -32,6 +34,8 @@ public class MissionSystem : MonoBehaviour
 
         EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyAdded);
         EventManager.Instance.RemoveListener<MissionClaimedEvent>(OnMissionClaimed);
+        EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
+        EventManager.Instance.RemoveListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
     }
 
     #region Initialization
@@ -100,6 +104,42 @@ public class MissionSystem : MonoBehaviour
     private void OnMissionClaimed(MissionClaimedEvent info)
     {
         EventManager.Instance.QueueEvent(new MissionListChangedEvent(GetActiveMissions()));
+    }
+
+    private void OnBuildingPlaced(BuildingPlacedEvent info)
+    {
+        UpdateMissionProgress(MissionType.BuildBuilding, 1);
+    }
+
+    private void OnBuildingUpgraded(BuildingUpgradedEvent info)
+    {
+        foreach (MissionRuntime mission in allMissions)
+        {
+            if (mission.Data.missionType != MissionType.UpgradeBuilding)
+                continue;
+
+            if (mission.Completed)
+                continue;
+
+            if (mission.Data.NeedBusinessType &&
+                mission.Data.TargetBusinessType != info.Building.BusinessType)
+                continue;
+
+            if (mission.Data.NeedRarity &&
+                mission.Data.TargetRarity != info.Building.CurrentRarity)
+                continue;
+
+            int progressToAdd = info.Building.CurrentLevel - mission.Progress;
+
+            if (progressToAdd <= 0)
+                continue;
+
+            mission.AddProgress(progressToAdd);
+
+            EventManager.Instance.QueueEvent(
+                new MissionProgressChangedEvent(mission)
+            );
+        }
     }
 
     private void UpdateMissionProgress(MissionType missionType, int amount)

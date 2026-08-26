@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ShopItemUI : MonoBehaviour
 {
     private ShopItem shopItem;
+    public ShopItem ShopItem => shopItem;
 
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private Image iconImage;

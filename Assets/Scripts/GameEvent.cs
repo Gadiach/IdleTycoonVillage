@@ -35,6 +35,16 @@ public class MissionClaimedEvent : GameEvent
     }
 }
 
+public class BuildingUpgradedEvent : GameEvent
+{
+    public BuildingData Building { get; }
+
+    public BuildingUpgradedEvent(BuildingData building)
+    {
+        Building = building;
+    }
+}
+
 public class MissionListChangedEvent : GameEvent
 {
     public List<MissionRuntime> Missions { get; }

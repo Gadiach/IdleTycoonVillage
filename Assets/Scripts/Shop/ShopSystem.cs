@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 public class ShopSystem : MonoBehaviour 
 {
     public static ShopSystem Instance;
@@ -75,6 +76,11 @@ public class ShopSystem : MonoBehaviour
         shopUI.UpdateShopItems();
     }
 
+    public RectTransform GetWorkerItemTransform(BusinessType businessType)
+    {
+        return shopUI.GetWorkerItemTransform(businessType);
+    }
+
     public void ShopButton_Click()
     {
         if (shopUI.IsOpened)
@@ -86,8 +92,8 @@ public class ShopSystem : MonoBehaviour
     public void OpenShop(ShopCategory category)
     {
         shopUI.UpdateShopItems();
-        shopUI.Open();
         shopUI.SelectTab((int)category);
+        shopUI.Open();
     }
 
     public void CloseShop()

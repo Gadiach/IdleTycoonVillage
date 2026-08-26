@@ -17,6 +17,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
+    public BusinessType AcceptedBusinessType => acceptedBusinessType;
+
     public bool UseGridSnapping => true;
 
     [SerializeField] private Image buildingRoundIconImage;
@@ -76,6 +78,13 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         else
         {
             ShopSystem.Instance.OpenShop(ShopCategory.Workers);
+
+            RectTransform target =
+                ShopSystem.Instance.GetWorkerItemTransform(
+                    acceptedBusinessType
+                );
+
+            TutorialSpotlightSystem.Instance.Show(target);
         }
     }
 

@@ -1,6 +1,7 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using static UnityEngine.GraphicsBuffer;
 
 public class UIManager : MonoBehaviour
 {
@@ -121,9 +122,17 @@ public class UIManager : MonoBehaviour
 
     public void OpenWorkerShop()
     {
+        BusinessType workerType =
+            currentBuilding.Placeable.AcceptedBusinessType;
+
         CloseBuildingPanel();
 
         ShopSystem.Instance.OpenShop(ShopCategory.Workers);
+
+        RectTransform target =
+            ShopSystem.Instance.GetWorkerItemTransform(workerType);
+
+        TutorialSpotlightSystem.Instance.Show(target);
     }
 
     public void OpenMainBuildingPanel(BuildingData building)

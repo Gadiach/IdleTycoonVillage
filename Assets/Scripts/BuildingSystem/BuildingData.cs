@@ -301,6 +301,8 @@ public class BuildingData : MonoBehaviour
         if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
             CurrentLevel++;
+
+            EventManager.Instance.QueueEvent(new BuildingUpgradedEvent(this));
         }
     }
 

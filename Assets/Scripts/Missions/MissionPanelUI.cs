@@ -5,9 +5,9 @@ public class MissionPanelUI : MonoBehaviour
 {
     [SerializeField] private Transform content;
     [SerializeField] private MissionItemUI missionPrefab;
-    private readonly List<MissionItemUI> missionItems = new();
     [SerializeField] private MissionIconDatabase missionIconDatabase;
 
+    private readonly List<MissionItemUI> missionItems = new();
 
     private void OnEnable()
     {
@@ -24,18 +24,43 @@ public class MissionPanelUI : MonoBehaviour
 
     private void OnMissionListChanged(MissionListChangedEvent info)
     {
-        RebuildMissionUI(info.Missions);
+        UpdateMissionUI(info.Missions);
     }
 
-    public void RebuildMissionUI(List<MissionRuntime> missions)
+    private void UpdateMissionUI(List<MissionRuntime> missions)
     {
-        Clear();
+        RemoveInactiveMissions(missions);
+        AddNewMissions(missions);
+    }
 
-        foreach (var mission in missions)
+    private void RemoveInactiveMissions(List<MissionRuntime> missions)
+    {
+        for (int i = missionItems.Count - 1; i >= 0; i--)
         {
+            MissionItemUI item = missionItems[i];
+
+            if (missions.Contains(item.Mission))
+                continue;
+
+            missionItems.RemoveAt(i);
+            Destroy(item.gameObject);
+        }
+    }
+
+    private void AddNewMissions(List<MissionRuntime> missions)
+    {
+        foreach (MissionRuntime mission in missions)
+        {
+            if (HasMissionItem(mission))
+                continue;
+
             MissionItemUI item = Instantiate(missionPrefab, content);
 
-            Sprite missionIcon = missionIconDatabase.GetIcon(mission.Data.missionType,mission.Data.TargetBusinessType, mission.Data.TargetRarity);
+            Sprite missionIcon = missionIconDatabase.GetIcon(
+                mission.Data.missionType,
+                mission.Data.TargetBusinessType,
+                mission.Data.TargetRarity
+            );
 
             item.Initialize(mission, missionIcon);
 
@@ -43,13 +68,14 @@ public class MissionPanelUI : MonoBehaviour
         }
     }
 
-    private void Clear()
+    private bool HasMissionItem(MissionRuntime mission)
     {
-        foreach (Transform child in content)
+        foreach (MissionItemUI item in missionItems)
         {
-            Destroy(child.gameObject);
+            if (item.Mission == mission)
+                return true;
         }
 
-        missionItems.Clear();
+        return false;
     }
 }

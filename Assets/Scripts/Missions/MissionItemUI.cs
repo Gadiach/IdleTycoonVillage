@@ -1,7 +1,8 @@
+using DG.Tweening;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 public class MissionItemUI : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MissionItemUI : MonoBehaviour
     private Tween progressTween;
 
     private MissionRuntime mission;
+    public MissionRuntime Mission => mission;
+
 
     public void Initialize(MissionRuntime missionRuntime, Sprite missionIcon)
     {
@@ -27,8 +30,16 @@ public class MissionItemUI : MonoBehaviour
         progressText.text = mission.ProgressText;
         progressFillImage.fillAmount = mission.ProgressPercentage;
 
-        claimButton.gameObject.SetActive(false);
         claimButton.transform.localScale = Vector3.one;
+
+        if (mission.CanClaim)
+        {
+            ShowClaimButton();
+        }
+        else
+        {
+            claimButton.gameObject.SetActive(false);
+        }
 
         claimRewardText.text = mission.Data.rewardAmount.ToString();
     }
