@@ -316,6 +316,7 @@ MonoBehaviour:
   buildingData: {fileID: -1920402991600211836}
   productionController: {fileID: 3089235239481483196}
   audioSource: {fileID: 7979416346430321622}
+  rewardIcon: {fileID: 0}
 --- !u!1 &1852522769249408974
 GameObject:
   m_ObjectHideFlags: 0

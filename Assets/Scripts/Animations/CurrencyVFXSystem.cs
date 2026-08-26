@@ -22,7 +22,7 @@ public class CurrencyVFXSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<CurrencyClaimedEvent>(OnCurrencyClaimed);
+        EventManager.Instance.AddListener<MissionRewardClaimedEvent>(OnCurrencyClaimed);
     }
 
     private void OnDisable()
@@ -30,7 +30,7 @@ public class CurrencyVFXSystem : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<CurrencyClaimedEvent>(OnCurrencyClaimed);
+        EventManager.Instance.RemoveListener<MissionRewardClaimedEvent>(OnCurrencyClaimed);
     }
 
     private void Awake()
@@ -45,7 +45,7 @@ public class CurrencyVFXSystem : MonoBehaviour
         }
     }
 
-    private void OnCurrencyClaimed(CurrencyClaimedEvent info)
+    private void OnCurrencyClaimed(MissionRewardClaimedEvent info)
     {
         Sprite currencyIcon = currencyIconDatabase.GetIcon(info.CurrencyType);
 

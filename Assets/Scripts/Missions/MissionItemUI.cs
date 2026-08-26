@@ -54,7 +54,7 @@ public class MissionItemUI : MonoBehaviour
     {
         mission.ClaimReward();
 
-        EventManager.Instance.QueueEvent(new CurrencyClaimedEvent(CurrencyType.Coins, mission.Data.rewardAmount, rewardIcon.position));
+        EventManager.Instance.QueueEvent(new MissionRewardClaimedEvent(CurrencyType.Coins, mission.Data.rewardAmount, rewardIcon.position));
 
         claimButton.transform.DOKill();
         claimButton.gameObject.SetActive(false);
