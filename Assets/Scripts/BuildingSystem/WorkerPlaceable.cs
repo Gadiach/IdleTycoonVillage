@@ -70,6 +70,8 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
         assignedBuilding.AssignWorker(worker);
         worker.AssignToBuilding(assignedBuilding.buildingData);
 
+        EventManager.Instance.QueueEvent(new WorkerAssignedToBuildingEvent(assignedBuilding.buildingData,worker));
+
         Destroy(gameObject);
     }
 

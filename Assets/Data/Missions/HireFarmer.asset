@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f4665476dc4e4e4094f2540e8c19df9, type: 3}
+  m_Name: HireFarmer
+  m_EditorClassIdentifier: 
+  needBusinessType: 1
+  targetBusinessType: 0
+  needRarity: 1
+  targetRarity: 0
+  id: hire_farmer
+  missionName: Hire a farmer
+  missionType: 5
+  targetValue: 1
+  rewardCurrency: 0
+  rewardAmount: 40

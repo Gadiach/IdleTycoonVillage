@@ -25,6 +25,7 @@ public class MissionSystem : MonoBehaviour
         EventManager.Instance.AddListener<MissionClaimedEvent>(OnMissionClaimed);
         EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.AddListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
+        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
     }
 
     private void OnDisable()
@@ -36,6 +37,7 @@ public class MissionSystem : MonoBehaviour
         EventManager.Instance.RemoveListener<MissionClaimedEvent>(OnMissionClaimed);
         EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.RemoveListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
+        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
     }
 
     #region Initialization
@@ -109,6 +111,30 @@ public class MissionSystem : MonoBehaviour
     private void OnBuildingPlaced(BuildingPlacedEvent info)
     {
         UpdateMissionProgress(MissionType.BuildBuilding, 1);
+    }
+
+    private void OnWorkerAssigned(WorkerAssignedToBuildingEvent info)
+    {
+        foreach (var mission in allMissions)
+        {
+            if (mission.Data.missionType != MissionType.HireWorker)
+                continue;
+
+            if (mission.Completed)
+                continue;
+
+            if (mission.Data.NeedBusinessType &&
+                mission.Data.TargetBusinessType != info.Worker.Type)
+                continue;
+
+            mission.AddProgress(1);
+
+            EventManager.Instance.QueueEvent(
+                new MissionProgressChangedEvent(mission)
+            );
+
+            break;
+        }
     }
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent info)

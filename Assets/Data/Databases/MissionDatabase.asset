@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: MissionDatabase
   m_EditorClassIdentifier: 
   missions:
-  - {fileID: 11400000, guid: 1e589077506f5294e960bcc305c3bf7d, type: 2}
   - {fileID: 11400000, guid: ec6431bb27f9400438b3de80673ae1ba, type: 2}
+  - {fileID: 11400000, guid: 1e589077506f5294e960bcc305c3bf7d, type: 2}
   - {fileID: 11400000, guid: cb52eaa4b3c59f74998716f35817808f, type: 2}
   - {fileID: 11400000, guid: 4bebdaf290e710944b741638087f79a0, type: 2}
+  - {fileID: 11400000, guid: 2d47e573a99846b4291e2b5bbdcb5012, type: 2}
   - {fileID: 11400000, guid: 226bdeca90b69224488c9e39a7fa2270, type: 2}
+  - {fileID: 11400000, guid: f6b51bd7de43732409d3034c7d1193ad, type: 2}
+  - {fileID: 11400000, guid: 226bdeca90b69224488c9e39a7fa2270, type: 2}
+  - {fileID: 11400000, guid: 38d8cfe7e93fa2d4381e22987e0a26f7, type: 2}

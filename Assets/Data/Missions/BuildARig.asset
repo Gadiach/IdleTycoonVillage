@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f4665476dc4e4e4094f2540e8c19df9, type: 3}
-  m_Name: Mission2
+  m_Name: BuildARig
   m_EditorClassIdentifier: 
   needBusinessType: 1
-  targetBusinessType: 0
+  targetBusinessType: 1
   needRarity: 1
   targetRarity: 0
-  id: build_farm
-  missionName: Build a farm
+  id: build_oilrig
+  missionName: Build a rig
   missionType: 2
   targetValue: 1
   rewardCurrency: 0
-  rewardAmount: 10
+  rewardAmount: 50
