@@ -5,8 +5,6 @@ public class WorkerSystem : MonoBehaviour
 {
     public static WorkerSystem Instance;
 
-    public List<WorkerData> allWorkers = new List<WorkerData>();
-
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
@@ -29,14 +27,6 @@ public class WorkerSystem : MonoBehaviour
         return null;
     }
 
-    public void AddWorker(WorkerData worker)
-    {
-        if (!allWorkers.Contains(worker))
-        {
-            allWorkers.Add(worker);
-        }
-    }
-
     public WorkerData CreateWorker(BusinessType type, bool register)
     {
         WorkerDefinition definition = GetDefinition(type);
@@ -44,7 +34,7 @@ public class WorkerSystem : MonoBehaviour
         WorkerData worker = new WorkerData(definition,progressionConfig,upgradeCostConfig,economyConfig);
 
         if (register)
-            AddWorker(worker);
+            EntityRegistry.Instance.AddWorker(worker);
 
         return worker;
     }

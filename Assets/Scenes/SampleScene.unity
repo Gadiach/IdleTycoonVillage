@@ -64550,6 +64550,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917589466}
   m_CullTransparentMesh: 1
+--- !u!1 &1922347161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1922347162}
+  - component: {fileID: 1922347163}
+  m_Layer: 0
+  m_Name: EntityRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1922347162
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922347161}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.4655993, y: 13.946025, z: -0.07079759}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1922347163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922347161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d809f9e345753014e995eceeb45437e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  workers: []
+  buildings: []
 --- !u!1 &1932137668
 GameObject:
   m_ObjectHideFlags: 0
@@ -64785,7 +64831,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2014a339540b2ed479aa282755cf8bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allWorkers: []
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
   upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
   economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
@@ -65979,3 +66024,4 @@ SceneRoots:
   - {fileID: 93866000}
   - {fileID: 549035473}
   - {fileID: 632442036}
+  - {fileID: 1922347162}

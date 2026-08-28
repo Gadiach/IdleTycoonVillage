@@ -25,3 +25,11 @@ MonoBehaviour:
     BusinessType: 0
     Rarity: 0
     Icon: {fileID: 21300000, guid: b11b1eda3323a23438bc8f4ce450294f, type: 3}
+  - MissionType: 5
+    BusinessType: 0
+    Rarity: 0
+    Icon: {fileID: 21300000, guid: 73a4078f7a93589478a67937268d4d9f, type: 3}
+  - MissionType: 6
+    BusinessType: 0
+    Rarity: 0
+    Icon: {fileID: 21300000, guid: d00acb0aa47dd6d428c2adb9bbee1fbe, type: 3}

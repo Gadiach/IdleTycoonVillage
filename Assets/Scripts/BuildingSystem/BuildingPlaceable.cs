@@ -140,6 +140,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
                 origin = transform.position;
 
                 CurrencySystem.Instance.SpendCurrency(CurrencyType.Coins, objectPrice);
+                EntityRegistry.Instance.AddBuilding(buildingData);
                 EventManager.Instance.QueueEvent(new BuildingPlacedEvent(buildingData));
             }
             else

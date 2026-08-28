@@ -37,7 +37,7 @@ public class MissionSystem : MonoBehaviour
         EventManager.Instance.RemoveListener<MissionClaimedEvent>(OnMissionClaimed);
         EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.RemoveListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
-        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
     }
 
     #region Initialization
@@ -58,7 +58,6 @@ public class MissionSystem : MonoBehaviour
         allMissions.Clear();
 
         InitializeMissionRuntimes();
-
         InitializeMissionUI();
     }
 
@@ -68,6 +67,54 @@ public class MissionSystem : MonoBehaviour
         {
             allMissions.Add(new MissionRuntime(missionData));
         }
+    }
+
+    private void InitializeMissionProgress(MissionRuntime mission)
+{
+    switch (mission.Data.missionType)
+    {
+        case MissionType.UpgradeBuilding:
+            InitializeBuildingUpgradeProgress(mission);
+            break;
+
+        case MissionType.UpgradeWorker:
+            InitializeWorkerUpgradeProgress(mission);
+            break;
+    }
+}
+
+    private void InitializeBuildingUpgradeProgress(MissionRuntime mission)
+    {
+        BuildingData building = EntityRegistry.Instance.GetBuilding(
+            mission.Data.TargetBusinessType
+        );
+
+        if (building == null)
+            return;
+
+        if (mission.Data.NeedRarity &&
+            mission.Data.TargetRarity != building.CurrentRarity)
+            return;
+
+        mission.SetTargetValue(building.CurrentProgressionMaxLevel);
+        mission.SetProgress(building.CurrentLevel);
+    }
+
+    private void InitializeWorkerUpgradeProgress(MissionRuntime mission)
+    {
+        WorkerData worker = EntityRegistry.Instance.GetWorker(
+            mission.Data.TargetBusinessType
+        );
+
+        if (worker == null)
+            return;
+
+        if (mission.Data.NeedRarity &&
+            mission.Data.TargetRarity != worker.CurrentRarity)
+            return;
+
+        mission.SetTargetValue(worker.CurrentProgressionMaxLevel);
+        mission.SetProgress(worker.CurrentLevel);
     }
 
     private void InitializeMissionUI()
@@ -85,6 +132,8 @@ public class MissionSystem : MonoBehaviour
         {
             if (mission.Claimed)
                 continue;
+
+            InitializeMissionProgress(mission);
 
             result.Add(mission);
 
@@ -111,6 +160,35 @@ public class MissionSystem : MonoBehaviour
     private void OnBuildingPlaced(BuildingPlacedEvent info)
     {
         UpdateMissionProgress(MissionType.BuildBuilding, 1);
+
+        UpdateBuildingUpgradeProgress(info.Building);
+    }
+
+    private void UpdateBuildingUpgradeProgress(BuildingData building)
+    {
+        foreach (MissionRuntime mission in allMissions)
+        {
+            if (mission.Data.missionType != MissionType.UpgradeBuilding)
+                continue;
+
+            if (mission.Completed)
+                continue;
+
+            if (mission.Data.NeedBusinessType &&
+                mission.Data.TargetBusinessType != building.BusinessType)
+                continue;
+
+            if (mission.Data.NeedRarity &&
+                mission.Data.TargetRarity != building.CurrentRarity)
+                continue;
+
+            mission.SetTargetValue(building.CurrentProgressionMaxLevel);
+            mission.SetProgress(building.CurrentLevel);
+
+            EventManager.Instance.QueueEvent(
+                new MissionProgressChangedEvent(mission)
+            );
+        }
     }
 
     private void OnWorkerAssigned(WorkerAssignedToBuildingEvent info)
@@ -123,15 +201,12 @@ public class MissionSystem : MonoBehaviour
             if (mission.Completed)
                 continue;
 
-            if (mission.Data.NeedBusinessType &&
-                mission.Data.TargetBusinessType != info.Worker.Type)
+            if (mission.Data.NeedBusinessType && mission.Data.TargetBusinessType != info.Worker.Type)
                 continue;
 
             mission.AddProgress(1);
 
-            EventManager.Instance.QueueEvent(
-                new MissionProgressChangedEvent(mission)
-            );
+            EventManager.Instance.QueueEvent(new MissionProgressChangedEvent(mission));
 
             break;
         }
@@ -139,33 +214,7 @@ public class MissionSystem : MonoBehaviour
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent info)
     {
-        foreach (MissionRuntime mission in allMissions)
-        {
-            if (mission.Data.missionType != MissionType.UpgradeBuilding)
-                continue;
-
-            if (mission.Completed)
-                continue;
-
-            if (mission.Data.NeedBusinessType &&
-                mission.Data.TargetBusinessType != info.Building.BusinessType)
-                continue;
-
-            if (mission.Data.NeedRarity &&
-                mission.Data.TargetRarity != info.Building.CurrentRarity)
-                continue;
-
-            int progressToAdd = info.Building.CurrentLevel - mission.Progress;
-
-            if (progressToAdd <= 0)
-                continue;
-
-            mission.AddProgress(progressToAdd);
-
-            EventManager.Instance.QueueEvent(
-                new MissionProgressChangedEvent(mission)
-            );
-        }
+        UpdateBuildingUpgradeProgress(info.Building);
     }
 
     private void UpdateMissionProgress(MissionType missionType, int amount)
