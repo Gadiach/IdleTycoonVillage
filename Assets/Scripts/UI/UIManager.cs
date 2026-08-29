@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class UIManager : MonoBehaviour
 {
@@ -418,10 +417,12 @@ public class UIManager : MonoBehaviour
         if (building.IsAutomated)
         {
             AutomationStatusText.text = "ON";
+            AutomationStatusText.color = Color.green;
         }
         else
         {
             AutomationStatusText.text = "OFF";
+            AutomationStatusText.color = Color.red;
         }
     }
 

@@ -184,6 +184,8 @@ public class WorkerData
         if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
             CurrentLevel++;
+
+            EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(this));
         }
     }
 

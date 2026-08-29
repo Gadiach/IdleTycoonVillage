@@ -26,6 +26,7 @@ public class MissionSystem : MonoBehaviour
         EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.AddListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
         EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        EventManager.Instance.AddListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
     }
 
     private void OnDisable()
@@ -38,6 +39,7 @@ public class MissionSystem : MonoBehaviour
         EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.RemoveListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
         EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        EventManager.Instance.RemoveListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
     }
 
     #region Initialization
@@ -164,6 +166,33 @@ public class MissionSystem : MonoBehaviour
         UpdateBuildingUpgradeProgress(info.Building);
     }
 
+    private void UpdateWorkerUpgradeProgress(WorkerData worker)
+    {
+        foreach (MissionRuntime mission in allMissions)
+        {
+            if (mission.Data.missionType != MissionType.UpgradeWorker)
+                continue;
+
+            if (mission.Completed)
+                continue;
+
+            if (mission.Data.NeedBusinessType &&
+                mission.Data.TargetBusinessType != worker.Type)
+                continue;
+
+            if (mission.Data.NeedRarity &&
+                mission.Data.TargetRarity != worker.CurrentRarity)
+                continue;
+
+            mission.SetTargetValue(worker.CurrentProgressionMaxLevel);
+            mission.SetProgress(worker.CurrentLevel);
+
+            EventManager.Instance.QueueEvent(
+                new MissionProgressChangedEvent(mission)
+            );
+        }
+    }
+
     private void UpdateBuildingUpgradeProgress(BuildingData building)
     {
         foreach (MissionRuntime mission in allMissions)
@@ -215,6 +244,11 @@ public class MissionSystem : MonoBehaviour
     private void OnBuildingUpgraded(BuildingUpgradedEvent info)
     {
         UpdateBuildingUpgradeProgress(info.Building);
+    }
+
+    private void OnWorkerUpgraded(WorkerUpgradedEvent info)
+    {
+        UpdateWorkerUpgradeProgress(info.Worker);
     }
 
     private void UpdateMissionProgress(MissionType missionType, int amount)
