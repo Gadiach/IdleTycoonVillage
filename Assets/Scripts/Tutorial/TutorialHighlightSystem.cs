@@ -17,11 +17,15 @@ public class TutorialHighlightSystem : MonoBehaviour
 
         target.DOKill();
 
-        Vector3 originalScale = target.localScale;
+        target.localScale = Vector3.one;
 
         target
-            .DOScale(originalScale * 1.15f, 0.25f)
+            .DOScale(1.15f, 0.3f)
+            .SetEase(Ease.InOutSine)
             .SetLoops(6, LoopType.Yoyo)
-            .SetEase(Ease.InOutSine);
+            .OnComplete(() =>
+            {
+                target.localScale = Vector3.one;
+            });
     }
 }

@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 8810073579872125663}
   - component: {fileID: 7386149318221317416}
   - component: {fileID: 391276741478883735}
+  - component: {fileID: 8903876059962482828}
   m_Layer: 6
   m_Name: AssignedWorkerBtn
   m_TagString: Untagged
@@ -450,6 +451,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8903876059962482828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852522769249408974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3969ee1faaa2c484f8b8e0dd1904dcb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pressedScale: 0.9
+  duration: 0.2
 --- !u!1 &1976514958278334237
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5685057345320724766
 RectTransform:
   m_ObjectHideFlags: 0
