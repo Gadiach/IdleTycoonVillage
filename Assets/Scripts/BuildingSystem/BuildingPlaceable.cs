@@ -79,12 +79,12 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         {
             ShopSystem.Instance.OpenShop(ShopCategory.Workers);
 
-            RectTransform target =
-                ShopSystem.Instance.GetWorkerItemTransform(
-                    acceptedBusinessType
-                );
+            ShopItemUI targetItem = ShopSystem.Instance.GetWorkerItem(acceptedBusinessType);
 
-            TutorialSpotlightSystem.Instance.Show(target);
+            if (targetItem != null)
+            {
+                TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
+            }
         }
     }
 

@@ -28,11 +28,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126689615061671125}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4717900352610043012}
   m_Father: {fileID: 7030714812652784797}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
@@ -285,7 +286,7 @@ GameObject:
   - component: {fileID: 8540873513671427667}
   - component: {fileID: 492446041608652394}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ArrowImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,16 +299,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919927290408869608}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7030714812652784797}
+  m_Father: {fileID: 4324955625886285525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 37.474, y: -10.172}
+  m_AnchoredPosition: {x: 36.974, y: -25.672}
   m_SizeDelta: {x: 18.9444, y: 18.944}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8540873513671427667
@@ -378,9 +379,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2447985207231796949}
-  - {fileID: 4324955625886285525}
   - {fileID: 788119223297131235}
-  - {fileID: 4717900352610043012}
+  - {fileID: 4324955625886285525}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -405,6 +405,7 @@ MonoBehaviour:
   currencyImage: {fileID: 1848586253481850250}
   priceText: {fileID: 6057722829346178855}
   dragComponent: {fileID: 3508367782211421258}
+  iconAndArrow: {fileID: 4324955625886285525}
 --- !u!1 &5674224299187470007
 GameObject:
   m_ObjectHideFlags: 0

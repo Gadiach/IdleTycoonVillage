@@ -13,6 +13,10 @@ public class ShopItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private ShopItemDrag dragComponent;
 
+    [SerializeField] private RectTransform iconAndArrow;
+
+    public RectTransform IconAndArrow => iconAndArrow;
+
     #region Initialization
     public void Initialize(ShopItem item, Sprite currencyIcon, RectTransform itemView)
     {

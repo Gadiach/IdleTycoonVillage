@@ -59,7 +59,7 @@ public class ShopUI : MonoBehaviour
         }
     }
 
-    public RectTransform GetWorkerItemTransform(BusinessType businessType)
+    public ShopItemUI GetWorkerItem(BusinessType businessType)
     {
         foreach (ShopItemUI itemUI in shopItemUIs)
         {
@@ -71,11 +71,10 @@ public class ShopUI : MonoBehaviour
             if (item.BusinessType != businessType)
                 continue;
 
-            return itemUI.transform as RectTransform;
+            return itemUI;
         }
 
         Debug.LogWarning($"Worker shop item not found: {businessType}");
-
         return null;
     }
 

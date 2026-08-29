@@ -76,9 +76,9 @@ public class ShopSystem : MonoBehaviour
         shopUI.UpdateShopItems();
     }
 
-    public RectTransform GetWorkerItemTransform(BusinessType businessType)
+    public ShopItemUI GetWorkerItem(BusinessType businessType)
     {
-        return shopUI.GetWorkerItemTransform(businessType);
+        return shopUI.GetWorkerItem(businessType);
     }
 
     public void ShopButton_Click()

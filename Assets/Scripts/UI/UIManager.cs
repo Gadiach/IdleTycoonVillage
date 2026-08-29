@@ -129,10 +129,15 @@ public class UIManager : MonoBehaviour
 
         ShopSystem.Instance.OpenShop(ShopCategory.Workers);
 
-        RectTransform target =
-            ShopSystem.Instance.GetWorkerItemTransform(workerType);
+        ShopItemUI targetItem =
+        ShopSystem.Instance.GetWorkerItem(workerType);
 
-        TutorialSpotlightSystem.Instance.Show(target);
+        if (targetItem != null)
+        {
+            TutorialHighlightSystem.Instance.Highlight(
+                targetItem.IconAndArrow
+            );
+        }
     }
 
     public void OpenMainBuildingPanel(BuildingData building)
