@@ -64739,6 +64739,7 @@ MonoBehaviour:
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
   upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
   economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
+  workerRoundIconDatabase: {fileID: 11400000, guid: c0ee2b5a7efa1ca4483366fbb8b594d4, type: 2}
   workerDefinitions:
   - {fileID: 11400000, guid: 91bbf6a6a9f9db54d97e961a1cf0d726, type: 2}
 --- !u!4 &1982822722

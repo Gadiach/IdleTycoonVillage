@@ -8,6 +8,7 @@ public class WorkerSystem : MonoBehaviour
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
+    [SerializeField] private WorkerRoundIconDatabase workerRoundIconDatabase;
     [SerializeField] private WorkerDefinition[] workerDefinitions;
 
     private void Awake()
@@ -37,5 +38,10 @@ public class WorkerSystem : MonoBehaviour
             EntityRegistry.Instance.AddWorker(worker);
 
         return worker;
+    }
+
+    public Sprite GetRoundIcon(BusinessType businessType)
+    {
+        return workerRoundIconDatabase.GetIcon(businessType);
     }
 }

@@ -17,6 +17,11 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
+    [SerializeField] private GameObject addWorkerObject;
+    [SerializeField] private GameObject assignedWorkerObject;
+
+    private Image assignedWorkerImage;
+
     private WorkerIconAnimation workerIconAnimation;
     public BusinessType AcceptedBusinessType => acceptedBusinessType;
 
@@ -45,6 +50,9 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         spriteRenderer = GetComponent<SpriteRenderer>();
         buildingData = GetComponent<BuildingData>();
         buildingData.SetPlaceable(this);
+        assignedWorkerImage = assignedWorkerObject.GetComponent<Image>();
+        addWorkerObject.SetActive(true);
+        assignedWorkerObject.SetActive(false);
         workerIconAnimation = GetComponentInChildren<WorkerIconAnimation>();
         workerIconAnimation?.StartAnimation();
     }
@@ -177,10 +185,18 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     public void AssignWorker(WorkerData worker)
     {
         assignedWorker = worker;
-        buildingRoundIconImage.sprite = worker.RoundIcon;
+
+        Sprite workerIcon = WorkerSystem.Instance.GetRoundIcon(worker.Type);
+
+        assignedWorkerImage.sprite = workerIcon;
+
+        addWorkerObject.SetActive(false);
+        assignedWorkerObject.SetActive(true);
+
+        workerIconAnimation?.StopAnimation();
+
         productionController.SetWorker(worker);
         productionController.StartProduction();
-        workerIconAnimation?.StopAnimation();
     }
 
     private void OnEnable()
