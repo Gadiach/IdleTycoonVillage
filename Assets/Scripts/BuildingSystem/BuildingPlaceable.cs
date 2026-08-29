@@ -17,6 +17,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private BusinessType buildingType;
     [SerializeField] private BusinessType acceptedBusinessType;
 
+    private WorkerIconAnimation workerIconAnimation;
     public BusinessType AcceptedBusinessType => acceptedBusinessType;
 
     public bool UseGridSnapping => true;
@@ -44,6 +45,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         spriteRenderer = GetComponent<SpriteRenderer>();
         buildingData = GetComponent<BuildingData>();
         buildingData.SetPlaceable(this);
+        workerIconAnimation = GetComponentInChildren<WorkerIconAnimation>();
+        workerIconAnimation?.StartAnimation();
     }
 
     private void Update()
@@ -177,6 +180,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         buildingRoundIconImage.sprite = worker.RoundIcon;
         productionController.SetWorker(worker);
         productionController.StartProduction();
+        workerIconAnimation?.StopAnimation();
     }
 
     private void OnEnable()
