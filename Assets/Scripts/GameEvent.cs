@@ -175,6 +175,16 @@ public class BuildingPlacedEvent : GameEvent
     }
 }
 
+public class ShopItemDragStartedEvent : GameEvent
+{
+    public ShopItem ShopItem { get; }
+
+    public ShopItemDragStartedEvent(ShopItem shopItem)
+    {
+        ShopItem = shopItem;
+    }
+}
+
 public class WorkerAssignedToBuildingEvent : GameEvent
 {
     public BuildingData Building { get; private set; }

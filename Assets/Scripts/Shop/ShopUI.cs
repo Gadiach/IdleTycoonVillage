@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ShopUI : MonoBehaviour
 {
@@ -78,7 +79,26 @@ public class ShopUI : MonoBehaviour
         return null;
     }
 
-    public void Open()
+    public ShopItemUI GetBuildingItem(BusinessType businessType)
+    {
+        foreach (ShopItemUI itemUI in shopItemUIs)
+        {
+            ShopItem item = itemUI.ShopItem;
+
+            if (item.Type != ShopCategory.Buildings)
+                continue;
+
+            if (item.BusinessType != businessType)
+                continue;
+
+            return itemUI;
+        }
+
+        Debug.LogWarning($"Building shop item not found: {businessType}");
+        return null;
+    }
+
+    public void Open(Action onComplete = null)
     {
         if (opened || isAnimating)
             return;
@@ -93,6 +113,8 @@ public class ShopUI : MonoBehaviour
             {
                 isAnimating = false;
                 opened = true;
+
+                onComplete?.Invoke();
             });
     }
 

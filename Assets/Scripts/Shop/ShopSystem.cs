@@ -81,6 +81,11 @@ public class ShopSystem : MonoBehaviour
         return shopUI.GetWorkerItem(businessType);
     }
 
+    public ShopItemUI GetBuildingItem(BusinessType businessType)
+    {
+        return shopUI.GetBuildingItem(businessType);
+    }
+
     public void ShopButton_Click()
     {
         if (shopUI.IsOpened)
@@ -89,11 +94,11 @@ public class ShopSystem : MonoBehaviour
             OpenShop(ShopCategory.Buildings);
     }
 
-    public void OpenShop(ShopCategory category)
+    public void OpenShop(ShopCategory category, Action onComplete = null)
     {
         shopUI.UpdateShopItems();
         shopUI.SelectTab((int)category);
-        shopUI.Open();
+        shopUI.Open(onComplete);
     }
 
     public void CloseShop()

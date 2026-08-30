@@ -13,6 +13,9 @@ public class ShopItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private ShopItemDrag dragComponent;
 
+    public RectTransform ItemIcon => iconImage.rectTransform;
+    public Sprite ItemIconSprite => iconImage.sprite;
+
     [SerializeField] private RectTransform iconAndArrow;
 
     public RectTransform IconAndArrow => iconAndArrow;

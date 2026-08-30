@@ -35,6 +35,8 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         hasSpawnedPreview = false;
         cg.blocksRaycasts = false;
         img.maskable = false;
+
+        EventManager.Instance.QueueEvent(new ShopItemDragStartedEvent(shopItem));
     }
 
     public void OnDrag(PointerEventData eventData)
