@@ -175,6 +175,10 @@ public class BuildingPlacedEvent : GameEvent
     }
 }
 
+public class ShowMissionPanelEvent : GameEvent
+{
+}
+
 public class ShopItemDragStartedEvent : GameEvent
 {
     public ShopItem ShopItem { get; }

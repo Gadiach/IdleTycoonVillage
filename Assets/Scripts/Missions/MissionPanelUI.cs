@@ -1,17 +1,28 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MissionPanelUI : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform content;
     [SerializeField] private MissionItemUI missionPrefab;
     [SerializeField] private MissionIconDatabase missionIconDatabase;
 
+    [Header("Animation")]
+    [SerializeField] private float hiddenOffset = 300f;
+    [SerializeField] private float animationDuration = 0.4f;
+
     private readonly List<MissionItemUI> missionItems = new();
+
+    private RectTransform missionPanel;
+    private Vector2 visiblePosition;
+    private Vector2 hiddenPosition;
 
     private void OnEnable()
     {
         EventManager.Instance.AddListener<MissionListChangedEvent>(OnMissionListChanged);
+        EventManager.Instance.AddListener<ShowMissionPanelEvent>(OnShowMissionPanel);
     }
 
     private void OnDisable()
@@ -20,6 +31,19 @@ public class MissionPanelUI : MonoBehaviour
             return;
 
         EventManager.Instance.RemoveListener<MissionListChangedEvent>(OnMissionListChanged);
+        EventManager.Instance.RemoveListener<ShowMissionPanelEvent>(OnShowMissionPanel);
+
+        missionPanel.DOKill();
+    }
+
+    private void Awake()
+    {
+        missionPanel = GetComponent<RectTransform>();
+
+        visiblePosition = missionPanel.anchoredPosition;
+        hiddenPosition = visiblePosition + new Vector2(0f, hiddenOffset);
+
+        missionPanel.anchoredPosition = hiddenPosition;
     }
 
     private void OnMissionListChanged(MissionListChangedEvent info)
@@ -31,6 +55,29 @@ public class MissionPanelUI : MonoBehaviour
     {
         RemoveInactiveMissions(missions);
         AddNewMissions(missions);
+    }
+
+    private void OnShowMissionPanel(ShowMissionPanelEvent info)
+    {
+        Show();
+    }
+
+    public void Show()
+    {
+        missionPanel.DOKill();
+
+        missionPanel
+            .DOAnchorPos(visiblePosition, animationDuration)
+            .SetEase(Ease.OutBack);
+    }
+
+    public void Hide()
+    {
+        missionPanel.DOKill();
+
+        missionPanel
+            .DOAnchorPos(hiddenPosition, animationDuration)
+            .SetEase(Ease.InBack);
     }
 
     private void RemoveInactiveMissions(List<MissionRuntime> missions)

@@ -80,9 +80,35 @@ public class TutorialSystem : MonoBehaviour
     {
         dragHint.Stop();
 
-        currentStep = TutorialStep.HireWorker;
+        currentStep = TutorialStep.ClaimMissionReward;
 
-        Debug.Log("Tutorial: Build Farm completed");
+        ShowMissionRewardDialogue();
+    }
+
+    private void ShowMissionRewardDialogue()
+    {
+        dialogueUI.Show(
+            "Great! You've completed your first mission!",
+            ShowClaimRewardDialogue
+        );
+    }
+
+    private void ShowClaimRewardDialogue()
+    {
+        dialogueUI.SetDialogue(
+            "Your reward is waiting. Go ahead and claim it!",
+            OpenMissions
+        );
+    }
+
+    private void OpenMissions()
+    {
+        dialogueUI.Hide(ShowMissionsPanel);
+    }
+
+    private void ShowMissionsPanel()
+    {
+        EventManager.Instance.QueueEvent(new ShowMissionPanelEvent());
     }
 
     private void StartTutorial()

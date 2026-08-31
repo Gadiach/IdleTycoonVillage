@@ -4550,7 +4550,7 @@ MonoBehaviour:
   characterHiddenOffset: 500
   dialogueAnimationDuration: 0.25
   dialogueDelay: 0.25
-  clickEnableDelay: 0.5
+  clickEnableDelay: 1.1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -64529,6 +64529,8 @@ MonoBehaviour:
   content: {fileID: 1197147137}
   missionPrefab: {fileID: -3213335824537877886, guid: 5703ca088d2858645896a07e1a0057ab, type: 3}
   missionIconDatabase: {fileID: 11400000, guid: 3fe0dd3c37a5b3b4faefbcd71752907b, type: 2}
+  hiddenOffset: 300
+  animationDuration: 0.4
 --- !u!1 &1846996390
 GameObject:
   m_ObjectHideFlags: 0
