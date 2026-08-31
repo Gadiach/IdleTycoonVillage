@@ -32,10 +32,19 @@ public class TutorialDragHint : MonoBehaviour
         fakeItem.gameObject.SetActive(false);
     }
 
-    public void Play(
-        RectTransform source,
-        RectTransform target,
-        Sprite itemSprite)
+    public void Play(RectTransform source, Vector3 targetPosition, Sprite itemSprite)
+    {
+        Stop();
+
+        this.source = source;
+        target = null;
+
+        fakeItem.sprite = itemSprite;
+
+        PlaySequence(targetPosition);
+    }
+
+    public void Play(RectTransform source, RectTransform target, Sprite itemSprite)
     {
         Stop();
 
@@ -44,7 +53,7 @@ public class TutorialDragHint : MonoBehaviour
 
         fakeItem.sprite = itemSprite;
 
-        PlaySequence();
+        PlaySequence(target.position);
     }
 
     public void Stop()
@@ -59,13 +68,12 @@ public class TutorialDragHint : MonoBehaviour
         fakeItem.gameObject.SetActive(false);
     }
 
-    private void PlaySequence()
+    private void PlaySequence(Vector3 targetPosition)
     {
         hand.gameObject.SetActive(true);
         fakeItem.gameObject.SetActive(true);
 
         Vector3 startPosition = source.position;
-        Vector3 targetPosition = target.position;
 
         fakeItemRect.position = startPosition;
         hand.position = startPosition + (Vector3)handOffset;
@@ -75,19 +83,16 @@ public class TutorialDragHint : MonoBehaviour
 
         sequence = DOTween.Sequence();
 
-        // Hand appears over the shop item.
         sequence.Append(
             hand.DOScale(Vector3.one, appearDuration)
                 .SetEase(Ease.OutBack)
         );
 
-        // Fake building appears as if it was picked up.
         sequence.Append(
             fakeItemRect.DOScale(Vector3.one, appearDuration)
                 .SetEase(Ease.OutBack)
         );
 
-        // Move building and hand together.
         sequence.Append(
             fakeItemRect.DOMove(targetPosition, dragDuration)
                 .SetEase(Ease.InOutSine)
@@ -95,28 +100,24 @@ public class TutorialDragHint : MonoBehaviour
 
         sequence.Join(
             hand.DOMove(
-                    targetPosition + (Vector3)handOffset,
-                    dragDuration
-                )
-                .SetEase(Ease.InOutSine)
+                targetPosition + (Vector3)handOffset,
+                dragDuration
+            ).SetEase(Ease.InOutSine)
         );
 
-        // Fake placement.
         sequence.Append(
-            fakeItemRect
-                .DOScale(Vector3.zero, appearDuration)
+            fakeItemRect.DOScale(Vector3.zero, appearDuration)
                 .SetEase(Ease.InBack)
         );
 
         sequence.Join(
-            hand
-                .DOScale(Vector3.zero, appearDuration)
+            hand.DOScale(Vector3.zero, appearDuration)
                 .SetEase(Ease.InBack)
         );
 
         sequence.AppendInterval(endPause + restartPause);
 
-        sequence.OnComplete(PlaySequence);
+        sequence.OnComplete(() => PlaySequence(targetPosition));
     }
 
     private void OnDisable()

@@ -179,6 +179,16 @@ public class ShowMissionPanelEvent : GameEvent
 {
 }
 
+public class CurrencyVFXCompletedEvent : GameEvent
+{
+    public CurrencyType CurrencyType { get; }
+
+    public CurrencyVFXCompletedEvent(CurrencyType currencyType)
+    {
+        CurrencyType = currencyType;
+    }
+}
+
 public class ShopItemDragStartedEvent : GameEvent
 {
     public ShopItem ShopItem { get; }

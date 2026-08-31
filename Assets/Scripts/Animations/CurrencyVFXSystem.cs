@@ -54,18 +54,18 @@ public class CurrencyVFXSystem : MonoBehaviour
         if (currencyIcon == null || targetIcon == null)
             return;
 
-        Play(info.SourcePosition,currencyIcon,targetIcon);
+        Play(info.SourcePosition, currencyIcon, targetIcon, info.CurrencyType);
     }
 
-    private void Play(Vector3 startPosition,Sprite currencyIcon,RectTransform targetIcon)
+    private void Play(Vector3 startPosition, Sprite currencyIcon, RectTransform targetIcon, CurrencyType currencyType)
     {
         for (int i = 0; i < flyingIconCount; i++)
         {
-            SpawnCurrencyIcon(startPosition,currencyIcon,targetIcon,i);
+            SpawnCurrencyIcon(startPosition, currencyIcon, targetIcon, currencyType, i);
         }
     }
 
-    private void SpawnCurrencyIcon(Vector3 startPosition,Sprite currencyIcon,RectTransform targetIcon,int index)
+    private void SpawnCurrencyIcon(Vector3 startPosition, Sprite currencyIcon, RectTransform targetIcon, CurrencyType currencyType, int index)
     {
         GameObject currencyObject = Instantiate(flyingCurrencyIconPrefab,flyingCurrencyPrefabsContainer);
 
@@ -112,6 +112,11 @@ public class CurrencyVFXSystem : MonoBehaviour
         {
             PulseTarget(targetIcon);
             Destroy(currencyObject);
+
+            if (index == flyingIconCount - 1)
+            {
+                EventManager.Instance.QueueEvent(new CurrencyVFXCompletedEvent(currencyType));
+            }
         });
     }
 
