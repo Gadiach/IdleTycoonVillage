@@ -104,6 +104,8 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         if (assignedWorker != null)
         {
             BuildingUI.Instance.OpenBuildingPanel(buildingData);
+
+            EventManager.Instance.QueueEvent(new BuildingClickedEvent(buildingData));
         }
     }
 

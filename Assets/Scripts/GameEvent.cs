@@ -189,6 +189,16 @@ public class CurrencyVFXCompletedEvent : GameEvent
     }
 }
 
+public class BuildingClickedEvent : GameEvent
+{
+    public BuildingData Building { get; }
+
+    public BuildingClickedEvent(BuildingData building)
+    {
+        Building = building;
+    }
+}
+
 public class ShopItemDragStartedEvent : GameEvent
 {
     public ShopItem ShopItem { get; }

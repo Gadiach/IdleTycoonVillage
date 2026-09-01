@@ -120,8 +120,10 @@ public class ShopUI : MonoBehaviour
 
     public void Close()
     {
-        if (!opened || isAnimating)
+        if (!shopPanel.gameObject.activeSelf)
             return;
+
+        shopRoot.DOKill();
 
         isAnimating = true;
 

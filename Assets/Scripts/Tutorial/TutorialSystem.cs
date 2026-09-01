@@ -10,6 +10,7 @@ public class TutorialSystem : MonoBehaviour
     [Header("References")]
     [SerializeField] private TutorialDialogueUI dialogueUI;
     [SerializeField] private TutorialDragHint dragHint;
+    [SerializeField] private TutorialTapHint tapHint;
 
     [Header("Build Farm")]
     [SerializeField] private RectTransform farmPlacementHint;
@@ -33,6 +34,9 @@ public class TutorialSystem : MonoBehaviour
         EventManager.Instance.AddListener<ShopItemDragStartedEvent>(OnShopItemDragStarted);
         EventManager.Instance.AddListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.AddListener<CurrencyVFXCompletedEvent>(OnCurrencyVFXCompleted);
+        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        EventManager.Instance.AddListener<BuildingIncomeCollectedEvent>(OnIncomeCollected);
+        EventManager.Instance.AddListener<BuildingClickedEvent>(OnBuildingClicked);
     }
 
     private void OnDisable()
@@ -46,6 +50,9 @@ public class TutorialSystem : MonoBehaviour
         EventManager.Instance.RemoveListener<ShopItemDragStartedEvent>(OnShopItemDragStarted);
         EventManager.Instance.RemoveListener<BuildingPlacedEvent>(OnBuildingPlaced);
         EventManager.Instance.RemoveListener<CurrencyVFXCompletedEvent>(OnCurrencyVFXCompleted);
+        EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        EventManager.Instance.RemoveListener<BuildingIncomeCollectedEvent>(OnIncomeCollected);
+        EventManager.Instance.RemoveListener<BuildingClickedEvent>(OnBuildingClicked);
     }
 
     private void Start()
@@ -79,6 +86,19 @@ public class TutorialSystem : MonoBehaviour
             "Let's turn this desert into something extraordinary! First, let's build a farm.",
             StartBuildFarmStep
         );
+    }
+
+    private void OnBuildingClicked(BuildingClickedEvent info)
+    {
+        if (currentStep != TutorialStep.AutomateFarm)
+            return;
+
+        if (info.Building != tutorialFarm)
+            return;
+
+        tapHint.Stop();
+
+        Debug.Log("Tutorial: Farm clicked");
     }
 
     #endregion
@@ -225,6 +245,89 @@ public class TutorialSystem : MonoBehaviour
             farmScreenPosition,
             workerItem.ItemIconSprite
         );
+    }
+
+    private void OnWorkerAssigned(WorkerAssignedToBuildingEvent info)
+    {
+        if (currentStep != TutorialStep.HireWorker)
+            return;
+
+        if (info.Building != tutorialFarm)
+            return;
+
+        CompleteHireWorkerStep();
+    }
+
+    private void CompleteHireWorkerStep()
+    {
+        dragHint.Stop();
+
+        currentStep = TutorialStep.CollectIncome;
+
+        ShopSystem.Instance.CloseShop();
+
+        dialogueUI.Show(
+            "Great! Your farm is running! Now wait for your first income and collect it.",
+            WaitForIncome
+        );
+    }
+
+    private void WaitForIncome()
+    {
+        dialogueUI.Hide();
+    }
+
+    #endregion
+
+    #region Collect Income
+
+    private void OnIncomeCollected(BuildingIncomeCollectedEvent info)
+    {
+        if (currentStep != TutorialStep.CollectIncome)
+            return;
+
+        CompleteCollectIncomeStep();
+    }
+
+    private void CompleteCollectIncomeStep()
+    {
+        currentStep = TutorialStep.AutomateFarm;
+
+        ShowAutomationDialogue();
+    }
+
+    #endregion
+
+    #region Automate Farm
+
+    private void ShowAutomationDialogue()
+    {
+        if (tutorialFarm != null)
+        {
+            PanZoom.current.FocusOnObject(tutorialFarm.transform);
+        }
+
+        dialogueUI.Show(
+            "Nice! But collecting income manually every time will slow us down. Let's automate the farm!",
+            HideAutomationDialogue
+        );
+    }
+
+    private void HideAutomationDialogue()
+    {
+        dialogueUI.Hide(StartFarmTapHint);
+    }
+
+    private void StartFarmTapHint()
+    {
+        if (tutorialFarm == null)
+            return;
+
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(
+            tutorialFarm.transform.position
+        );
+
+        tapHint.Play(screenPosition);
     }
 
     #endregion
