@@ -47,17 +47,17 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
 
     public void CheckPlacement()
     {
-        if (!placed)
+        if (placed)
+            return;
+
+        if (CanBePlaced(transform.position))
         {
-            if (CanBePlaced(transform.position))
-            {
-                Place(transform.position);
-            }
-            else
-            {
-                Destroy(gameObject); 
-            }
-            ShopSystem.Instance.ShopButton_Click();
+            Place(transform.position);
+        }
+        else
+        {
+            Destroy(gameObject);
+            ShopSystem.Instance.OpenShop(ShopCategory.Workers);
         }
     }
 

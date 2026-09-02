@@ -4285,7 +4285,6 @@ MonoBehaviour:
   dragHint: {fileID: 1871753654}
   tapHint: {fileID: 1931805063}
   farmPlacementHint: {fileID: 1276387683}
-  workerDragTargetYOffset: 2
 --- !u!1 &504646520
 GameObject:
   m_ObjectHideFlags: 0
@@ -4553,7 +4552,7 @@ MonoBehaviour:
   characterHiddenOffset: 500
   dialogueAnimationDuration: 0.25
   dialogueDelay: 0.25
-  clickEnableDelay: 0.8
+  clickEnableDelay: 0.3
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

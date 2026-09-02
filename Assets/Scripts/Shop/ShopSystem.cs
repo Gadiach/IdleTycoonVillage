@@ -9,6 +9,8 @@ public class ShopSystem : MonoBehaviour
 
     private const string ShopItemsPath = "ShopItems";
 
+    private bool canPlayerCloseShop = true;
+
     private Dictionary<ShopCategory, List<ShopItem>> shopItems = new Dictionary<ShopCategory, List<ShopItem>>(capacity: 3);
 
     private void Awake()
@@ -89,9 +91,16 @@ public class ShopSystem : MonoBehaviour
     public void ShopButton_Click()
     {
         if (shopUI.IsOpened)
+        {
+            if (!canPlayerCloseShop)
+                return;
+
             CloseShop();
+        }
         else
+        {
             OpenShop(ShopCategory.Buildings);
+        }
     }
 
     public void OpenShop(ShopCategory category, Action onComplete = null)
@@ -99,6 +108,11 @@ public class ShopSystem : MonoBehaviour
         shopUI.UpdateShopItems();
         shopUI.SelectTab((int)category);
         shopUI.Open(onComplete);
+    }
+
+    public void SetPlayerCloseEnabled(bool enabled)
+    {
+        canPlayerCloseShop = enabled;
     }
 
     public void CloseShop()

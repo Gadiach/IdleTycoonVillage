@@ -18,8 +18,7 @@ public class TutorialSystem : MonoBehaviour
     private TutorialStep currentStep;
     private BuildingData tutorialFarm;
 
-    [Header("Hire Worker")]
-    [SerializeField] private float workerDragTargetYOffset = 2f;
+    private const float BuildingTargetYOffset = 2f;
 
     private void Awake()
     {
@@ -114,6 +113,8 @@ public class TutorialSystem : MonoBehaviour
 
     private void OpenBuildingShop()
     {
+        ShopSystem.Instance.SetPlayerCloseEnabled(false);
+
         ShopSystem.Instance.OpenShop(
             ShopCategory.Buildings,
             StartFarmDragHint
@@ -150,6 +151,8 @@ public class TutorialSystem : MonoBehaviour
     private void CompleteBuildFarmStep()
     {
         dragHint.Stop();
+
+        ShopSystem.Instance.SetPlayerCloseEnabled(true);
 
         currentStep = TutorialStep.ClaimMissionReward;
 
@@ -222,6 +225,8 @@ public class TutorialSystem : MonoBehaviour
 
     private void OpenWorkerShop()
     {
+        ShopSystem.Instance.SetPlayerCloseEnabled(false);
+
         ShopSystem.Instance.OpenShop(
             ShopCategory.Workers,
             StartWorkerDragHint
@@ -235,10 +240,7 @@ public class TutorialSystem : MonoBehaviour
         if (workerItem == null || tutorialFarm == null)
             return;
 
-        Vector3 targetWorldPosition =
-            tutorialFarm.transform.position + Vector3.up * workerDragTargetYOffset;
-
-        Vector3 farmScreenPosition = Camera.main.WorldToScreenPoint(targetWorldPosition);
+        Vector3 farmScreenPosition = GetBuildingScreenPosition(tutorialFarm);
 
         dragHint.Play(
             workerItem.ItemIcon,
@@ -261,6 +263,8 @@ public class TutorialSystem : MonoBehaviour
     private void CompleteHireWorkerStep()
     {
         dragHint.Stop();
+
+        ShopSystem.Instance.SetPlayerCloseEnabled(true);
 
         currentStep = TutorialStep.CollectIncome;
 
@@ -323,11 +327,17 @@ public class TutorialSystem : MonoBehaviour
         if (tutorialFarm == null)
             return;
 
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(
-            tutorialFarm.transform.position
-        );
+        Vector3 farmScreenPosition = GetBuildingScreenPosition(tutorialFarm);
 
-        tapHint.Play(screenPosition);
+        tapHint.Play(farmScreenPosition);
+    }
+
+    private Vector3 GetBuildingScreenPosition(BuildingData building)
+    {
+        Vector3 worldPosition =
+            building.transform.position + Vector3.up * BuildingTargetYOffset;
+
+        return Camera.main.WorldToScreenPoint(worldPosition);
     }
 
     #endregion

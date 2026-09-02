@@ -158,24 +158,23 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             }
             else
             {
-                Destroy(transform.gameObject);
-            }           
+                Destroy(gameObject);
+                ShopSystem.Instance.OpenShop(ShopCategory.Buildings);
+            }
 
-            ShopSystem.Instance.ShopButton_Click();
+            return;
+        }
+
+        if (CanBePlaced(transform.position))
+        {
+            Place(transform.position);
+            origin = transform.position;
         }
         else
         {
-            if (CanBePlaced(transform.position))
-            {
-                Place(transform.position);
-                origin = transform.position;
-            }
-            else
-            {
-                transform.position = origin;
-                Place(transform.position);
-            }
-        }       
+            transform.position = origin;
+            Place(transform.position);
+        }
     }
 
     public bool AcceptsWorkerType(BusinessType type) => type == acceptedBusinessType;
