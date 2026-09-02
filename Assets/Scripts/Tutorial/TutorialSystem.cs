@@ -87,19 +87,6 @@ public class TutorialSystem : MonoBehaviour
         );
     }
 
-    private void OnBuildingClicked(BuildingClickedEvent info)
-    {
-        if (currentStep != TutorialStep.AutomateFarm)
-            return;
-
-        if (info.Building != tutorialFarm)
-            return;
-
-        tapHint.Stop();
-
-        Debug.Log("Tutorial: Farm clicked");
-    }
-
     #endregion
 
     #region Build Farm
@@ -295,16 +282,16 @@ public class TutorialSystem : MonoBehaviour
 
     private void CompleteCollectIncomeStep()
     {
-        currentStep = TutorialStep.AutomateFarm;
+        currentStep = TutorialStep.ManageBusiness;
 
-        ShowAutomationDialogue();
+        ShowManageBusinessDialogue();
     }
 
     #endregion
 
-    #region Automate Farm
+    #region Manage Business
 
-    private void ShowAutomationDialogue()
+    private void ShowManageBusinessDialogue()
     {
         if (tutorialFarm != null)
         {
@@ -312,12 +299,12 @@ public class TutorialSystem : MonoBehaviour
         }
 
         dialogueUI.Show(
-            "Nice! But collecting income manually every time will slow us down. Let's automate the farm!",
-            HideAutomationDialogue
+            "Nice! Now let's see how we can make your business even better.",
+            HideManageBusinessDialogue
         );
     }
 
-    private void HideAutomationDialogue()
+    private void HideManageBusinessDialogue()
     {
         dialogueUI.Hide(StartFarmTapHint);
     }
@@ -332,12 +319,36 @@ public class TutorialSystem : MonoBehaviour
         tapHint.Play(farmScreenPosition);
     }
 
-    private Vector3 GetBuildingScreenPosition(BuildingData building)
+    private void OnBuildingClicked(BuildingClickedEvent info)
     {
-        Vector3 worldPosition =
-            building.transform.position + Vector3.up * BuildingTargetYOffset;
+        if (currentStep != TutorialStep.ManageBusiness)
+            return;
 
-        return Camera.main.WorldToScreenPoint(worldPosition);
+        if (info.Building != tutorialFarm)
+            return;
+
+        tapHint.Stop();
+
+        ShowBusinessUpgradeDialogue();
+    }
+
+    private void ShowBusinessUpgradeDialogue()
+    {
+        dialogueUI.Show(
+            "Upgrade your building to earn more, and upgrade your worker to produce faster. Keep growing your business!",
+            CompleteTutorial
+        );
+    }
+
+    private void CompleteTutorial()
+    {
+        currentStep = TutorialStep.Completed;
+
+        dialogueUI.Hide();
+
+        ShopSystem.Instance.SetPlayerCloseEnabled(true);
+
+        Debug.Log("Tutorial completed");
     }
 
     #endregion
@@ -368,6 +379,18 @@ public class TutorialSystem : MonoBehaviour
 
             dragHint.Stop();
         }
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private Vector3 GetBuildingScreenPosition(BuildingData building)
+    {
+        Vector3 worldPosition =
+            building.transform.position + Vector3.up * BuildingTargetYOffset;
+
+        return Camera.main.WorldToScreenPoint(worldPosition);
     }
 
     #endregion

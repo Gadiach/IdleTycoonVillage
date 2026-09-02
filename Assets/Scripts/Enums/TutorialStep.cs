@@ -5,6 +5,6 @@ public enum TutorialStep
     ClaimMissionReward,
     HireWorker,
     CollectIncome,
-    AutomateFarm,
+    ManageBusiness,
     Completed
 }

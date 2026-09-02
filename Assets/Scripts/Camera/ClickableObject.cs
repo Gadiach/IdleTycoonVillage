@@ -14,7 +14,7 @@ public class ClickableObject : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
-        ShopSystem.Instance.CloseShop();
+        ShopSystem.Instance.TryCloseShop();
 
         if (PanZoom.current != null)
         {
@@ -33,6 +33,7 @@ public class ClickableObject : MonoBehaviour
         else
         {
             UIManager.Instance.OpenMainBuildingPanel(buildingData);
+            EventManager.Instance.QueueEvent(new BuildingClickedEvent(buildingData));
         }           
     }
 }

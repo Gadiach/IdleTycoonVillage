@@ -92,15 +92,20 @@ public class ShopSystem : MonoBehaviour
     {
         if (shopUI.IsOpened)
         {
-            if (!canPlayerCloseShop)
-                return;
-
-            CloseShop();
+            TryCloseShop();
         }
         else
         {
             OpenShop(ShopCategory.Buildings);
         }
+    }
+
+    public void TryCloseShop()
+    {
+        if (!canPlayerCloseShop)
+            return;
+
+        CloseShop();
     }
 
     public void OpenShop(ShopCategory category, Action onComplete = null)

@@ -85,7 +85,7 @@ public class PanZoom : MonoBehaviour
 
             if (distance < dragThreshold)
             {
-                ShopSystem.Instance.CloseShop();
+                ShopSystem.Instance.TryCloseShop();
             }
         }
     }
