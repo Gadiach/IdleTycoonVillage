@@ -46,6 +46,15 @@ public class BuildingData : MonoBehaviour
 
     #region Calculated Properties
 
+    public int IncomePerCycle => CalculateIncome(CurrentLevel);
+
+    public int LastIncomeIncrease { get; private set; }
+
+    private int CalculateIncome(int level)
+    {
+        return baseIncomePerCycle * level;
+    }
+
     public bool CanUpgradeTierOrRarity => HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
 
     public int PriceToUpgrade
@@ -86,7 +95,6 @@ public class BuildingData : MonoBehaviour
         }
     }
 
-    public int IncomePerCycle => baseIncomePerCycle * CurrentLevel;
     public int TotalIncome => IncomePerCycle * TotalIncomeCircles;
     
     public bool StartProductionOnPlace => startProductionOnPlace;
@@ -300,7 +308,11 @@ public class BuildingData : MonoBehaviour
 
         if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
+            int previousIncome = IncomePerCycle;
+
             CurrentLevel++;
+
+            LastIncomeIncrease = IncomePerCycle - previousIncome;
 
             EventManager.Instance.QueueEvent(new BuildingUpgradedEvent(this));
         }

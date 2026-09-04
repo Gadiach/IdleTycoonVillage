@@ -46,6 +46,8 @@ public class WorkerData
 
     #region Calculated Properties
 
+    public float LastCycleDurationDecrease { get; private set; }
+
     public float CurrentProgressionMinCycleDuration => CalculateCycleDuration(CurrentProgressionMaxLevel,CurrentRarity,CurrentTier);
 
     public float NextProgressionMinCycleDuration => CalculateCycleDuration(NextProgressionMaxLevel,NextProgressionRarity,NextProgressionTier);
@@ -124,7 +126,8 @@ public class WorkerData
         }
     }
 
-    public float CycleDuration => CalculateCycleDuration(CurrentLevel,CurrentRarity,CurrentTier);
+    public float CycleDuration => Mathf.Round(CalculateCycleDuration(CurrentLevel, CurrentRarity, CurrentTier) * 100f) / 100f;
+
 
     public Dictionary<CurrencyType, int> BlueprintRequirementsForNextUpgrade
     {
@@ -183,7 +186,13 @@ public class WorkerData
 
         if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
         {
+            float previousDuration = CycleDuration;
+
             CurrentLevel++;
+
+            LastCycleDurationDecrease = Mathf.Round(
+                (previousDuration - CycleDuration) * 100f
+            ) / 100f;
 
             EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(this));
         }
