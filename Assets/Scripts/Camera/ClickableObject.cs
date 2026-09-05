@@ -12,7 +12,17 @@ public class ClickableObject : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (buildingData == null)
+            return;
+
+        if (TutorialSystem.Instance != null &&
+            !TutorialSystem.Instance.CanOpenBuilding(buildingData))
+        {
+            return;
+        }
 
         ShopSystem.Instance.TryCloseShop();
 
@@ -21,19 +31,17 @@ public class ClickableObject : MonoBehaviour
             PanZoom.current.FocusOnObject(transform);
         }
 
-        if (buildingData == null)
-        {
-            return;
-        }
-
-        if(buildingData.BusinessType == BusinessType.Science)
+        if (buildingData.BusinessType == BusinessType.Science)
         {
             UniversityUI.Instance.OpenUniversityPanel();
         }
         else
         {
-            UIManager.Instance.OpenMainBuildingPanel(buildingData);
-            EventManager.Instance.QueueEvent(new BuildingClickedEvent(buildingData));
-        }           
+            BuildingMainMenuUI.Instance.OpenMainBuildingPanel(buildingData);
+
+            EventManager.Instance.QueueEvent(
+                new BuildingClickedEvent(buildingData)
+            );
+        }
     }
 }

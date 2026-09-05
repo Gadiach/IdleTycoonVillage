@@ -1,16 +1,19 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class BuildingMainMenuUI : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static BuildingMainMenuUI Instance;
 
     [Header("Common UI Elements")]
     public GameObject buildingPanel;
     public TextMeshProUGUI AutomationStatusText;
-    public TextMeshProUGUI IncomeText;
-    public TextMeshProUGUI TimeText;
+    [SerializeField] private TextMeshProUGUI IncomeText;
+    [SerializeField] private TextMeshProUGUI TimeText;
+    [SerializeField] private TextMeshProUGUI incomeChangeText;
+    [SerializeField] private TextMeshProUGUI timeChangeText;
     [SerializeField] private GameObject workerPanel;
     [SerializeField] private GameObject noWorkerPanel;
     [SerializeField] private Sprite upgradeButtonActiveSprite;
@@ -18,6 +21,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite activeUpgradeArrows;
     [SerializeField] private Sprite inactiveUpgradeArrows;
     [SerializeField] private GameObject blackBackground;
+    [SerializeField] private AutomationUnlockVFX automationUnlockVFX;
 
     [Header("Building UI Elements")]
 
@@ -30,30 +34,64 @@ public class UIManager : MonoBehaviour
 
     [Header("Worker UI Elements")]
 
-    public TextMeshProUGUI WorkerLevelText;             
-    public TextMeshProUGUI WorkerUpgradePriceText;      
+    public TextMeshProUGUI WorkerLevelText;
+    public TextMeshProUGUI WorkerUpgradePriceText;
     public Image WorkerImage;
     [SerializeField] private Image WorkerUpgradeArrowImage;
     [SerializeField] private Button WorkerUpgradeButton;
-    [SerializeField] private Image[] colorStarsWorker;  
+    [SerializeField] private Image[] colorStarsWorker;
 
     [Header("Buttons to open panels")]
 
     [SerializeField] private Button buildingButton;
     [SerializeField] private Button workerButton;
 
+    [Header("Stats Change VFX")]
+
+    [SerializeField] private float popScale = 1.2f;
+    [SerializeField] private float popDuration = 0.15f;
+    [SerializeField] private float floatDistance = 30f;
+    [SerializeField] private float floatDuration = 0.5f;
+    [SerializeField] private Color improvementColor = Color.green;
+
     private BuildingData currentBuilding;
     private WorkerData currentWorker;
 
+    private Vector3 incomeInitialScale;
+    private Vector3 timeInitialScale;
+
+    private Color incomeInitialColor;
+    private Color timeInitialColor;
+
+    private Vector2 incomeChangeInitialPosition;
+    private Vector2 timeChangeInitialPosition;
+
+    private Vector3 automationStatusInitialScale;
 
     private void Awake()
     {
         Instance = this;
+
+        automationStatusInitialScale = AutomationStatusText.rectTransform.localScale;
+
+        incomeInitialScale = IncomeText.rectTransform.localScale;
+        timeInitialScale = TimeText.rectTransform.localScale;
+
+        incomeInitialColor = IncomeText.color;
+        timeInitialColor = TimeText.color;
+
+        incomeChangeInitialPosition = incomeChangeText.rectTransform.anchoredPosition;
+        timeChangeInitialPosition = timeChangeText.rectTransform.anchoredPosition;
+
+        incomeChangeText.gameObject.SetActive(false);
+        timeChangeText.gameObject.SetActive(false);
+
         buildingPanel.SetActive(false);
     }
 
     private void OnEnable()
     {
+        EventManager.Instance.AddListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
         EventManager.Instance.AddListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
         EventManager.Instance.AddListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
@@ -65,24 +103,55 @@ public class UIManager : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
+        EventManager.Instance.RemoveListener<BuildingUpgradedEvent>(OnBuildingUpgraded);
         EventManager.Instance.RemoveListener<WorkerUpgradedEvent>(OnWorkerUpgraded);
         EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
         EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
+        EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
+    }
+
+    private void OnBuildingUpgraded(BuildingUpgradedEvent evt)
+    {
+        if (currentBuilding != evt.Building)
+            return;
+
+        PlayStatChangeVFX(
+            IncomeText,
+            incomeChangeText,
+            incomeInitialScale,
+            incomeInitialColor,
+            incomeChangeInitialPosition,
+            $"+{evt.Building.LastIncomeIncrease}"
+        );
     }
 
     private void OnWorkerUpgraded(WorkerUpgradedEvent evt)
     {
         currentBuilding = evt.Worker.AssignedBuilding;
 
-        if (currentBuilding == null || currentBuilding.Placeable == null) return;
+        if (currentBuilding == null || currentBuilding.Placeable == null)
+            return;
 
         WorkerData assignedWorker = currentBuilding.Placeable.GetAssignedWorker();
 
-        if (assignedWorker == evt.Worker)
-        {
-            currentBuilding.CheckAutomationState();
-        }
+        if (assignedWorker != evt.Worker)
+            return;
+
+        currentBuilding.CheckAutomationState();
+
+        if (currentWorker != evt.Worker)
+            return;
+
+        PlayStatChangeVFX(
+            TimeText,
+            timeChangeText,
+            timeInitialScale,
+            timeInitialColor,
+            timeChangeInitialPosition,
+            $"-{evt.Worker.LastCycleDurationDecrease:F2}s"
+        );
     }
+
     private void OnBuildingTierOrRarityChanged(BuildingTierOrRarityChangedEvent evt)
     {
         if (currentBuilding != evt.Building)
@@ -101,7 +170,7 @@ public class UIManager : MonoBehaviour
         UpdateWorkerStarUI(currentWorker);
     }
 
-    private void SetUpgradeButtonState(Button button,Image arrowImage,bool interactable)
+    private void SetUpgradeButtonState(Button button, Image arrowImage, bool interactable)
     {
         button.interactable = interactable;
 
@@ -167,12 +236,11 @@ public class UIManager : MonoBehaviour
             workerPanel.SetActive(false);
             noWorkerPanel.SetActive(true);
         }
-                                                                                
 
         buildingPanel.SetActive(true);
         blackBackground.SetActive(true);
 
-        UpdateBuildingStarUI(building);                                    
+        UpdateBuildingStarUI(building);
 
         UpdateAutomationUI(building);
 
@@ -211,7 +279,7 @@ public class UIManager : MonoBehaviour
 
         EvaluateWorkerUpgradeState();
 
-        UpdateWorkerUpgradePriceText(); 
+        UpdateWorkerUpgradePriceText();
 
         currentBuilding.CheckAutomationState();
     }
@@ -253,6 +321,62 @@ public class UIManager : MonoBehaviour
         TimeText.text = $"Time: {currentWorker.CycleDuration:F2}s";
     }
 
+    private void PlayStatChangeVFX(
+        TextMeshProUGUI valueText,
+        TextMeshProUGUI changeText,
+        Vector3 initialScale,
+        Color initialColor,
+        Vector2 initialChangePosition,
+        string change)
+    {
+        valueText.DOKill();
+        valueText.rectTransform.DOKill();
+
+        changeText.DOKill();
+        changeText.rectTransform.DOKill();
+
+        valueText.rectTransform.localScale = initialScale;
+        valueText.color = improvementColor;
+
+        valueText.rectTransform
+            .DOScale(initialScale * popScale, popDuration)
+            .SetEase(Ease.OutQuad)
+            .SetLoops(2, LoopType.Yoyo);
+
+        valueText
+            .DOColor(initialColor, floatDuration)
+            .SetEase(Ease.OutQuad);
+
+        changeText.text = change;
+        changeText.color = improvementColor;
+        changeText.gameObject.SetActive(true);
+        changeText.rectTransform.anchoredPosition = initialChangePosition;
+
+        Color color = changeText.color;
+        color.a = 1f;
+        changeText.color = color;
+
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.Join(
+            changeText.rectTransform
+                .DOAnchorPosY(initialChangePosition.y + floatDistance, floatDuration)
+                .SetEase(Ease.OutQuad)
+        );
+
+        sequence.Join(
+            changeText
+                .DOFade(0f, floatDuration)
+                .SetEase(Ease.InQuad)
+        );
+
+        sequence.OnComplete(() =>
+        {
+            changeText.gameObject.SetActive(false);
+            changeText.rectTransform.anchoredPosition = initialChangePosition;
+        });
+    }
+
     private void EvaluateBuildingUpgradeState()
     {
         if (currentBuilding.CurrentLevel >= currentBuilding.CurrentProgressionMaxLevel)
@@ -277,7 +401,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SetWorkerUpgradeState (UpgradeUIState state)
+    private void SetWorkerUpgradeState(UpgradeUIState state)
     {
         switch (state)
         {
@@ -295,10 +419,9 @@ public class UIManager : MonoBehaviour
     {
         SetWorkerLevelTextMaxed();
 
-        SetUpgradeButtonState(WorkerUpgradeButton,WorkerUpgradeArrowImage,false);
+        SetUpgradeButtonState(WorkerUpgradeButton, WorkerUpgradeArrowImage, false);
 
         WorkerUpgradePriceText.color = Color.gray;
-
     }
 
     private void ApplyCanUpgradeWorkerLevelUI()
@@ -339,12 +462,14 @@ public class UIManager : MonoBehaviour
 
     private void SetBuildingLevelTextWithRedMaxLevel()
     {
-        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " + $"<color=red>{currentBuilding.CurrentProgressionMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " +
+                                 $"<color=red>{currentBuilding.CurrentProgressionMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextWithRedMaxLevel()
     {
-        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " + $"<color=red>{currentWorker.CurrentProgressionMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " +
+                               $"<color=red>{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private void ApplyNeedBuildingTierUpgradeUI()
@@ -354,17 +479,18 @@ public class UIManager : MonoBehaviour
         SetUpgradeButtonState(BuildingUpgradeButton, BuildingUpgradeArrowImage, false);
 
         BuildingUpgradePriceText.color = Color.gray;
-
     }
 
     private void SetBuildingLevelTextMaxed()
     {
-        BuildingLevelText.text = $"Lv: <color=red>{currentBuilding.CurrentLevel} / " + $"{currentBuilding.CurrentProgressionMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: <color=red>{currentBuilding.CurrentLevel} / " +
+                                 $"{currentBuilding.CurrentProgressionMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextMaxed()
     {
-        WorkerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " + $"{currentWorker.CurrentProgressionMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " +
+                               $"{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private Color GetColorByRarity(Rarities rarity)
@@ -428,18 +554,37 @@ public class UIManager : MonoBehaviour
 
     private void OnAutomationChanged(BuildingAutomationChangedEvent evt)
     {
-        if (currentBuilding == evt.Building)
+        if (currentBuilding != evt.Building)
+            return;
+
+        UpdateAutomationUI(currentBuilding);
+
+        if (currentBuilding.IsAutomated)
         {
-            UpdateAutomationUI(currentBuilding);
+            PlayAutomationStatusVFX(); 
+            automationUnlockVFX.Play();
         }
+    }
+
+    private void PlayAutomationStatusVFX()
+    {
+        AutomationStatusText.rectTransform.DOKill();
+
+        AutomationStatusText.rectTransform.localScale = automationStatusInitialScale;
+
+        AutomationStatusText.rectTransform
+            .DOScale(automationStatusInitialScale * popScale, popDuration)
+            .SetEase(Ease.OutQuad)
+            .SetLoops(2, LoopType.Yoyo);
     }
 
     private bool CanAffordBuildingUpgrade()
     {
-        return CurrencySystem.Instance.HasEnoughCurrency(currentBuilding.Currency, currentBuilding.PriceToUpgrade);
+        return CurrencySystem.Instance.HasEnoughCurrency(
+            currentBuilding.Currency,
+            currentBuilding.PriceToUpgrade
+        );
     }
-
-    
 
     private bool HasWorker()
     {
@@ -448,7 +593,10 @@ public class UIManager : MonoBehaviour
 
     private bool CanAffordWorkerUpgrade()
     {
-        return CurrencySystem.Instance.HasEnoughCurrency(currentWorker.Currency, currentWorker.PriceToUpgrade);
+        return CurrencySystem.Instance.HasEnoughCurrency(
+            currentWorker.Currency,
+            currentWorker.PriceToUpgrade
+        );
     }
 
     public void QuitGame()

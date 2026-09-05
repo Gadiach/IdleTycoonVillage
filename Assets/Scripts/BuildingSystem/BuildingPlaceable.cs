@@ -84,6 +84,12 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         if (assignedWorker != null)
         {
+            if (TutorialSystem.Instance != null &&
+                !TutorialSystem.Instance.CanOpenWorker(assignedWorker))
+            {
+                return;
+            }
+
             WorkerUI.Instance.OpenWorkerPanel(assignedWorker);
         }
         else

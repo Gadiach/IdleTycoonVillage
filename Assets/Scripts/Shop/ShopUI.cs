@@ -100,8 +100,14 @@ public class ShopUI : MonoBehaviour
 
     public void Open(Action onComplete = null)
     {
-        if (opened || isAnimating)
+        if (isAnimating)
             return;
+
+        if (opened)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
         shopPanel.gameObject.SetActive(true);
 

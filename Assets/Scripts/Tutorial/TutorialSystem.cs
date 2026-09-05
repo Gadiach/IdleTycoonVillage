@@ -316,7 +316,7 @@ public class TutorialSystem : MonoBehaviour
 
         Vector3 farmScreenPosition = GetBuildingScreenPosition(tutorialFarm);
 
-        tapHint.Play(farmScreenPosition);
+        tapHint.Play(farmScreenPosition, tutorialFarm.transform);
     }
 
     private void OnBuildingClicked(BuildingClickedEvent info)
@@ -379,6 +379,36 @@ public class TutorialSystem : MonoBehaviour
 
             dragHint.Stop();
         }
+    }
+
+    public bool CanShowWorkerShopTab()
+    {
+        if (!playTutorial || currentStep == TutorialStep.Completed)
+            return true;
+
+        return currentStep >= TutorialStep.HireWorker;
+    }
+
+    public bool CanOpenBuilding(BuildingData building)
+    {
+        if (!playTutorial || currentStep == TutorialStep.Completed)
+            return true;
+
+        if (currentStep != TutorialStep.ManageBusiness)
+            return false;
+
+        return building == tutorialFarm;
+    }
+
+    public bool CanOpenWorker(WorkerData worker)
+    {
+        if (!playTutorial || currentStep == TutorialStep.Completed)
+            return true;
+
+        if (currentStep != TutorialStep.ManageBusiness)
+            return false;
+
+        return worker.AssignedBuilding == tutorialFarm;
     }
 
     #endregion
