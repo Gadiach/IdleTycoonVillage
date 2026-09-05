@@ -18,9 +18,12 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
 
     [NonSerialized] public bool IsSelected;
 
+    private bool interactable = true;
+
     private void Awake()
     {
-        if (background == null) background = GetComponent<Image>();
+        if (background == null)
+            background = GetComponent<Image>();
 
         TabGroup.Subscribe(this);
     }
@@ -31,8 +34,16 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
         icon.sprite = selected ? selectedIcon : unselectedIcon;
     }
 
+    public void SetInteractable(bool value)
+    {
+        interactable = value;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!interactable)
+            return;
+
         TabGroup.OnTabSelected(this);
     }
 }

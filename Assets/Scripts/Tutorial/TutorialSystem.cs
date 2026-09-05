@@ -79,6 +79,14 @@ public class TutorialSystem : MonoBehaviour
         );
     }
 
+    public bool CanShowWorkerShopTab()
+{
+    if (!playTutorial)
+        return true;
+
+    return currentStep >= TutorialStep.HireWorker;
+}
+
     private void ShowBuildFarmDialogue()
     {
         dialogueUI.SetDialogue(
@@ -214,10 +222,7 @@ public class TutorialSystem : MonoBehaviour
     {
         ShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        ShopSystem.Instance.OpenShop(
-            ShopCategory.Workers,
-            StartWorkerDragHint
-        );
+        ShopSystem.Instance.OpenShop(ShopCategory.Workers,StartWorkerDragHint);
     }
 
     private void StartWorkerDragHint()
@@ -379,14 +384,6 @@ public class TutorialSystem : MonoBehaviour
 
             dragHint.Stop();
         }
-    }
-
-    public bool CanShowWorkerShopTab()
-    {
-        if (!playTutorial || currentStep == TutorialStep.Completed)
-            return true;
-
-        return currentStep >= TutorialStep.HireWorker;
     }
 
     public bool CanOpenBuilding(BuildingData building)

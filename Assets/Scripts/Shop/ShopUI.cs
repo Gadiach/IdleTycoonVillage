@@ -1,13 +1,15 @@
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class ShopUI : MonoBehaviour
 {
     [SerializeField] private RectTransform shopPanel;
     [SerializeField] private RectTransform itemView;
     [SerializeField] private RectTransform shopRoot;
+
+    [SerializeField] private TabButton workerTab;
 
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
     [SerializeField] private GameObject itemPrefab;
@@ -26,6 +28,7 @@ public class ShopUI : MonoBehaviour
     public bool IsOpened => opened;
 
     #region Initialization
+
     private void Awake()
     {
         InitializeShopPanelPositions();
@@ -98,6 +101,19 @@ public class ShopUI : MonoBehaviour
         return null;
     }
 
+    public void UpdateAvailableTabs()
+    {
+        if (TutorialSystem.Instance == null)
+        {
+            workerTab.SetInteractable(true);
+            return;
+        }
+
+        workerTab.SetInteractable(
+            TutorialSystem.Instance.CanShowWorkerShopTab()
+        );
+    }
+
     public void Open(Action onComplete = null)
     {
         if (isAnimating)
@@ -133,7 +149,8 @@ public class ShopUI : MonoBehaviour
 
         isAnimating = true;
 
-        shopRoot.DOAnchorPos(closedPosition, animationTime)
+        shopRoot
+            .DOAnchorPos(closedPosition, animationTime)
             .OnComplete(() =>
             {
                 isAnimating = false;

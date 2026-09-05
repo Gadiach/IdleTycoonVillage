@@ -105,18 +105,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         }
     }
 
-    //public void OnBuildingIconClick()
-    //{
-    //    if (assignedWorker != null)
-    //    {
-    //        Debug.Log("BUILDING CLICKED");
-
-    //        BuildingUI.Instance.OpenBuildingPanel(buildingData);
-
-    //        EventManager.Instance.QueueEvent(new BuildingClickedEvent(buildingData));
-    //    }
-    //}
-
     public void OnMoveButtonClick()
     {
         gameObject.AddComponent<ObjectDrag>(); 

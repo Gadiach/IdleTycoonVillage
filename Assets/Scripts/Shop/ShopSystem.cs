@@ -7,8 +7,6 @@ public class ShopSystem : MonoBehaviour
 
     [SerializeField] private ShopUI shopUI;
 
-    [SerializeField] private GameObject workerTab;
-
     private const string ShopItemsPath = "ShopItems";
 
     private bool canPlayerCloseShop = true;
@@ -59,19 +57,6 @@ public class ShopSystem : MonoBehaviour
         {
             shopItems.Add(category, new List<ShopItem>());
         }
-    }
-
-    private void UpdateTutorialTabs()
-    {
-        if (TutorialSystem.Instance == null)
-        {
-            workerTab.SetActive(true);
-            return;
-        }
-
-        workerTab.SetActive(
-            TutorialSystem.Instance.CanShowWorkerShopTab()
-        );
     }
 
     private void Load()
@@ -125,10 +110,7 @@ public class ShopSystem : MonoBehaviour
 
     public void OpenShop(ShopCategory category, Action onComplete = null)
     {
-        UpdateTutorialTabs();
-
-        Canvas.ForceUpdateCanvases();
-
+        shopUI.UpdateAvailableTabs();
         shopUI.UpdateShopItems();
         shopUI.SelectTab((int)category);
         shopUI.Open(onComplete);
