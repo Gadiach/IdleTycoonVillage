@@ -8,12 +8,8 @@ public class BuildingMainMenuUI : MonoBehaviour
     public static BuildingMainMenuUI Instance;
 
     [Header("Common UI Elements")]
+        
     public GameObject buildingPanel;
-    public TextMeshProUGUI AutomationStatusText;
-    [SerializeField] private TextMeshProUGUI IncomeText;
-    [SerializeField] private TextMeshProUGUI TimeText;
-    [SerializeField] private TextMeshProUGUI incomeChangeText;
-    [SerializeField] private TextMeshProUGUI timeChangeText;
     [SerializeField] private GameObject workerPanel;
     [SerializeField] private GameObject noWorkerPanel;
     [SerializeField] private Sprite upgradeButtonActiveSprite;
@@ -21,7 +17,24 @@ public class BuildingMainMenuUI : MonoBehaviour
     [SerializeField] private Sprite activeUpgradeArrows;
     [SerializeField] private Sprite inactiveUpgradeArrows;
     [SerializeField] private GameObject blackBackground;
+
+    [Header("Automation")]
+
+    [SerializeField] private Button automationInfoButton;
+    [SerializeField] private GameObject automationInfoPopup;
+    [SerializeField] private TextMeshProUGUI automationInfoText;
     [SerializeField] private AutomationUnlockVFX automationUnlockVFX;
+    public TextMeshProUGUI AutomationStatusText;
+
+    [Header("Income")]
+
+    [SerializeField] private TextMeshProUGUI incomeChangeText;
+    [SerializeField] private TextMeshProUGUI IncomeText;
+
+    [Header("Time")]
+
+    [SerializeField] private TextMeshProUGUI TimeText;
+    [SerializeField] private TextMeshProUGUI timeChangeText;
 
     [Header("Building UI Elements")]
 
@@ -87,6 +100,8 @@ public class BuildingMainMenuUI : MonoBehaviour
         timeChangeText.gameObject.SetActive(false);
 
         buildingPanel.SetActive(false);
+
+        automationInfoPopup.SetActive(false);
     }
 
     private void OnEnable()
@@ -96,6 +111,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
         EventManager.Instance.AddListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
         EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
+        automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
     }
 
     private void OnDisable()
@@ -108,6 +124,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
         EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
         EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
+        automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
     }
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent evt)
@@ -208,10 +225,28 @@ public class BuildingMainMenuUI : MonoBehaviour
         }
     }
 
+    private void OnAutomationInfoClicked()
+    {
+        if (currentBuilding == null)
+            return;
+
+        automationInfoPopup.SetActive(!automationInfoPopup.activeSelf);
+    }
+
+    private void UpdateAutomationInfo()
+    {
+        automationInfoPopup.SetActive(false);
+
+        automationInfoText.text =
+            $"Need Worker Lv. {currentBuilding.LevelOfWorkerNeededForAutomation}";
+    }
+
     public void OpenMainBuildingPanel(BuildingData building)
     {
         currentBuilding = building;
         currentWorker = building.Placeable.GetAssignedWorker();
+
+        UpdateAutomationInfo();
 
         UpdateIncomeText();
         UpdateTimeText();
@@ -534,6 +569,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     public void CloseBuildingPanel()
     {
+        automationInfoPopup.SetActive(false);
         buildingPanel.SetActive(false);
         blackBackground.SetActive(false);
     }
@@ -544,11 +580,17 @@ public class BuildingMainMenuUI : MonoBehaviour
         {
             AutomationStatusText.text = "ON";
             AutomationStatusText.color = Color.green;
+
+            automationInfoButton.gameObject.SetActive(false);
+            automationInfoPopup.SetActive(false);
         }
         else
         {
             AutomationStatusText.text = "OFF";
             AutomationStatusText.color = Color.red;
+
+            automationInfoButton.gameObject.SetActive(true);
+            automationInfoPopup.SetActive(false);
         }
     }
 

@@ -5,7 +5,9 @@ public class TutorialSystem : MonoBehaviour
     public static TutorialSystem Instance;
 
     [Header("Settings")]
-    [SerializeField] private bool playTutorial = true;
+    [SerializeField] private bool 連TutorialActive = true;
+
+    public bool IsTutorialActive => 連TutorialActive;
 
     [Header("References")]
     [SerializeField] private TutorialDialogueUI dialogueUI;
@@ -27,7 +29,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!playTutorial)
+        if (!連TutorialActive)
             return;
 
         EventManager.Instance.AddListener<ShopItemDragStartedEvent>(OnShopItemDragStarted);
@@ -40,7 +42,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void OnDisable()
     {
-        if (!playTutorial)
+        if (!連TutorialActive)
             return;
 
         if (EventManager.Instance == null)
@@ -56,7 +58,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void Start()
     {
-        if (!playTutorial)
+        if (!連TutorialActive)
             return;
 
         StartTutorial();
@@ -81,7 +83,7 @@ public class TutorialSystem : MonoBehaviour
 
     public bool CanShowWorkerShopTab()
 {
-    if (!playTutorial)
+    if (!連TutorialActive)
         return true;
 
     return currentStep >= TutorialStep.HireWorker;
@@ -388,7 +390,7 @@ public class TutorialSystem : MonoBehaviour
 
     public bool CanOpenBuilding(BuildingData building)
     {
-        if (!playTutorial || currentStep == TutorialStep.Completed)
+        if (!連TutorialActive || currentStep == TutorialStep.Completed)
             return true;
 
         if (currentStep != TutorialStep.ManageBusiness)
@@ -399,7 +401,7 @@ public class TutorialSystem : MonoBehaviour
 
     public bool CanOpenWorker(WorkerData worker)
     {
-        if (!playTutorial || currentStep == TutorialStep.Completed)
+        if (!連TutorialActive || currentStep == TutorialStep.Completed)
             return true;
 
         if (currentStep != TutorialStep.ManageBusiness)

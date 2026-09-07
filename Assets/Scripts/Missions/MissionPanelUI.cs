@@ -42,8 +42,19 @@ public class MissionPanelUI : MonoBehaviour
 
         visiblePosition = missionPanel.anchoredPosition;
         hiddenPosition = visiblePosition + new Vector2(0f, hiddenOffset);
+    }
 
-        missionPanel.anchoredPosition = hiddenPosition;
+    private void Start()
+    {
+        if (TutorialSystem.Instance != null &&
+            TutorialSystem.Instance.IsTutorialActive)
+        {
+            missionPanel.anchoredPosition = hiddenPosition;
+        }
+        else
+        {
+            missionPanel.anchoredPosition = visiblePosition;
+        }
     }
 
     private void OnMissionListChanged(MissionListChangedEvent info)
