@@ -342,7 +342,7 @@ public class TutorialSystem : MonoBehaviour
     private void ShowBusinessUpgradeDialogue()
     {
         dialogueUI.Show(
-            "Upgrade your building to earn more, and upgrade your worker to produce faster. Keep growing your business!",
+            "Upgrade buildings to earn more and workers to produce faster. Keep growing!",
             CompleteTutorial
         );
     }
