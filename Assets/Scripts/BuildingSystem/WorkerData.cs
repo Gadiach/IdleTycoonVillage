@@ -20,6 +20,8 @@ public class WorkerData
 
     private float ProductionTimeReductionPerLevel => Definition.ProductionTimeReductionPerLevel;
 
+    public bool IsMaxProgression => CurrentRarity == Rarities.Futuristic && CurrentTier == Tiers.Tier5;
+
     #endregion
 
     #region Configs
@@ -48,9 +50,9 @@ public class WorkerData
 
     public float LastCycleDurationDecrease { get; private set; }
 
-    public float CurrentProgressionMinCycleDuration => CalculateCycleDuration(CurrentProgressionMaxLevel,CurrentRarity,CurrentTier);
+    public float CurrentProgressionMinCycleDuration => Mathf.Round(CalculateCycleDuration(CurrentProgressionMaxLevel,CurrentRarity,CurrentTier) * 100f) / 100f;
 
-    public float NextProgressionMinCycleDuration => CalculateCycleDuration(NextProgressionMaxLevel,NextProgressionRarity,NextProgressionTier);
+    public float NextProgressionMinCycleDuration => Mathf.Round(CalculateCycleDuration(NextProgressionMaxLevel,NextProgressionRarity,NextProgressionTier) * 100f) / 100f;
 
     public int CurrentProgressionMaxLevel
     {
@@ -135,35 +137,29 @@ public class WorkerData
         {
             Dictionary<CurrencyType, int> requirements = new();
 
-            int currentRarityIndex = (int)CurrentRarity;
-            int currentTierIndex = (int)CurrentTier;
+            if (IsMaxProgression)
+                return requirements;
 
-            int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-            if (currentTierIndex < maxTier)
+            if (CurrentTier != Tiers.Tier5)
             {
-                CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
+                CurrencyType blueprint =
+                    CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
 
-                requirements[blueprint] = currentTierIndex + 1;
+                requirements[blueprint] = (int)NextTier;
+
                 return requirements;
             }
 
-            for (int r = 0; r <= currentRarityIndex; r++)
-            {
-                Rarities rarity = (Rarities)r;
-                CurrencyType blueprint = CurrencyHelper.GetWorkerBlueprintCurrency(rarity);
+            CurrencyType nextRarityBlueprint =
+                CurrencyHelper.GetWorkerBlueprintCurrency(NextRarity);
 
-                if (r < currentRarityIndex)
-                    requirements[blueprint] = maxTier;
-                else
-                    requirements[blueprint] = 1;
-            }
+            requirements[nextRarityBlueprint] = 1;
 
             return requirements;
         }
     }
 
-    public bool CanUpgradeTierOrRarity => HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
+    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
 
     #endregion
 

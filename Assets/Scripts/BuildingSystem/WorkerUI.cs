@@ -94,12 +94,12 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateCurrentMinCycleDurationText()
     {
-        currentMinCycleDurationText.text = currentWorker.CurrentProgressionMinCycleDuration.ToString("F1");
+        currentMinCycleDurationText.text = currentWorker.CurrentProgressionMinCycleDuration.ToString("F2");
     }
 
     private void UpdateNextMinCycleDurationText()
     {
-        nextMinCycleDurationText.text = currentWorker.NextProgressionMinCycleDuration.ToString("F1");
+        nextMinCycleDurationText.text = currentWorker.NextProgressionMinCycleDuration.ToString("F2");
     }
 
     private void UpdateStarUpgradeButton()
