@@ -11,6 +11,8 @@ public class WorkerUI : MonoBehaviour
 
     [SerializeField] private Image[] currentTierRarityStarsColor;
     [SerializeField] private Image[] nextTierRarityStarsColor;
+    [SerializeField] private GameObject[] nextTierUpgradeStars;
+    [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
     [SerializeField] private Image workerIcon;
 
@@ -23,10 +25,6 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private Sprite addStarButtonActiveSprite;
     [SerializeField] private Sprite addStarButtonInactiveSprite;
 
-    [SerializeField] private Sprite activeStarSprite;
-    [SerializeField] private Sprite inactiveStarSprite;
-
-    [SerializeField] private Image starIcon;
     [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject workerPanel;
@@ -43,6 +41,7 @@ public class WorkerUI : MonoBehaviour
         Instance = this;
         workerPanel.SetActive(false);
         blackBackground.SetActive(false);
+        HideAllUpgradeStars();
     }
 
     public void OpenWorkerPanel(WorkerData worker)
@@ -56,6 +55,7 @@ public class WorkerUI : MonoBehaviour
         workerPanel.SetActive(true);
 
         blackBackground.SetActive(true);
+
     }
 
     private void UpdateWorkerPanelUI()
@@ -63,6 +63,7 @@ public class WorkerUI : MonoBehaviour
         UpdateCurrentRarityText();
 
         UpdateStarUI(currentWorker);
+        UpdateNextTierUpgradeStar();
 
         UpdateCurrentMaxLvlTxt();
 
@@ -112,17 +113,11 @@ public class WorkerUI : MonoBehaviour
         addStarButton.interactable = interactable;
 
         UpdateAddStarButtonSprite(interactable);
-        UpdateAddStarIcon(interactable);
     }
 
     private void UpdateAddStarButtonSprite(bool interactable)
     {
         addStarButton.image.sprite = interactable ? addStarButtonActiveSprite : addStarButtonInactiveSprite;
-    }
-
-    private void UpdateAddStarIcon(bool interactable)
-    {
-        starIcon.sprite = interactable ? activeStarSprite : inactiveStarSprite;
     }
 
     private void UpdateBlueprintPriceUI()
@@ -152,9 +147,93 @@ public class WorkerUI : MonoBehaviour
 
     public void OnAddStarButtonClicked()
     {
+        if (!currentWorker.CanUpgradeTierOrRarity)
+            return;
+
+        GameObject sourceStar = GetActiveUpgradeStar();
+        Image targetStar = GetUpgradeTargetStar();
+
+        Vector3 sourcePosition = sourceStar.transform.position;
+        Sprite sourceSprite = sourceStar.GetComponent<Image>().sprite;
+
+        Color previousStarColor = targetStar.color;
+
         currentWorker.UpgradeTierOrRarity();
 
         UpdateWorkerPanelUI();
+
+        Color upgradedStarColor = targetStar.color;
+        targetStar.color = previousStarColor;
+
+        PlayStarUpgradeVFX(
+            sourcePosition,
+            sourceSprite,
+            targetStar,
+            upgradedStarColor
+        );
+    }
+
+    private Image GetUpgradeTargetStar()
+    {
+        int targetIndex = currentWorker.CurrentTier == Tiers.Tier5
+            ? 0
+            : (int)currentWorker.CurrentTier;
+
+        return currentTierRarityStarsColor[targetIndex];
+    }
+
+    private GameObject GetActiveUpgradeStar()
+    {
+        foreach (GameObject star in nextTierUpgradeStars)
+        {
+            if (star.activeSelf)
+                return star;
+        }
+
+        return null;
+    }
+
+    private void PlayStarUpgradeVFX(
+    Vector3 sourcePosition,
+    Sprite sourceSprite,
+    Image targetStar,
+    Color targetColor)
+    {
+        starUpgradeVFX.PlayWorkerUpgrade(
+            sourcePosition,
+            targetStar,
+            sourceSprite,
+            targetColor
+        );
+    }
+
+    private void HideAllUpgradeStars()
+    {
+        foreach (GameObject star in nextTierUpgradeStars)
+        {
+            star.SetActive(false);
+        }
+    }
+
+    private void UpdateNextTierUpgradeStar()
+    {
+        HideAllUpgradeStars();
+
+        if (currentWorker.IsMaxProgression)
+            return;
+
+        int upgradeStarIndex;
+
+        if (currentWorker.CurrentTier == Tiers.Tier5)
+        {
+            upgradeStarIndex = 0;
+        }
+        else
+        {
+            upgradeStarIndex = (int)currentWorker.NextTier - 1;
+        }
+
+        nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
     }
 
     public void ClosePanel()
