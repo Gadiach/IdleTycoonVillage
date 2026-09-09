@@ -29,8 +29,9 @@ public class WorkerUI : MonoBehaviour
 
     [SerializeField] private GameObject workerPanel;
 
-    [SerializeField] private GameObject[] blueprintSlots;
-    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
+    [SerializeField] private Image blueprintImage;
+    [SerializeField] private TextMeshProUGUI upgradePriceText;
+    [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
 
     [SerializeField] private GameObject blackBackground;
 
@@ -63,6 +64,7 @@ public class WorkerUI : MonoBehaviour
         UpdateCurrentRarityText();
 
         UpdateStarUI(currentWorker);
+
         UpdateNextTierUpgradeStar();
 
         UpdateCurrentMaxLvlTxt();
@@ -124,25 +126,51 @@ public class WorkerUI : MonoBehaviour
     {
         var requirements = currentWorker.BlueprintRequirementsForNextUpgrade;
 
-        int index = 0;
+        if (requirements.Count == 0)
+        {
+            blueprintImage.gameObject.SetActive(false);
+            upgradePriceText.gameObject.SetActive(false);
+            return;
+        }
 
         foreach (var requirement in requirements)
         {
-            blueprintSlots[index].SetActive(true);
+            UpdateBlueprintRequirement(requirement.Key, requirement.Value);
 
-            int owned = CurrencySystem.GetCurrencyAmount(requirement.Key);
-
-            upgradePriceTexts[index].text = $"{owned}/{requirement.Value}";
-
-            upgradePriceTexts[index].color = owned >= requirement.Value ? Color.white : Color.red;
-
-            index++;
+            break;
         }
+    }
 
-        for (int i = index; i < blueprintSlots.Length; i++)
-        {
-            blueprintSlots[i].SetActive(false);
-        }
+    private void UpdateBlueprintRequirement(CurrencyType currencyType,int requiredAmount)
+    {
+        int ownedAmount = CurrencySystem.GetCurrencyAmount(currencyType);
+
+        UpdateBlueprintIcon(currencyType);
+        UpdateUpgradePriceText(ownedAmount, requiredAmount);
+        UpdateUpgradePriceTextColor(ownedAmount, requiredAmount);
+
+        SetBlueprintRequirementVisible(true);
+    }
+
+    private void SetBlueprintRequirementVisible(bool visible)
+    {
+        blueprintImage.gameObject.SetActive(visible);
+        upgradePriceText.gameObject.SetActive(visible);
+    }
+
+    private void UpdateBlueprintIcon(CurrencyType currencyType)
+    {
+        blueprintImage.sprite = currencyIconDatabase.GetIcon(currencyType);
+    }
+
+    private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
+    {
+        upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
+    }
+
+    private void UpdateUpgradePriceTextColor(int ownedAmount, int requiredAmount)
+    {
+        upgradePriceText.color = ownedAmount >= requiredAmount ? Color.white : Color.red;
     }
 
     public void OnAddStarButtonClicked()
@@ -165,19 +193,12 @@ public class WorkerUI : MonoBehaviour
         Color upgradedStarColor = targetStar.color;
         targetStar.color = previousStarColor;
 
-        PlayStarUpgradeVFX(
-            sourcePosition,
-            sourceSprite,
-            targetStar,
-            upgradedStarColor
-        );
+        PlayStarUpgradeVFX(sourcePosition,sourceSprite,targetStar,upgradedStarColor);
     }
 
     private Image GetUpgradeTargetStar()
     {
-        int targetIndex = currentWorker.CurrentTier == Tiers.Tier5
-            ? 0
-            : (int)currentWorker.CurrentTier;
+        int targetIndex = currentWorker.CurrentTier == Tiers.Tier5 ? 0 : (int)currentWorker.CurrentTier;
 
         return currentTierRarityStarsColor[targetIndex];
     }
@@ -193,18 +214,9 @@ public class WorkerUI : MonoBehaviour
         return null;
     }
 
-    private void PlayStarUpgradeVFX(
-    Vector3 sourcePosition,
-    Sprite sourceSprite,
-    Image targetStar,
-    Color targetColor)
+    private void PlayStarUpgradeVFX(Vector3 sourcePosition,Sprite sourceSprite,Image targetStar,Color targetColor)
     {
-        starUpgradeVFX.PlayWorkerUpgrade(
-            sourcePosition,
-            targetStar,
-            sourceSprite,
-            targetColor
-        );
+        starUpgradeVFX.PlayWorkerUpgrade(sourcePosition,targetStar,sourceSprite,targetColor);
     }
 
     private void HideAllUpgradeStars()

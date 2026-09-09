@@ -46,6 +46,7 @@ public class BuildingData : MonoBehaviour
 
     #region Calculated Properties
 
+    public bool IsMaxProgression => CurrentRarity == Rarities.Futuristic && CurrentTier == Tiers.Tier5;
     public int IncomePerCycle => CalculateIncome(CurrentLevel);
 
     public int LastIncomeIncrease { get; private set; }
@@ -55,7 +56,7 @@ public class BuildingData : MonoBehaviour
         return baseIncomePerCycle * level;
     }
 
-    public bool CanUpgradeTierOrRarity => HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
+    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
 
     public int PriceToUpgrade
     {
@@ -106,27 +107,23 @@ public class BuildingData : MonoBehaviour
         {
             Dictionary<CurrencyType, int> requirements = new();
 
-            int currentRarityIndex = (int)CurrentRarity;
-            int currentTierIndex = (int)CurrentTier;
+            if (IsMaxProgression)
+                return requirements;
 
-            int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-            if (currentTierIndex < maxTier)
+            if (CurrentTier != Tiers.Tier5)
             {
-                CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
+                CurrencyType blueprint =
+                    CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
 
-                requirements[blueprint] = currentTierIndex + 1;
+                requirements[blueprint] = (int)NextTier;
 
                 return requirements;
             }
 
-            for (int r = 0; r <= currentRarityIndex; r++)
-            {
-                Rarities rarity = (Rarities)r;
-                CurrencyType blueprint = CurrencyHelper.GetBuildingBlueprintCurrency(rarity);
+            CurrencyType nextRarityBlueprint =
+                CurrencyHelper.GetBuildingBlueprintCurrency(NextRarity);
 
-                requirements[blueprint] = r < currentRarityIndex ? maxTier : 1;
-            }
+            requirements[nextRarityBlueprint] = 1;
 
             return requirements;
         }
@@ -136,11 +133,8 @@ public class BuildingData : MonoBehaviour
     {
         get
         {
-            int current = (int)CurrentTier;
-            int max = Enum.GetValues(typeof(Tiers)).Length - 1;
-
-            if (current < max)
-                return (Tiers)(current + 1);
+            if (CurrentTier < Tiers.Tier5)
+                return (Tiers)((int)CurrentTier + 1);
 
             return Tiers.Tier1;
         }
@@ -203,6 +197,9 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeTierOrRarity()
     {
+        if (IsMaxProgression)
+            return;
+
         var requirements = BlueprintRequirementsForNextUpgrade;
 
         if (!HasEnoughResourcesForTierOrRarityUpgrade(requirements))
@@ -212,23 +209,22 @@ public class BuildingData : MonoBehaviour
 
         ApplyTierOrRarityUpgrade();
 
-        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
+        EventManager.Instance.QueueEvent(
+            new BuildingTierOrRarityChangedEvent(this)
+        );
     }
 
     private void ApplyTierOrRarityUpgrade()
     {
-        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-        if ((int)CurrentTier < maxTier)
+        if (CurrentTier < Tiers.Tier5)
         {
             CurrentTier = NextTier;
+            return;
         }
-        else
-        {
-            CurrentTier = Tiers.Tier1;
-            CurrentRarity = NextRarity;
-        }
-    }    
+
+        CurrentTier = Tiers.Tier1;
+        CurrentRarity = NextRarity;
+    }
 
     private void SpendUpgradeRequirements(Dictionary<CurrencyType, int> requirements)
     {

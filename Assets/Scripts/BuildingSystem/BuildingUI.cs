@@ -11,6 +11,8 @@ public class BuildingUI : MonoBehaviour
 
     [SerializeField] private Image[] currentTierRarityStarsColor;
     [SerializeField] private Image[] nextTierRarityStarsColor;
+    [SerializeField] private GameObject[] nextTierUpgradeStars;
+    [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
     [SerializeField] private Image buildingIcon;
 
@@ -23,17 +25,13 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private Sprite addStarButtonActiveSprite;
     [SerializeField] private Sprite addStarButtonInactiveSprite;
 
-    [SerializeField] private Sprite activeStarSprite;
-    [SerializeField] private Sprite inactiveStarSprite;
-
-    [SerializeField] private Image starIcon;
-
     [SerializeField] private Button addStarButton;
 
     [SerializeField] private GameObject buildingPanel;
 
-    [SerializeField] private GameObject[] blueprintSlots;
-    [SerializeField] private TextMeshProUGUI[] upgradePriceTexts;
+    [SerializeField] private Image blueprintImage;
+    [SerializeField] private TextMeshProUGUI upgradePriceText;
+    [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
 
     [SerializeField] private GameObject blackBackground;
 
@@ -44,6 +42,7 @@ public class BuildingUI : MonoBehaviour
         Instance = this;
         buildingPanel.SetActive(false);
         blackBackground.SetActive(false);
+        HideAllUpgradeStars();
     }
 
     public void OpenBuildingPanel(BuildingData building)
@@ -64,6 +63,8 @@ public class BuildingUI : MonoBehaviour
         UpdateCurrentRarityText();
 
         UpdateStarUI(currentBuilding);
+
+        UpdateNextTierUpgradeStar();
 
         UpdatecurrentMaxLvlTxt();
 
@@ -122,25 +123,51 @@ public class BuildingUI : MonoBehaviour
     {
         var requirements = currentBuilding.BlueprintRequirementsForNextUpgrade;
 
-        int index = 0;
+        if (requirements.Count == 0)
+        {
+            SetBlueprintRequirementVisible(false);
+            return;
+        }
 
         foreach (var requirement in requirements)
         {
-            blueprintSlots[index].SetActive(true);
-
-            int owned = CurrencySystem.GetCurrencyAmount(requirement.Key);
-
-            upgradePriceTexts[index].text = $"{owned}/{requirement.Value}";
-
-            upgradePriceTexts[index].color = owned >= requirement.Value ? Color.white : Color.red;
-
-            index++;
+            UpdateBlueprintRequirement(requirement.Key, requirement.Value);
+            break;
         }
+    }
 
-        for (int i = index; i < blueprintSlots.Length; i++)
-        {
-            blueprintSlots[i].SetActive(false);
-        }
+    private void UpdateBlueprintRequirement(
+        CurrencyType currencyType,
+        int requiredAmount)
+    {
+        int ownedAmount = CurrencySystem.GetCurrencyAmount(currencyType);
+
+        UpdateBlueprintIcon(currencyType);
+        UpdateUpgradePriceText(ownedAmount, requiredAmount);
+        UpdateUpgradePriceTextColor(ownedAmount, requiredAmount);
+
+        SetBlueprintRequirementVisible(true);
+    }
+
+    private void SetBlueprintRequirementVisible(bool visible)
+    {
+        blueprintImage.gameObject.SetActive(visible);
+        upgradePriceText.gameObject.SetActive(visible);
+    }
+
+    private void UpdateBlueprintIcon(CurrencyType currencyType)
+    {
+        blueprintImage.sprite = currencyIconDatabase.GetIcon(currencyType);
+    }
+
+    private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
+    {
+        upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
+    }
+
+    private void UpdateUpgradePriceTextColor(int ownedAmount,int requiredAmount)
+    {
+        upgradePriceText.color = ownedAmount >= requiredAmount ? Color.white : Color.red;
     }
 
     private void UpdateStarUpgradeButton()
@@ -150,9 +177,93 @@ public class BuildingUI : MonoBehaviour
 
     public void OnAddStarButtonClicked()
     {
+        if (!currentBuilding.CanUpgradeTierOrRarity)
+            return;
+
+        GameObject sourceStar = GetActiveUpgradeStar();
+        Image targetStar = GetUpgradeTargetStar();
+
+        Vector3 sourcePosition = sourceStar.transform.position;
+        Sprite sourceSprite = sourceStar.GetComponent<Image>().sprite;
+
+        Color previousStarColor = targetStar.color;
+
         currentBuilding.UpgradeTierOrRarity();
 
         UpdateBuildingPanelUI();
+
+        Color upgradedStarColor = targetStar.color;
+        targetStar.color = previousStarColor;
+
+        PlayStarUpgradeVFX(
+            sourcePosition,
+            sourceSprite,
+            targetStar,
+            upgradedStarColor
+        );
+    }
+
+    private Image GetUpgradeTargetStar()
+    {
+        int targetIndex = currentBuilding.CurrentTier == Tiers.Tier5
+            ? 0
+            : (int)currentBuilding.CurrentTier;
+
+        return currentTierRarityStarsColor[targetIndex];
+    }
+
+    private GameObject GetActiveUpgradeStar()
+    {
+        foreach (GameObject star in nextTierUpgradeStars)
+        {
+            if (star.activeSelf)
+                return star;
+        }
+
+        return null;
+    }
+
+    private void PlayStarUpgradeVFX(
+        Vector3 sourcePosition,
+        Sprite sourceSprite,
+        Image targetStar,
+        Color targetColor)
+    {
+        starUpgradeVFX.PlayBuildingUpgrade(
+            sourcePosition,
+            targetStar,
+            sourceSprite,
+            targetColor
+        );
+    }
+
+    private void HideAllUpgradeStars()
+    {
+        foreach (GameObject star in nextTierUpgradeStars)
+        {
+            star.SetActive(false);
+        }
+    }
+
+    private void UpdateNextTierUpgradeStar()
+    {
+        HideAllUpgradeStars();
+
+        if (currentBuilding.IsMaxProgression)
+            return;
+
+        int upgradeStarIndex;
+
+        if (currentBuilding.CurrentTier == Tiers.Tier5)
+        {
+            upgradeStarIndex = 0;
+        }
+        else
+        {
+            upgradeStarIndex = (int)currentBuilding.NextTier - 1;
+        }
+
+        nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
     }
 
     private void SetAddStarButtonState(bool interactable)
@@ -160,17 +271,11 @@ public class BuildingUI : MonoBehaviour
         addStarButton.interactable = interactable;
 
         UpdateAddStarButtonSprite(interactable);
-        UpdateAddStarImage(interactable);
     }
 
     private void UpdateAddStarButtonSprite(bool interactable)
     {
         addStarButton.image.sprite = interactable ? addStarButtonActiveSprite : addStarButtonInactiveSprite;
-    }
-
-    private void UpdateAddStarImage(bool interactable)
-    {
-        starIcon.sprite = interactable ? activeStarSprite : inactiveStarSprite;
     }
 
     private void UpdateStarUI(BuildingData building)
