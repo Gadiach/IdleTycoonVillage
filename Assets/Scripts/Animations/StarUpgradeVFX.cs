@@ -5,13 +5,14 @@ using UnityEngine.UI;
 public class StarUpgradeVFX : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private RectTransform flyingStarsContainer;
     [SerializeField] private GameObject flyingStarPrefab;
 
     [Header("Worker")]
+    [SerializeField] private RectTransform workerFlyingStarsContainer;
     [SerializeField] private Image[] workerStars;
 
     [Header("Building")]
+    [SerializeField] private RectTransform buildingFlyingStarsContainer;
     [SerializeField] private Image[] buildingStars;
 
     [Header("Fly Animation")]
@@ -37,6 +38,7 @@ public class StarUpgradeVFX : MonoBehaviour
             startPosition,
             targetStar,
             workerStars,
+            workerFlyingStarsContainer,
             flyingStarSprite,
             targetColor
         );
@@ -52,6 +54,7 @@ public class StarUpgradeVFX : MonoBehaviour
             startPosition,
             targetStar,
             buildingStars,
+            buildingFlyingStarsContainer,
             flyingStarSprite,
             targetColor
         );
@@ -61,6 +64,7 @@ public class StarUpgradeVFX : MonoBehaviour
         Vector3 startPosition,
         Image targetStar,
         Image[] stars,
+        RectTransform flyingStarsContainer,
         Sprite flyingStarSprite,
         Color targetColor)
     {

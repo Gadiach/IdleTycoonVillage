@@ -48956,7 +48956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &957401947
 RectTransform:
   m_ObjectHideFlags: 0
@@ -50002,14 +50002,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4cbc8be60d3634408fc0889033e4792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyingStarsContainer: {fileID: 931901333}
   flyingStarPrefab: {fileID: 5168226551553788528, guid: cc61d5718b48db646a5efaea8db6d182, type: 3}
+  workerFlyingStarsContainer: {fileID: 931901333}
   workerStars:
   - {fileID: 1354032621}
   - {fileID: 843209737}
   - {fileID: 2105179918}
   - {fileID: 1242935063}
   - {fileID: 537416593}
+  buildingFlyingStarsContainer: {fileID: 1117812137}
   buildingStars:
   - {fileID: 1107982128}
   - {fileID: 1764410054}
@@ -65005,7 +65006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1980132719
 RectTransform:
   m_ObjectHideFlags: 0
@@ -65029,7 +65030,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -278, y: 202.6484}
+  m_AnchoredPosition: {x: 8, y: 202.6484}
   m_SizeDelta: {x: -523.3663, y: 335.7594}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1980132720
@@ -66131,8 +66132,13 @@ MonoBehaviour:
   - {fileID: 993061844}
   - {fileID: 71674397}
   - {fileID: 221159413}
-  nextTierUpgradeStars: []
-  starUpgradeVFX: {fileID: 0}
+  nextTierUpgradeStars:
+  - {fileID: 527777400}
+  - {fileID: 1171352387}
+  - {fileID: 1642534043}
+  - {fileID: 2069447151}
+  - {fileID: 1734849314}
+  starUpgradeVFX: {fileID: 1046197225}
   buildingIcon: {fileID: 1372183286}
   currentMaxLvlTxt: {fileID: 407140096}
   nextMaxLvlTxt: {fileID: 878696130}
