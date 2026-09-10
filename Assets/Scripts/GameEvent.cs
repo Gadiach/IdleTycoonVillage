@@ -91,6 +91,16 @@ public class CurrencySpentEvent : GameEvent
     }
 }
 
+public class CurrencyChangedEvent : GameEvent
+{
+    public CurrencyType CurrencyType { get; private set; }
+
+    public CurrencyChangedEvent(CurrencyType currencyType)
+    {
+        CurrencyType = currencyType;
+    }
+}
+
 public class NotEnoughCurrencyEvent : GameEvent
 {
     public int amount;

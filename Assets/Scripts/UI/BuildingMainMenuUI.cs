@@ -112,6 +112,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.AddListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
         EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
+        EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
     }
 
     private void OnDisable()
@@ -125,6 +126,23 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.RemoveListener<BuildingTierOrRarityChangedEvent>(OnBuildingTierOrRarityChanged);
         EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
+        EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
+    }
+
+    private void OnCurrencyChanged(CurrencyChangedEvent evt)
+    {
+        if (!buildingPanel.activeSelf)
+            return;
+
+        if (evt.CurrencyType == currentBuilding.LevelUpgradeCurrency)
+        {
+            EvaluateBuildingUpgradeState();
+        }
+
+        if (HasWorker() && evt.CurrencyType == currentWorker.Currency)
+        {
+            EvaluateWorkerUpgradeState();
+        }
     }
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent evt)
@@ -237,8 +255,7 @@ public class BuildingMainMenuUI : MonoBehaviour
     {
         automationInfoPopup.SetActive(false);
 
-        automationInfoText.text =
-            $"Need Worker Lv. {currentBuilding.LevelOfWorkerNeededForAutomation}";
+        automationInfoText.text = $"Need Worker Lv. {currentBuilding.LevelOfWorkerNeededForAutomation}";
     }
 
     public void OpenMainBuildingPanel(BuildingData building)
@@ -293,13 +310,12 @@ public class BuildingMainMenuUI : MonoBehaviour
         });
     }
 
+
     public void OnUpgradeBuildingLvlBtnClicked()
     {
         currentBuilding.UpgradeBuildingLvl();
 
         UpdateIncomeText();
-
-        EvaluateBuildingUpgradeState();
 
         UpdateBuildingUpgradePriceText(currentBuilding);
 
@@ -311,8 +327,6 @@ public class BuildingMainMenuUI : MonoBehaviour
         currentWorker.UpgradeWorkerLvl();
 
         UpdateTimeText();
-
-        EvaluateWorkerUpgradeState();
 
         UpdateWorkerUpgradePriceText();
 

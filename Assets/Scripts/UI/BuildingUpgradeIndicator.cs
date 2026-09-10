@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class BuildingUpgradeIndicator : MonoBehaviour
 {
-    [Header("Indicators")]
-    [SerializeField] private GameObject levelUpgradeIndicator;
-    [SerializeField] private GameObject starUpgradeIndicator;
+    [SerializeField] private GameObject upgradeIndicator;
 
     private BuildingData building;
 
@@ -12,61 +10,34 @@ public class BuildingUpgradeIndicator : MonoBehaviour
     {
         building = buildingData;
 
-        UpdateIndicators();
+        UpdateIndicator();
     }
 
-    public void UpdateIndicators()
+    public void UpdateIndicator()
     {
         if (building == null)
             return;
 
-        WorkerData worker = building.Placeable != null
-            ? building.Placeable.GetAssignedWorker()
-            : null;
+        WorkerData worker = building.Placeable.GetAssignedWorker();
 
-        bool canUpgradeLevel =
-            CanUpgradeBuildingLevel() ||
-            CanUpgradeWorkerLevel(worker);
+        bool canUpgradeBuildingLevel =
+            building.CanUpgradeLevel;
 
-        bool canUpgradeStar =
-            CanUpgradeBuildingStar() ||
-            CanUpgradeWorkerStar(worker);
+        bool canUpgradeBuildingStar =
+            building.CanUpgradeTierOrRarity;
 
-        levelUpgradeIndicator.SetActive(canUpgradeLevel);
-        starUpgradeIndicator.SetActive(canUpgradeStar);
-    }
+        bool canUpgradeWorkerLevel =
+            worker != null && worker.CanUpgradeLevel;
 
-    private bool CanUpgradeBuildingLevel()
-    {
-        return building.CurrentLevel < building.CurrentProgressionMaxLevel &&
-               CurrencySystem.Instance.HasEnoughCurrency(
-                   building.LevelUpgradeCurrency,
-                   building.PriceToUpgradeLevel
-               );
-    }
+        bool canUpgradeWorkerStar =
+            worker != null && worker.CanUpgradeTierOrRarity;
 
-    private bool CanUpgradeWorkerLevel(WorkerData worker)
-    {
-        if (worker == null)
-            return false;
+        bool hasAvailableUpgrade =
+            canUpgradeBuildingLevel ||
+            canUpgradeBuildingStar ||
+            canUpgradeWorkerLevel ||
+            canUpgradeWorkerStar;
 
-        return worker.CurrentLevel < worker.CurrentProgressionMaxLevel &&
-               CurrencySystem.Instance.HasEnoughCurrency(
-                   worker.Currency,
-                   worker.PriceToUpgrade
-               );
-    }
-
-    private bool CanUpgradeBuildingStar()
-    {
-        return building.CanUpgradeTierOrRarity;
-    }
-
-    private bool CanUpgradeWorkerStar(WorkerData worker)
-    {
-        if (worker == null)
-            return false;
-
-        return worker.CanUpgradeTierOrRarity;
+        upgradeIndicator.SetActive(hasAvailableUpgrade);
     }
 }

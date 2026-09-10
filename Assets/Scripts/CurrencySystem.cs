@@ -94,6 +94,7 @@ public class CurrencySystem : MonoBehaviour
         currencyAmounts[currencyType] -= amount;
 
         EventManager.Instance.QueueEvent(new CurrencySpentEvent(currencyType, amount));
+        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(currencyType));
 
         return true;
     }
@@ -107,6 +108,7 @@ public class CurrencySystem : MonoBehaviour
         currencyAmounts[currencyType] += amount;
 
         EventManager.Instance.QueueEvent(new CurrencyAddedEvent(currencyType, amount));
+        EventManager.Instance.QueueEvent(new CurrencyChangedEvent(currencyType));
     }
 
     #endregion
