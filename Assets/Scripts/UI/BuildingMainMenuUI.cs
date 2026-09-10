@@ -331,7 +331,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     private void UpdateBuildingUpgradePriceText(BuildingData building)
     {
-        BuildingUpgradePriceText.text = building.PriceToUpgrade.ToString();
+        BuildingUpgradePriceText.text = building.PriceToUpgradeLevel.ToString();
     }
 
     private void UpdateIncomeText()
@@ -488,23 +488,19 @@ public class BuildingMainMenuUI : MonoBehaviour
     {
         SetBuildingLevelTextWithRedMaxLevel();
 
-        bool canAfford = CanAffordBuildingUpgrade();
+        BuildingUpgradePriceText.color = currentBuilding.CanUpgradeLevel ? Color.white : Color.red;
 
-        BuildingUpgradePriceText.color = canAfford ? Color.white : Color.red;
-
-        SetUpgradeButtonState(BuildingUpgradeButton, BuildingUpgradeArrowImage, canAfford);
+        SetUpgradeButtonState(BuildingUpgradeButton,BuildingUpgradeArrowImage,currentBuilding.CanUpgradeLevel);
     }
 
     private void SetBuildingLevelTextWithRedMaxLevel()
     {
-        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " +
-                                 $"<color=red>{currentBuilding.CurrentProgressionMaxLevel}</color>";
+        BuildingLevelText.text = $"Lv: {currentBuilding.CurrentLevel} / " + $"<color=red>{currentBuilding.CurrentProgressionMaxLevel}</color>";
     }
 
     private void SetWorkerLevelTextWithRedMaxLevel()
     {
-        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " +
-                               $"<color=red>{currentWorker.CurrentProgressionMaxLevel}</color>";
+        WorkerLevelText.text = $"Lv: {currentWorker.CurrentLevel} / " + $"<color=red>{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private void ApplyNeedBuildingTierUpgradeUI()
@@ -618,14 +614,6 @@ public class BuildingMainMenuUI : MonoBehaviour
             .DOScale(automationStatusInitialScale * popScale, popDuration)
             .SetEase(Ease.OutQuad)
             .SetLoops(2, LoopType.Yoyo);
-    }
-
-    private bool CanAffordBuildingUpgrade()
-    {
-        return CurrencySystem.Instance.HasEnoughCurrency(
-            currentBuilding.Currency,
-            currentBuilding.PriceToUpgrade
-        );
     }
 
     private bool HasWorker()

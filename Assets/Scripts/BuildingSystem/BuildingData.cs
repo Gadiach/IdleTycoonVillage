@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingData : MonoBehaviour
@@ -9,11 +8,12 @@ public class BuildingData : MonoBehaviour
     [Header("Definition Data")]
     public string Name;
     public string Description;
-    public CurrencyType Currency;
+    public CurrencyType LevelUpgradeCurrency;
     public ShopCategory Type;
     public BusinessType BusinessType;
     public Sprite Icon;
     public int PurchasePrice;
+    
     [SerializeField] private int baseUpgradePrice = 5;
     [SerializeField] private int baseIncomePerCycle = 5;
     [SerializeField] private int workerLevelNeededForAutomation = 5;
@@ -35,11 +35,8 @@ public class BuildingData : MonoBehaviour
     public int CurrentLevel { get; private set; } = 1;
     public bool IsAutomated { get; private set; }
     public int TotalIncomeCircles { get; private set; }
-
     public Rarities CurrentRarity { get; private set; } = Rarities.Primitive;
-
     public Tiers CurrentTier { get; private set; } = Tiers.Tier1;
-
     public BuildingPlaceable Placeable { get; private set; }
 
     #endregion
@@ -47,6 +44,27 @@ public class BuildingData : MonoBehaviour
     #region Calculated Properties
 
     public bool IsMaxProgression => CurrentRarity == Rarities.Futuristic && CurrentTier == Tiers.Tier5;
+    public bool IsMaxLevel => CurrentLevel >= CurrentProgressionMaxLevel;
+
+    public CurrencyType TierOrRarityUpgradeCurrency
+    {
+        get
+        {
+            if (CurrentTier == Tiers.Tier5)
+            {
+                return CurrencyHelper.GetBuildingBlueprintCurrency(NextRarity);
+            }
+
+            return CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
+        }
+    }
+
+    public int PriceToUpgradeTierOrRarity => CurrentTier == Tiers.Tier5 ? 1 : (int)NextTier;
+    public int PriceToUpgradeLevel => Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.buildingUpgradeMultiplier, CurrentLevel - 1));
+
+    public bool HasEnoughCurrencyForTierOrRarityUpgrade => CurrencySystem.Instance.HasEnoughCurrency(TierOrRarityUpgradeCurrency,PriceToUpgradeTierOrRarity);
+    public bool HasEnoughCurrencyForLevelUpgrade => CurrencySystem.Instance.HasEnoughCurrency(LevelUpgradeCurrency,PriceToUpgradeLevel);
+
     public int IncomePerCycle => CalculateIncome(CurrentLevel);
 
     public int LastIncomeIncrease { get; private set; }
@@ -56,15 +74,8 @@ public class BuildingData : MonoBehaviour
         return baseIncomePerCycle * level;
     }
 
-    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
-
-    public int PriceToUpgrade
-    {
-        get
-        {
-            return Mathf.RoundToInt(baseUpgradePrice * Mathf.Pow(upgradeCostConfig.buildingUpgradeMultiplier,CurrentLevel - 1));
-        }
-    }
+    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughCurrencyForTierOrRarityUpgrade;
+    public bool CanUpgradeLevel => !IsMaxLevel && HasEnoughCurrencyForLevelUpgrade;
 
     public int CurrentProgressionMaxIncome
     {
@@ -100,34 +111,6 @@ public class BuildingData : MonoBehaviour
     
     public bool StartProductionOnPlace => startProductionOnPlace;
     public int LevelOfWorkerNeededForAutomation => workerLevelNeededForAutomation;
-
-    public Dictionary<CurrencyType, int> BlueprintRequirementsForNextUpgrade
-    {
-        get
-        {
-            Dictionary<CurrencyType, int> requirements = new();
-
-            if (IsMaxProgression)
-                return requirements;
-
-            if (CurrentTier != Tiers.Tier5)
-            {
-                CurrencyType blueprint =
-                    CurrencyHelper.GetBuildingBlueprintCurrency(CurrentRarity);
-
-                requirements[blueprint] = (int)NextTier;
-
-                return requirements;
-            }
-
-            CurrencyType nextRarityBlueprint =
-                CurrencyHelper.GetBuildingBlueprintCurrency(NextRarity);
-
-            requirements[nextRarityBlueprint] = 1;
-
-            return requirements;
-        }
-    }
 
     public Tiers NextTier
     {
@@ -166,7 +149,7 @@ public class BuildingData : MonoBehaviour
     {
         Name = item.Name;
         PurchasePrice = item.PurchasePrice;
-        Currency = item.Currency;
+        LevelUpgradeCurrency = item.Currency;
         Type = item.Type;
         Icon = item.Icon;
     }
@@ -182,36 +165,16 @@ public class BuildingData : MonoBehaviour
         };
     }
 
-    private bool HasEnoughResourcesForTierOrRarityUpgrade(Dictionary<CurrencyType, int> requirements)
-    {
-        foreach (var requirement in requirements)
-        {
-            if (!CurrencySystem.Instance.HasEnoughCurrency(requirement.Key, requirement.Value))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public void UpgradeTierOrRarity()
     {
-        if (IsMaxProgression)
+        if (!CanUpgradeTierOrRarity)
             return;
 
-        var requirements = BlueprintRequirementsForNextUpgrade;
-
-        if (!HasEnoughResourcesForTierOrRarityUpgrade(requirements))
-            return;
-
-        SpendUpgradeRequirements(requirements);
+        CurrencySystem.Instance.SpendCurrency(TierOrRarityUpgradeCurrency,PriceToUpgradeTierOrRarity);
 
         ApplyTierOrRarityUpgrade();
 
-        EventManager.Instance.QueueEvent(
-            new BuildingTierOrRarityChangedEvent(this)
-        );
+        EventManager.Instance.QueueEvent(new BuildingTierOrRarityChangedEvent(this));
     }
 
     private void ApplyTierOrRarityUpgrade()
@@ -226,14 +189,6 @@ public class BuildingData : MonoBehaviour
         CurrentRarity = NextRarity;
     }
 
-    private void SpendUpgradeRequirements(Dictionary<CurrencyType, int> requirements)
-    {
-        foreach (var requirement in requirements)
-        {
-            CurrencySystem.Instance.SpendCurrency(requirement.Key,requirement.Value);
-        }
-    }
-
     public int CurrentProgressionMaxLevel
     {
         get
@@ -244,21 +199,9 @@ public class BuildingData : MonoBehaviour
         }
     }
 
-    public Rarities NextProgressionRarity
-    {
-        get
-        {
-            return CurrentTier == Tiers.Tier5 ? NextRarity : CurrentRarity;
-        }
-    }
+    public Rarities NextProgressionRarity => CurrentTier == Tiers.Tier5 ? NextRarity : CurrentRarity;
 
-    public Tiers NextProgressionTier
-    {
-        get
-        {
-            return CurrentTier == Tiers.Tier5 ? Tiers.Tier1 : NextTier;
-        }
-    }
+    public Tiers NextProgressionTier => CurrentTier == Tiers.Tier5 ? Tiers.Tier1 : NextTier;
 
     public int NextProgressionMaxLevel
     {
@@ -296,22 +239,18 @@ public class BuildingData : MonoBehaviour
 
     public void UpgradeBuildingLvl()
     {
-        if (CurrentLevel >= CurrentProgressionMaxLevel)
-        {
-            Debug.Log("Building is already at MAX level!");
+        if (!CanUpgradeLevel)
             return;
-        }
 
-        if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
-        {
-            int previousIncome = IncomePerCycle;
+        int previousIncome = IncomePerCycle;
 
-            CurrentLevel++;
+        CurrencySystem.Instance.SpendCurrency(LevelUpgradeCurrency,PriceToUpgradeLevel);
 
-            LastIncomeIncrease = IncomePerCycle - previousIncome;
+        CurrentLevel++;
 
-            EventManager.Instance.QueueEvent(new BuildingUpgradedEvent(this));
-        }
+        LastIncomeIncrease = IncomePerCycle - previousIncome;
+
+        EventManager.Instance.QueueEvent(new BuildingUpgradedEvent(this));
     }
 
     public void CheckAutomationState()

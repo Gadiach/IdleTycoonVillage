@@ -121,30 +121,24 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateBlueprintPriceUI()
     {
-        var requirements = currentBuilding.BlueprintRequirementsForNextUpgrade;
-
-        if (requirements.Count == 0)
+        if (currentBuilding.IsMaxProgression)
         {
             SetBlueprintRequirementVisible(false);
             return;
         }
 
-        foreach (var requirement in requirements)
-        {
-            UpdateBlueprintRequirement(requirement.Key, requirement.Value);
-            break;
-        }
+        UpdateBlueprintRequirement(currentBuilding.TierOrRarityUpgradeCurrency,currentBuilding.PriceToUpgradeTierOrRarity);
     }
 
     private void UpdateBlueprintRequirement(
-        CurrencyType currencyType,
-        int requiredAmount)
+    CurrencyType currencyType,
+    int requiredAmount)
     {
         int ownedAmount = CurrencySystem.GetCurrencyAmount(currencyType);
 
         UpdateBlueprintIcon(currencyType);
         UpdateUpgradePriceText(ownedAmount, requiredAmount);
-        UpdateUpgradePriceTextColor(ownedAmount, requiredAmount);
+        UpdateUpgradePriceTextColor();
 
         SetBlueprintRequirementVisible(true);
     }
@@ -165,9 +159,9 @@ public class BuildingUI : MonoBehaviour
         upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
     }
 
-    private void UpdateUpgradePriceTextColor(int ownedAmount,int requiredAmount)
+    private void UpdateUpgradePriceTextColor()
     {
-        upgradePriceText.color = ownedAmount >= requiredAmount ? Color.white : Color.red;
+        upgradePriceText.color = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
     }
 
     private void UpdateStarUpgradeButton()
