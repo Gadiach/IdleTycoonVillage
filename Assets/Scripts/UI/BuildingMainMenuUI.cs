@@ -22,8 +22,6 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     [SerializeField] private GameObject BuildingStarUpgradeIndicator;
     [SerializeField] private GameObject WorkerStarUpgradeIndicator;
-    [SerializeField] private GameObject BuildingLvlUpgradeIndicator;
-    [SerializeField] private GameObject WorkerLvlUpgradeIndicator;
 
     [Header("Automation")]
 
@@ -156,20 +154,11 @@ public class BuildingMainMenuUI : MonoBehaviour
         if (currentBuilding == null)
             return;
 
-        BuildingLvlUpgradeIndicator.SetActive(
-            currentBuilding.CanUpgradeLevel
-        );
-
         BuildingStarUpgradeIndicator.SetActive(
             currentBuilding.CanUpgradeTierOrRarity
         );
 
         bool hasWorker = currentWorker != null;
-
-        WorkerLvlUpgradeIndicator.SetActive(
-            hasWorker &&
-            currentWorker.CanUpgradeLevel
-        );
 
         WorkerStarUpgradeIndicator.SetActive(
             hasWorker &&
