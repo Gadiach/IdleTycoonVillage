@@ -18,6 +18,13 @@ public class BuildingMainMenuUI : MonoBehaviour
     [SerializeField] private Sprite inactiveUpgradeArrows;
     [SerializeField] private GameObject blackBackground;
 
+    [Header("Upgrade Indicators")]
+
+    [SerializeField] private GameObject BuildingStarUpgradeIndicator;
+    [SerializeField] private GameObject WorkerStarUpgradeIndicator;
+    [SerializeField] private GameObject BuildingLvlUpgradeIndicator;
+    [SerializeField] private GameObject WorkerLvlUpgradeIndicator;
+
     [Header("Automation")]
 
     [SerializeField] private Button automationInfoButton;
@@ -134,15 +141,40 @@ public class BuildingMainMenuUI : MonoBehaviour
         if (!buildingPanel.activeSelf)
             return;
 
-        if (evt.CurrencyType == currentBuilding.LevelUpgradeCurrency)
-        {
-            EvaluateBuildingUpgradeState();
-        }
+        EvaluateBuildingUpgradeState();
 
-        if (HasWorker() && evt.CurrencyType == currentWorker.LevelUpgradeCurrency)
+        if (HasWorker())
         {
             EvaluateWorkerUpgradeState();
         }
+
+        UpdateUpgradeIndicators();
+    }
+
+    private void UpdateUpgradeIndicators()
+    {
+        if (currentBuilding == null)
+            return;
+
+        BuildingLvlUpgradeIndicator.SetActive(
+            currentBuilding.CanUpgradeLevel
+        );
+
+        BuildingStarUpgradeIndicator.SetActive(
+            currentBuilding.CanUpgradeTierOrRarity
+        );
+
+        bool hasWorker = currentWorker != null;
+
+        WorkerLvlUpgradeIndicator.SetActive(
+            hasWorker &&
+            currentWorker.CanUpgradeLevel
+        );
+
+        WorkerStarUpgradeIndicator.SetActive(
+            hasWorker &&
+            currentWorker.CanUpgradeTierOrRarity
+        );
     }
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent evt)
@@ -194,6 +226,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         EvaluateBuildingUpgradeState();
         UpdateBuildingStarUI(currentBuilding);
+        UpdateUpgradeIndicators();
     }
 
     private void OnWorkerTierOrRarityChanged(WorkerTierOrRarityChangedEvent evt)
@@ -203,6 +236,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         EvaluateWorkerUpgradeState();
         UpdateWorkerStarUI(currentWorker);
+        UpdateUpgradeIndicators();
     }
 
     private void SetUpgradeButtonState(Button button, Image arrowImage, bool interactable)
@@ -293,6 +327,8 @@ public class BuildingMainMenuUI : MonoBehaviour
         blackBackground.SetActive(true);
 
         UpdateBuildingStarUI(building);
+
+        UpdateUpgradeIndicators();
 
         UpdateAutomationUI(building);
 
