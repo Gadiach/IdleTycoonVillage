@@ -12,7 +12,7 @@ public class WorkerData
 
     public Sprite RoundIcon => Definition.RoundIcon;
 
-    public CurrencyType Currency => Definition.Currency;
+    public CurrencyType LevelUpgradeCurrency => Definition.Currency;
 
     private float BaseProductionDuration => Definition.BaseProductionDuration;
 
@@ -21,6 +21,7 @@ public class WorkerData
     private float ProductionTimeReductionPerLevel => Definition.ProductionTimeReductionPerLevel;
 
     public bool IsMaxProgression => CurrentRarity == Rarities.Futuristic && CurrentTier == Tiers.Tier5;
+    public bool IsMaxLevel => CurrentLevel >= CurrentProgressionMaxLevel;
 
     #endregion
 
@@ -53,6 +54,9 @@ public class WorkerData
     public float CurrentProgressionMinCycleDuration => Mathf.Round(CalculateCycleDuration(CurrentProgressionMaxLevel,CurrentRarity,CurrentTier) * 100f) / 100f;
 
     public float NextProgressionMinCycleDuration => Mathf.Round(CalculateCycleDuration(NextProgressionMaxLevel,NextProgressionRarity,NextProgressionTier) * 100f) / 100f;
+
+    public int PriceToUpgradeTierOrRarity => CurrentTier == Tiers.Tier5 ? 1 : (int)NextTier;
+    public int PriceToUpgradeLevel => Mathf.RoundToInt(BaseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
 
     public int CurrentProgressionMaxLevel
     {
@@ -96,11 +100,8 @@ public class WorkerData
     {
         get
         {
-            int current = (int)CurrentTier;
-            int max = Enum.GetValues(typeof(Tiers)).Length - 1;
-
-            if (current < max)
-                return (Tiers)(current + 1);
+            if (CurrentTier < Tiers.Tier5)
+                return (Tiers)((int)CurrentTier + 1);
 
             return Tiers.Tier1;
         }
@@ -120,46 +121,15 @@ public class WorkerData
         }
     }
 
-    public int PriceToUpgrade
-    {
-        get
-        {
-            return Mathf.RoundToInt(BaseUpgradePrice * Mathf.Pow(upgradeCostConfig.workerUpgradeMultiplier, CurrentLevel - 1));
-        }
-    }
+    public bool HasEnoughCurrencyForTierOrRarityUpgrade => CurrencySystem.Instance.HasEnoughCurrency(TierOrRarityUpgradeCurrency,PriceToUpgradeTierOrRarity);
+
+    public bool HasEnoughCurrencyForLevelUpgrade => CurrencySystem.Instance.HasEnoughCurrency(LevelUpgradeCurrency,PriceToUpgradeLevel);
+
+    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughCurrencyForTierOrRarityUpgrade;
+
+    public bool CanUpgradeLevel => !IsMaxLevel && HasEnoughCurrencyForLevelUpgrade;
 
     public float CycleDuration => Mathf.Round(CalculateCycleDuration(CurrentLevel, CurrentRarity, CurrentTier) * 100f) / 100f;
-
-
-    public Dictionary<CurrencyType, int> BlueprintRequirementsForNextUpgrade
-    {
-        get
-        {
-            Dictionary<CurrencyType, int> requirements = new();
-
-            if (IsMaxProgression)
-                return requirements;
-
-            if (CurrentTier != Tiers.Tier5)
-            {
-                CurrencyType blueprint =
-                    CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
-
-                requirements[blueprint] = (int)NextTier;
-
-                return requirements;
-            }
-
-            CurrencyType nextRarityBlueprint =
-                CurrencyHelper.GetWorkerBlueprintCurrency(NextRarity);
-
-            requirements[nextRarityBlueprint] = 1;
-
-            return requirements;
-        }
-    }
-
-    public bool CanUpgradeTierOrRarity => !IsMaxProgression && HasEnoughResourcesForTierOrRarityUpgrade(BlueprintRequirementsForNextUpgrade);
 
     #endregion
 
@@ -174,24 +144,18 @@ public class WorkerData
 
     public void UpgradeWorkerLvl()
     {
-        if (CurrentLevel >= CurrentProgressionMaxLevel)
-        {
-            Debug.Log("Worker is already at MAX level!");
+        if (!CanUpgradeLevel)
             return;
-        }
 
-        if (CurrencySystem.Instance.SpendCurrency(Currency, PriceToUpgrade))
-        {
-            float previousDuration = CycleDuration;
+        float previousDuration = CycleDuration;
 
-            CurrentLevel++;
+        CurrencySystem.Instance.SpendCurrency(LevelUpgradeCurrency,PriceToUpgradeLevel);
 
-            LastCycleDurationDecrease = Mathf.Round(
-                (previousDuration - CycleDuration) * 100f
-            ) / 100f;
+        CurrentLevel++;
 
-            EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(this));
-        }
+        LastCycleDurationDecrease = Mathf.Round((previousDuration - CycleDuration) * 100f) / 100f;
+
+        EventManager.Instance.QueueEvent(new WorkerUpgradedEvent(this));
     }
 
     private float CalculateCycleDuration(int level, Rarities rarity, Tiers tier)
@@ -205,27 +169,12 @@ public class WorkerData
         return BaseProductionDuration * rarityMultiplier * tierMultiplier * levelMultiplier;
     }
 
-    private bool HasEnoughResourcesForTierOrRarityUpgrade(Dictionary<CurrencyType, int> requirements)
-    {
-        foreach (var requirement in requirements)
-        {
-            if (!CurrencySystem.Instance.HasEnoughCurrency(requirement.Key, requirement.Value))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public void UpgradeTierOrRarity()
     {
-        var requirements = BlueprintRequirementsForNextUpgrade;
-
-        if (!HasEnoughResourcesForTierOrRarityUpgrade(requirements))
+        if (!CanUpgradeTierOrRarity)
             return;
 
-        SpendUpgradeRequirements(requirements);
+        CurrencySystem.Instance.SpendCurrency(TierOrRarityUpgradeCurrency,PriceToUpgradeTierOrRarity);
 
         ApplyTierOrRarityUpgrade();
 
@@ -234,26 +183,30 @@ public class WorkerData
 
     private void ApplyTierOrRarityUpgrade()
     {
-        int maxTier = Enum.GetValues(typeof(Tiers)).Length;
-
-        if ((int)CurrentTier < maxTier)
+        if (CurrentTier < Tiers.Tier5)
         {
             CurrentTier = NextTier;
+            return;
         }
-        else
+
+        CurrentTier = Tiers.Tier1;
+        CurrentRarity = NextRarity;
+    }
+
+    public CurrencyType TierOrRarityUpgradeCurrency
+    {
+        get
         {
-            CurrentTier = Tiers.Tier1;
-            CurrentRarity = NextRarity;
+            if (CurrentTier == Tiers.Tier5)
+            {
+                return CurrencyHelper.GetWorkerBlueprintCurrency(NextRarity);
+            }
+
+            return CurrencyHelper.GetWorkerBlueprintCurrency(CurrentRarity);
         }
     }
 
-    private void SpendUpgradeRequirements(Dictionary<CurrencyType, int> requirements)
-    {
-        foreach (var requirement in requirements)
-        {
-            CurrencySystem.Instance.SpendCurrency(requirement.Key, requirement.Value);
-        }
-    }
+   
 
     public StarDisplayInfo GetStarDisplayInfo()
     {

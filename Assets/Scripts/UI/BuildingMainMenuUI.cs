@@ -139,7 +139,7 @@ public class BuildingMainMenuUI : MonoBehaviour
             EvaluateBuildingUpgradeState();
         }
 
-        if (HasWorker() && evt.CurrencyType == currentWorker.Currency)
+        if (HasWorker() && evt.CurrencyType == currentWorker.LevelUpgradeCurrency)
         {
             EvaluateWorkerUpgradeState();
         }
@@ -340,7 +340,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     private void UpdateWorkerUpgradePriceText()
     {
-        WorkerUpgradePriceText.text = currentWorker.PriceToUpgrade.ToString();
+        WorkerUpgradePriceText.text = currentWorker.PriceToUpgradeLevel.ToString();
     }
 
     private void UpdateBuildingUpgradePriceText(BuildingData building)
@@ -477,11 +477,9 @@ public class BuildingMainMenuUI : MonoBehaviour
     {
         SetWorkerLevelTextWithRedMaxLevel();
 
-        bool canAfford = CanAffordWorkerUpgrade();
+        WorkerUpgradePriceText.color = currentWorker.CanUpgradeLevel ? Color.white : Color.red;
 
-        WorkerUpgradePriceText.color = canAfford ? Color.white : Color.red;
-
-        SetUpgradeButtonState(WorkerUpgradeButton, WorkerUpgradeArrowImage, canAfford);
+        SetUpgradeButtonState(WorkerUpgradeButton,WorkerUpgradeArrowImage,currentWorker.CanUpgradeLevel);
     }
 
     private void SetBuildingUpgradeState(UpgradeUIState state)
@@ -633,14 +631,6 @@ public class BuildingMainMenuUI : MonoBehaviour
     private bool HasWorker()
     {
         return currentWorker != null;
-    }
-
-    private bool CanAffordWorkerUpgrade()
-    {
-        return CurrencySystem.Instance.HasEnoughCurrency(
-            currentWorker.Currency,
-            currentWorker.PriceToUpgrade
-        );
     }
 
     public void QuitGame()

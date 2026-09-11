@@ -124,21 +124,13 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateBlueprintPriceUI()
     {
-        var requirements = currentWorker.BlueprintRequirementsForNextUpgrade;
-
-        if (requirements.Count == 0)
+        if (currentWorker.IsMaxProgression)
         {
-            blueprintImage.gameObject.SetActive(false);
-            upgradePriceText.gameObject.SetActive(false);
+            SetBlueprintRequirementVisible(false);
             return;
         }
 
-        foreach (var requirement in requirements)
-        {
-            UpdateBlueprintRequirement(requirement.Key, requirement.Value);
-
-            break;
-        }
+        UpdateBlueprintRequirement(currentWorker.TierOrRarityUpgradeCurrency,currentWorker.PriceToUpgradeTierOrRarity);
     }
 
     private void UpdateBlueprintRequirement(CurrencyType currencyType,int requiredAmount)
@@ -147,7 +139,7 @@ public class WorkerUI : MonoBehaviour
 
         UpdateBlueprintIcon(currencyType);
         UpdateUpgradePriceText(ownedAmount, requiredAmount);
-        UpdateUpgradePriceTextColor(ownedAmount, requiredAmount);
+        UpdateUpgradePriceTextColor();
 
         SetBlueprintRequirementVisible(true);
     }
@@ -168,9 +160,9 @@ public class WorkerUI : MonoBehaviour
         upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
     }
 
-    private void UpdateUpgradePriceTextColor(int ownedAmount, int requiredAmount)
+    private void UpdateUpgradePriceTextColor()
     {
-        upgradePriceText.color = ownedAmount >= requiredAmount ? Color.white : Color.red;
+        upgradePriceText.color = currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
     }
 
     public void OnAddStarButtonClicked()

@@ -6,16 +6,47 @@ public class BuildingUpgradeIndicator : MonoBehaviour
 
     private BuildingData building;
 
-    public void Initialize(BuildingData buildingData)
+    private void Awake()
     {
-        building = buildingData;
+        building = GetComponentInParent<BuildingData>();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+    }
+
+    private void OnDisable()
+    {
+        if (EventManager.Instance == null)
+            return;
+
+        EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+    }
+
+    private void Start()
+    {
+        UpdateIndicator();
+    }
+
+    private void OnCurrencyChanged(CurrencyChangedEvent evt)
+    {
+        UpdateIndicator();
+    }
+
+    private void OnWorkerAssigned(WorkerAssignedToBuildingEvent evt)
+    {
+        if (evt.Building != building)
+            return;
 
         UpdateIndicator();
     }
 
-    public void UpdateIndicator()
+    private void UpdateIndicator()
     {
-        if (building == null)
+        if (building == null || building.Placeable == null)
             return;
 
         WorkerData worker = building.Placeable.GetAssignedWorker();

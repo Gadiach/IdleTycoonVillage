@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3245382200693143249}
   - component: {fileID: 643786277596387570}
   m_Layer: 6
-  m_Name: UpgradeHintIcon
+  m_Name: UpgradeIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1461,6 +1461,7 @@ GameObject:
   - component: {fileID: 5063855944649379868}
   - component: {fileID: 863576713045479790}
   - component: {fileID: -1920402991600211836}
+  - component: {fileID: 3938421713433595799}
   m_Layer: 6
   m_Name: CamelFarm
   m_TagString: Untagged
@@ -1785,3 +1786,16 @@ MonoBehaviour:
   economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
   upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
   startProductionOnPlace: 1
+--- !u!114 &3938421713433595799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9193094272671895835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0e94dd09234bf34db3ffbf1f3362c1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeIndicator: {fileID: 458524891656179316}
