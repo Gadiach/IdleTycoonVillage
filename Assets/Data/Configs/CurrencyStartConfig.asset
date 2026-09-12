@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currencies:
   - currencyType: 0
-    amount: 50
+    amount: 10
   - currencyType: 1
     amount: 0
   buildingBlueprints:

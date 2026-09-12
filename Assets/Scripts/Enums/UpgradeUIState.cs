@@ -1,5 +1,6 @@
 public enum UpgradeUIState
 {
-    CanUpgradeLevel,   
-    NeedTierUpgrade    
+    CanUpgradeLevel,
+    NotEnoughCurrency,
+    NeedTierUpgrade
 }
