@@ -15,6 +15,7 @@ public class BuildingUpgradeIndicator : MonoBehaviour
     {
         EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
         EventManager.Instance.AddListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        
     }
 
     private void OnDisable()
@@ -24,6 +25,7 @@ public class BuildingUpgradeIndicator : MonoBehaviour
 
         EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
         EventManager.Instance.RemoveListener<WorkerAssignedToBuildingEvent>(OnWorkerAssigned);
+        
     }
 
     private void Start()

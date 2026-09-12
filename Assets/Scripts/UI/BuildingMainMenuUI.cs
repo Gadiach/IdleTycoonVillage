@@ -137,6 +137,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
         EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        buildingGetCurrencyButton.onClick.AddListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnDisable()
@@ -151,6 +152,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
         EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        buildingGetCurrencyButton.onClick.RemoveListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnCurrencyChanged(CurrencyChangedEvent evt)
@@ -160,12 +162,19 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         EvaluateBuildingUpgradeState();
 
-        //if (HasWorker())
-        //{
-        //    EvaluateWorkerUpgradeState();
-        //}
+        if (HasWorker())
+        {
+            EvaluateWorkerUpgradeState();
+        }
 
         UpdateUpgradeIndicators();
+    }
+
+    private void OnBuildingGetCurrencyClicked()
+    {
+        CloseBuildingPanel();
+
+        CurrencyShopUI.Instance.Open();
     }
 
     private void UpdateUpgradeIndicators()
@@ -242,7 +251,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         if (currentWorker != evt.Worker)
             return;
 
-        //EvaluateWorkerUpgradeState();
+        EvaluateWorkerUpgradeState();
         UpdateWorkerStarUI(currentWorker);
         UpdateUpgradeIndicators();
     }
@@ -318,9 +327,9 @@ public class BuildingMainMenuUI : MonoBehaviour
             workerPanel.SetActive(true);
             noWorkerPanel.SetActive(false);
 
-            //UpdateWorkerUpgradePriceText();
-            //UpdateWorkerImage();
-            //EvaluateWorkerUpgradeState();
+            UpdateWorkerUpgradePriceText();
+            UpdateWorkerImage();
+            EvaluateWorkerUpgradeState();
 
             UpdateWorkerStarUI(currentWorker);
         }
@@ -599,14 +608,27 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     private void ApplyNotEnoughBuildingCurrencyUI()
     {
-        SetBuildingLevelTextWithRedMaxLevel();
+        if (currentBuilding.IsMaxLevel)
+        {
+            SetBuildingLevelTextMaxed();
+        }
+        else
+        {
+            SetBuildingLevelTextWithRedMaxLevel();
+        }
 
-        SetUpgradeButtonState(buildingLevelUpgradeButton,false);
+        SetUpgradeButtonState(
+            buildingLevelUpgradeButton,
+            false
+        );
 
         buildingCanUpgradeVisuals.SetActive(false);
         buildingNotEnoughCurrencyVisuals.SetActive(true);
 
-        UpdateUpgradeArrowSprite(buildingUpgradeArrowImage,false);
+        UpdateUpgradeArrowSprite(
+            buildingUpgradeArrowImage,
+            false
+        );
     }
 
     private void ApplyNeedBuildingTierUpgradeUI()
