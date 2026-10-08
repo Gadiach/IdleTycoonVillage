@@ -21,6 +21,7 @@ public class PanZoom : MonoBehaviour
     private float focusYOffset = 3f;
 
     private Vector3 mouseDownPosition;
+    private Vector2 touchDownPosition;
 
     private Camera cam;
 
@@ -35,20 +36,38 @@ public class PanZoom : MonoBehaviour
 
     private void Update()
     {
+        HandleMovementInput();
+        HandleMouseZoom();
+    }
 
+    private void HandleMovementInput()
+    {
         if (Input.touchCount > 0)
         {
             HandleTouchInput();
-        }
-        else
-        {
-            HandleMouseInput();
+            return;
         }
 
+        HandleMouseInput();
+    }
+
+    private void HandleMouseZoom()
+    {
         float scroll = Input.mouseScrollDelta.y;
-        if (scroll != 0)
+
+        if (scroll == 0)
+            return;
+
+        Zoom(scroll * zoomSencitivity);
+    }
+
+    private void TryCloseOpenedShops()
+    {
+        ShopSystem.Instance.TryCloseShop();
+
+        if (CurrencyShopUI.Instance != null)
         {
-            Zoom(scroll * zoomSencitivity);
+            CurrencyShopUI.Instance.Close();
         }
     }
 
@@ -56,97 +75,157 @@ public class PanZoom : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                moveAllowed = false;
-            }
-            else
-            {
-                moveAllowed = true;
-            }
-
-            mouseDownPosition = Input.mousePosition;
-            touchPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            BeginMouseInput();
         }
-        else if (Input.GetMouseButton(0) && moveAllowed)
+        else if (Input.GetMouseButton(0))
         {
-            Vector3 direction = touchPos - cam.ScreenToWorldPoint(Input.mousePosition);
-
-            cam.transform.position += direction;
-
-            ClampCameraPosition();
+            MoveCameraWithMouse();
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if (!moveAllowed)
-                return;
-
-            float distance = Vector3.Distance(mouseDownPosition, Input.mousePosition);
-
-            if (distance < dragThreshold)
-            {
-                ShopSystem.Instance.TryCloseShop();
-            }
+            EndMouseInput();
         }
+    }
+
+    private void BeginMouseInput()
+    {
+        moveAllowed = !EventSystem.current.IsPointerOverGameObject();
+
+        mouseDownPosition = Input.mousePosition;
+        touchPos = cam.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    private void MoveCameraWithMouse()
+    {
+        if (!moveAllowed)
+            return;
+
+        Vector3 direction =
+            touchPos - cam.ScreenToWorldPoint(Input.mousePosition);
+
+        MoveCamera(direction);
+    }
+
+    private void EndMouseInput()
+    {
+        if (!moveAllowed)
+            return;
+
+        float dragDistance = Vector3.Distance(
+            mouseDownPosition,
+            Input.mousePosition
+        );
+
+        TryHandleMapTap(dragDistance);
     }
 
     private void HandleTouchInput()
     {
         if (Input.touchCount == 2)
         {
-            Touch touchZero = Input.GetTouch(0);
-            Touch touchOne = Input.GetTouch(1);
-
-            if (EventSystem.current.IsPointerOverGameObject(touchOne.fingerId)
-                || EventSystem.current.IsPointerOverGameObject(touchZero.fingerId))
-            {
-                return;
-            }
-
-            Vector2 touchZeroLastPos = touchZero.position - touchZero.deltaPosition;
-            Vector2 touchOneLastPos = touchOne.position - touchOne.deltaPosition;
-
-            float distTouch = (touchZeroLastPos - touchOneLastPos).magnitude;
-            float currentDistTouch = (touchZero.position - touchOne.position).magnitude;
-
-            float difference = currentDistTouch - distTouch;
-
-            Zoom(difference * 0.01f);
+            HandlePinchZoom();
+            return;
         }
-        else
+
+        HandleSingleTouch();
+    }
+
+    private void HandleSingleTouch()
+    {
+        Touch touch = Input.GetTouch(0);
+
+        switch (touch.phase)
         {
-            Touch touch = Input.GetTouch(0);
+            case TouchPhase.Began:
+                BeginTouch(touch);
+                break;
 
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-                    {
-                        moveAllowed = false;
-                    }
-                    else
-                    {
-                        moveAllowed = true;
-                    }
-                    touchPos = cam.ScreenToWorldPoint(touch.position);
-                    break;
+            case TouchPhase.Moved:
+                MoveCameraWithTouch(touch);
+                break;
 
-                case TouchPhase.Moved:
-                    if (moveAllowed)
-                    {
-                        Vector3 direction = touchPos - cam.ScreenToWorldPoint(touch.position);
-                        cam.transform.position += direction;
-
-                        transform.position = new Vector3
-                            (
-                            Mathf.Clamp(transform.position.x, leftLimit, rightLimit),
-                            Mathf.Clamp(transform.position.y, bottomLimit, upperLimit),
-                            transform.position.z
-                            );
-                    }
-                    break;
-            }
+            case TouchPhase.Ended:
+                EndTouch(touch);
+                break;
         }
+    }
+
+    private void BeginTouch(Touch touch)
+    {
+        moveAllowed =
+            !EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+
+        touchDownPosition = touch.position;
+        touchPos = cam.ScreenToWorldPoint(touch.position);
+    }
+
+    private void MoveCameraWithTouch(Touch touch)
+    {
+        if (!moveAllowed)
+            return;
+
+        Vector3 direction =
+            touchPos - cam.ScreenToWorldPoint(touch.position);
+
+        MoveCamera(direction);
+    }
+
+    private void HandlePinchZoom()
+    {
+        Touch firstTouch = Input.GetTouch(0);
+        Touch secondTouch = Input.GetTouch(1);
+
+        if (IsTouchOverUI(firstTouch) || IsTouchOverUI(secondTouch))
+            return;
+
+        Vector2 firstPreviousPosition =
+            firstTouch.position - firstTouch.deltaPosition;
+
+        Vector2 secondPreviousPosition =
+            secondTouch.position - secondTouch.deltaPosition;
+
+        float previousDistance =
+            Vector2.Distance(firstPreviousPosition, secondPreviousPosition);
+
+        float currentDistance =
+            Vector2.Distance(firstTouch.position, secondTouch.position);
+
+        float difference = currentDistance - previousDistance;
+
+        Zoom(difference * 0.01f);
+    }
+
+    private void MoveCamera(Vector3 direction)
+    {
+        cam.transform.position += direction;
+
+        ClampCameraPosition();
+    }
+
+    private void TryHandleMapTap(float dragDistance)
+    {
+        if (dragDistance >= dragThreshold)
+            return;
+
+        TryCloseOpenedShops();
+    }
+
+    private bool IsTouchOverUI(Touch touch)
+    {
+        return EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+    }
+
+    private void EndTouch(Touch touch)
+    {
+        if (!moveAllowed)
+            return;
+
+        float dragDistance = Vector2.Distance(
+            touchDownPosition,
+            touch.position
+        );
+
+        TryHandleMapTap(dragDistance);
     }
 
     private void Zoom(float increment)
