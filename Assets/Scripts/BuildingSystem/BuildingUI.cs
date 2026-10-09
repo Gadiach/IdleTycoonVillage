@@ -6,12 +6,19 @@ public class BuildingUI : MonoBehaviour
 {
     public static BuildingUI Instance;
 
+    [Header("Upgrade Visual States")]
+    [SerializeField] private GameObject buildingCanUpgradeVisuals;
+    [SerializeField] private GameObject buildingNotEnoughCurrencyVisuals;
+
+    [SerializeField] private GameObject[] nextTierUpgradeStars;
+    [SerializeField] private GameObject[] nextTierUpgradeStarsInactive;
+
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI currentRarityText;
 
     [SerializeField] private Image[] currentTierRarityStarsColor;
     [SerializeField] private Image[] nextTierRarityStarsColor;
-    [SerializeField] private GameObject[] nextTierUpgradeStars;
+
     [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
     [SerializeField] private Image buildingIcon;
@@ -58,25 +65,35 @@ public class BuildingUI : MonoBehaviour
         blackBackground.SetActive(true);
     }
 
+
+
     private void UpdateBuildingPanelUI()
     {
         UpdateCurrentRarityText();
+
+        UpdateUpgradeVisualState();
 
         UpdateStarUI(currentBuilding);
 
         UpdateNextTierUpgradeStar();
 
         UpdatecurrentMaxLvlTxt();
-
         UpdateNextMaxLvlTxt();
 
         UpdateCurrentMaxIncomeText();
-
         UpdateNextMaxIncomeText();
 
         UpdateStarUpgradeButton();
 
         UpdateBlueprintPriceUI();
+    }
+
+    private void UpdateUpgradeVisualState()
+    {
+        bool canAfford = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade;
+
+        buildingCanUpgradeVisuals.SetActive(canAfford);
+        buildingNotEnoughCurrencyVisuals.SetActive(!canAfford);
     }
 
     private Color GetColorByRarity(Rarities rarity)
@@ -237,6 +254,11 @@ public class BuildingUI : MonoBehaviour
         {
             star.SetActive(false);
         }
+
+        foreach (GameObject star in nextTierUpgradeStarsInactive)
+        {
+            star.SetActive(false);
+        }
     }
 
     private void UpdateNextTierUpgradeStar()
@@ -257,7 +279,14 @@ public class BuildingUI : MonoBehaviour
             upgradeStarIndex = (int)currentBuilding.NextTier - 1;
         }
 
-        nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
+        if (currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade)
+        {
+            nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
+        }
+        else
+        {
+            nextTierUpgradeStarsInactive[upgradeStarIndex].SetActive(true);
+        }
     }
 
     private void SetAddStarButtonState(bool interactable)
