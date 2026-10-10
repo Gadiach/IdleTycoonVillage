@@ -1413,7 +1413,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4feead7acdc23754f93204e01c5ee2cc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85376b5de77dc9e4f8e0a3d1919d6bbe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2723,7 +2723,7 @@ GameObject:
   - component: {fileID: 285324416}
   - component: {fileID: 285324415}
   m_Layer: 5
-  m_Name: BlueprintImg
+  m_Name: ActiveBlueprintImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2768,7 +2768,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4feead7acdc23754f93204e01c5ee2cc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85376b5de77dc9e4f8e0a3d1919d6bbe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -48409,7 +48409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00000017881393, y: 0.71}
+  m_AnchoredPosition: {x: -0.6, y: 1.2}
   m_SizeDelta: {x: 12, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &645807685
@@ -49460,7 +49460,8 @@ MonoBehaviour:
   addStarButtonInactiveSprite: {fileID: 21300000, guid: 9b9a57381fdfe8146a1f957332595848, type: 3}
   addStarButton: {fileID: 588468790}
   workerPanel: {fileID: 957401946}
-  blueprintImage: {fileID: 1531447103}
+  activeBlueprintImage: {fileID: 1531447103}
+  inactiveBlueprintImage: {fileID: 1080300876}
   activeUpgradePriceText: {fileID: 996023447}
   inactiveUpgradePriceText: {fileID: 474416089}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
@@ -52665,8 +52666,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2119178685}
-        m_TargetAssemblyTypeName: BuildingUI, Assembly-CSharp
+      - m_Target: {fileID: 807662331}
+        m_TargetAssemblyTypeName: WorkerUI, Assembly-CSharp
         m_MethodName: OnAddBPBtnClicked
         m_Mode: 1
         m_Arguments:
@@ -52697,7 +52698,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d625607cfac014e4bb363baa843d22f9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 908c05f026a1b264caf7ab3960faa229, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -53962,7 +53963,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00000017881393, y: 0.71}
+  m_AnchoredPosition: {x: -0.2, y: 1.5}
   m_SizeDelta: {x: 12, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1182449512
@@ -55654,7 +55655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1348187091
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58501,7 +58502,7 @@ GameObject:
   - component: {fileID: 1531447102}
   - component: {fileID: 1531447103}
   m_Layer: 5
-  m_Name: BlueprintImg
+  m_Name: ActiveBlueprintImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58554,7 +58555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d625607cfac014e4bb363baa843d22f9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 908c05f026a1b264caf7ab3960faa229, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -60507,7 +60508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1698421129
 RectTransform:
   m_ObjectHideFlags: 0
@@ -71380,7 +71381,8 @@ MonoBehaviour:
   addStarButtonInactiveSprite: {fileID: 21300000, guid: 9b9a57381fdfe8146a1f957332595848, type: 3}
   addStarButton: {fileID: 1487377942}
   buildingPanel: {fileID: 1980132718}
-  blueprintImage: {fileID: 285324415}
+  activeBlueprintImage: {fileID: 285324415}
+  inactiveBlueprintImage: {fileID: 142872878}
   activeUpgradePriceText: {fileID: 622323315}
   inactiveUpgradePriceText: {fileID: 2100067585}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}

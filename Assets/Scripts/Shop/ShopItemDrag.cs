@@ -55,8 +55,7 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        cg.blocksRaycasts = true;
-        rt.anchoredPosition = originPos;
+        ResetDragVisual();
     }
 
     private void SpawnPreview(Vector2 screenPosition)
@@ -73,7 +72,7 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         GridPlacementSystem.current.InitializeWithObject(shopItem.Prefab,worldPosition,shopItem);
     }
 
-    private void OnEnable()
+    private void ResetDragVisual()
     {
         cg.blocksRaycasts = true;
         rt.anchoredPosition = originPos;
@@ -81,6 +80,16 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         Color c = img.color;
         c.a = 1f;
         img.color = c;
+    }
+
+    private void OnEnable()
+    {
+        ResetDragVisual();
+    }
+
+    private void OnDisable()
+    {
+        ResetDragVisual();
     }
 
 }

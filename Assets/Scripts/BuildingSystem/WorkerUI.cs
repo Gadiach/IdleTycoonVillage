@@ -36,7 +36,8 @@ public class WorkerUI : MonoBehaviour
 
     [SerializeField] private GameObject workerPanel;
 
-    [SerializeField] private Image blueprintImage;
+    [SerializeField] private Image activeBlueprintImage;
+    [SerializeField] private Image inactiveBlueprintImage;
 
     [SerializeField] private TextMeshProUGUI activeUpgradePriceText;
     [SerializeField] private TextMeshProUGUI inactiveUpgradePriceText;
@@ -166,13 +167,19 @@ public class WorkerUI : MonoBehaviour
 
     private void SetBlueprintRequirementVisible(bool visible)
     {
-        blueprintImage.gameObject.SetActive(visible);
+        activeBlueprintImage.gameObject.SetActive(visible);
+        inactiveBlueprintImage.gameObject.SetActive(visible);
+
         activeUpgradePriceText.gameObject.SetActive(visible);
+        inactiveUpgradePriceText.gameObject.SetActive(visible);
     }
 
     private void UpdateBlueprintIcon(CurrencyType currencyType)
     {
-        blueprintImage.sprite = currencyIconDatabase.GetIcon(currencyType);
+        Sprite icon = currencyIconDatabase.GetIcon(currencyType);
+
+        activeBlueprintImage.sprite = icon;
+        inactiveBlueprintImage.sprite = icon;
     }
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
@@ -209,6 +216,31 @@ public class WorkerUI : MonoBehaviour
         targetStar.color = previousStarColor;
 
         PlayStarUpgradeVFX(sourcePosition,sourceSprite,targetStar,upgradedStarColor);
+    }
+
+    public void OnAddBPBtnClicked()
+    {
+        BuildingData university = EntityRegistry.Instance.GetBuilding(BusinessType.Science);
+
+        BuildingMainMenuUI.Instance.CloseBuildingPanel();
+        ClosePanel();
+
+        if (university != null)
+        {
+            UniversityUI.Instance.OpenUniversityPanel();
+            return;
+        }
+
+        ShopSystem.Instance.OpenShop(ShopCategory.Buildings);
+
+        ShopItemUI targetItem = ShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+
+        if (targetItem != null)
+        {
+            TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
+
+            ShopSystem.Instance.ScrollUp(1f);
+        }
     }
 
     private Image GetUpgradeTargetStar()

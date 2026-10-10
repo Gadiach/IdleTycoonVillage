@@ -36,7 +36,9 @@ public class BuildingUI : MonoBehaviour
 
     [SerializeField] private GameObject buildingPanel;
 
-    [SerializeField] private Image blueprintImage;
+    [SerializeField] private Image activeBlueprintImage;
+    [SerializeField] private Image inactiveBlueprintImage;
+
     [SerializeField] private TextMeshProUGUI activeUpgradePriceText;
     [SerializeField] private TextMeshProUGUI inactiveUpgradePriceText;
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
@@ -161,13 +163,19 @@ public class BuildingUI : MonoBehaviour
 
     private void SetBlueprintRequirementVisible(bool visible)
     {
-        blueprintImage.gameObject.SetActive(visible);
+        activeBlueprintImage.gameObject.SetActive(visible);
+        inactiveBlueprintImage.gameObject.SetActive(visible);
+
         activeUpgradePriceText.gameObject.SetActive(visible);
+        inactiveUpgradePriceText.gameObject.SetActive(visible);
     }
 
     private void UpdateBlueprintIcon(CurrencyType currencyType)
     {
-        blueprintImage.sprite = currencyIconDatabase.GetIcon(currencyType);
+        Sprite icon = currencyIconDatabase.GetIcon(currencyType);
+
+        activeBlueprintImage.sprite = icon;
+        inactiveBlueprintImage.sprite = icon;
     }
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
@@ -241,9 +249,7 @@ public class BuildingUI : MonoBehaviour
 
     private Image GetUpgradeTargetStar()
     {
-        int targetIndex = currentBuilding.CurrentTier == Tiers.Tier5
-            ? 0
-            : (int)currentBuilding.CurrentTier;
+        int targetIndex = currentBuilding.CurrentTier == Tiers.Tier5 ? 0 : (int)currentBuilding.CurrentTier;
 
         return currentTierRarityStarsColor[targetIndex];
     }
