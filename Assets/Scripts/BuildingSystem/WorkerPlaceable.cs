@@ -57,7 +57,7 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
         else
         {
             Destroy(gameObject);
-            ShopSystem.Instance.OpenShop(ShopCategory.Workers);
+            BuildShopSystem.Instance.OpenShop(ShopCategory.Workers);
         }
     }
 

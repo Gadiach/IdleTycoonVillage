@@ -63,7 +63,7 @@ public class PanZoom : MonoBehaviour
 
     private void TryCloseOpenedShops()
     {
-        ShopSystem.Instance.TryCloseShop();
+        BuildShopSystem.Instance.TryCloseShop();
 
         if (CurrencyShopUI.Instance != null)
         {

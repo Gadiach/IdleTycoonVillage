@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class ShopSystem : MonoBehaviour 
+public class BuildShopSystem : MonoBehaviour 
 {
-    public static ShopSystem Instance;
+    public static BuildShopSystem Instance;
 
     [SerializeField] private ShopUI shopUI;
 

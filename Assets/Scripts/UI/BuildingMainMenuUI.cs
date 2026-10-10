@@ -62,6 +62,7 @@ public class BuildingMainMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buildingLevelText;
 
     [SerializeField] private Button buildingGetCurrencyButton;
+    [SerializeField] private Button workerGetCurrencyButton;
 
     [Header("Worker Level Upgrade Button UI")]
 
@@ -138,6 +139,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
         EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
         buildingGetCurrencyButton.onClick.AddListener(OnBuildingGetCurrencyClicked);
+        workerGetCurrencyButton.onClick.AddListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnDisable()
@@ -153,6 +155,7 @@ public class BuildingMainMenuUI : MonoBehaviour
         automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
         EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
         buildingGetCurrencyButton.onClick.RemoveListener(OnBuildingGetCurrencyClicked);
+        workerGetCurrencyButton.onClick.RemoveListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnCurrencyChanged(CurrencyChangedEvent evt)
@@ -279,9 +282,9 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         CloseBuildingPanel();
 
-        ShopSystem.Instance.OpenShop(ShopCategory.Workers);
+        BuildShopSystem.Instance.OpenShop(ShopCategory.Workers);
 
-        ShopItemUI targetItem = ShopSystem.Instance.GetWorkerItem(workerType);
+        ShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(workerType);
 
         if (targetItem != null)
         {

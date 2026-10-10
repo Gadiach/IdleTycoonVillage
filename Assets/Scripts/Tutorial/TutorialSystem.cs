@@ -110,9 +110,9 @@ public class TutorialSystem : MonoBehaviour
 
     private void OpenBuildingShop()
     {
-        ShopSystem.Instance.SetPlayerCloseEnabled(false);
+        BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        ShopSystem.Instance.OpenShop(
+        BuildShopSystem.Instance.OpenShop(
             ShopCategory.Buildings,
             StartFarmDragHint
         );
@@ -120,7 +120,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void StartFarmDragHint()
     {
-        ShopItemUI farmItem = ShopSystem.Instance.GetBuildingItem(BusinessType.Farming);
+        ShopItemUI farmItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Farming);
 
         if (farmItem == null)
             return;
@@ -149,7 +149,7 @@ public class TutorialSystem : MonoBehaviour
     {
         dragHint.Stop();
 
-        ShopSystem.Instance.SetPlayerCloseEnabled(true);
+        BuildShopSystem.Instance.SetPlayerCloseEnabled(true);
 
         currentStep = TutorialStep.ClaimMissionReward;
 
@@ -202,7 +202,7 @@ public class TutorialSystem : MonoBehaviour
     {
         currentStep = TutorialStep.HireWorker;
 
-        ShopSystem.Instance.CloseShop();
+        BuildShopSystem.Instance.CloseShop();
 
         if (tutorialFarm != null)
         {
@@ -222,14 +222,14 @@ public class TutorialSystem : MonoBehaviour
 
     private void OpenWorkerShop()
     {
-        ShopSystem.Instance.SetPlayerCloseEnabled(false);
+        BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        ShopSystem.Instance.OpenShop(ShopCategory.Workers,StartWorkerDragHint);
+        BuildShopSystem.Instance.OpenShop(ShopCategory.Workers,StartWorkerDragHint);
     }
 
     private void StartWorkerDragHint()
     {
-        ShopItemUI workerItem = ShopSystem.Instance.GetWorkerItem(BusinessType.Farming);
+        ShopItemUI workerItem = BuildShopSystem.Instance.GetWorkerItem(BusinessType.Farming);
 
         if (workerItem == null || tutorialFarm == null)
             return;
@@ -258,11 +258,11 @@ public class TutorialSystem : MonoBehaviour
     {
         dragHint.Stop();
 
-        ShopSystem.Instance.SetPlayerCloseEnabled(true);
+        BuildShopSystem.Instance.SetPlayerCloseEnabled(true);
 
         currentStep = TutorialStep.CollectIncome;
 
-        ShopSystem.Instance.CloseShop();
+        BuildShopSystem.Instance.CloseShop();
 
         dialogueUI.Show(
             "Great! Your farm is running! Now wait for your first income and collect it.",
@@ -353,7 +353,7 @@ public class TutorialSystem : MonoBehaviour
 
         dialogueUI.Hide();
 
-        ShopSystem.Instance.SetPlayerCloseEnabled(true);
+        BuildShopSystem.Instance.SetPlayerCloseEnabled(true);
 
         Debug.Log("Tutorial completed");
     }

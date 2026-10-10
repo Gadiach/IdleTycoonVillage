@@ -24,7 +24,7 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
-        ShopSystem.Instance.TryCloseShop();
+        BuildShopSystem.Instance.TryCloseShop();
 
         if (PanZoom.current != null)
         {

@@ -200,13 +200,13 @@ public class BuildingUI : MonoBehaviour
             return;
         }
 
-        ShopSystem.Instance.OpenShop(ShopCategory.Buildings);
+        BuildShopSystem.Instance.OpenShop(ShopCategory.Buildings);
 
-        ShopItemUI targetItem = ShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+        ShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
 
         TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
 
-        ShopSystem.Instance.ScrollUp(1f);
+        BuildShopSystem.Instance.ScrollUp(1f);
     }
 
     private void UpdateUpgradePriceTextColor()

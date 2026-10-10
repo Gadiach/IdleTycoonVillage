@@ -60,7 +60,7 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
 
     private void SpawnPreview(Vector2 screenPosition)
     {
-        ShopSystem.Instance.CloseShop();
+        BuildShopSystem.Instance.CloseShop();
 
         Color c = img.color;
         c.a = 0f;
