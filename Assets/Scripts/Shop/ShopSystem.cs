@@ -88,6 +88,11 @@ public class ShopSystem : MonoBehaviour
         return shopUI.GetBuildingItem(businessType);
     }
 
+    public void ScrollUp(float amount)
+    {
+        shopUI.ScrollUp(amount);
+    }
+
     public void ShopButton_Click()
     {
         if (shopUI.IsOpened)

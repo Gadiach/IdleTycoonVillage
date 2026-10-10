@@ -34,7 +34,6 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     {
         hasSpawnedPreview = false;
         cg.blocksRaycasts = false;
-        img.maskable = false;
 
         EventManager.Instance.QueueEvent(new ShopItemDragStartedEvent(shopItem));
     }
@@ -57,7 +56,6 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         cg.blocksRaycasts = true;
-        img.maskable = true; 
         rt.anchoredPosition = originPos;
     }
 
@@ -78,7 +76,6 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     private void OnEnable()
     {
         cg.blocksRaycasts = true;
-        img.maskable = true;
         rt.anchoredPosition = originPos;
 
         Color c = img.color;

@@ -961,8 +961,10 @@ MonoBehaviour:
   timer: {fileID: 5269680982033990650}
   timerUI: {fileID: 0}
   productionController: {fileID: 3543448518283104345}
-  buildingType: 0
-  acceptedBusinessType: 0
+  buildingType: 2
+  acceptedBusinessType: 2
+  addWorkerObject: {fileID: 0}
+  assignedWorkerObject: {fileID: 0}
   buildingRoundIconImage: {fileID: 0}
   autoWorkDurationHours: 8
 --- !u!60 &6783849216738458132
@@ -1174,7 +1176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  Currency: 0
+  LevelUpgradeCurrency: 0
   Type: 0
   BusinessType: 2
   Icon: {fileID: 0}
@@ -1183,8 +1185,8 @@ MonoBehaviour:
   baseIncomePerCycle: 5
   workerLevelNeededForAutomation: 5
   progressionConfig: {fileID: 11400000, guid: 38cea1adbe6d95e4b982cab831d86d0b, type: 2}
-  economyConfig: {fileID: 0}
-  upgradeCostConfig: {fileID: 0}
+  economyConfig: {fileID: 11400000, guid: 27f9214265c312c409365978b9d66f34, type: 2}
+  upgradeCostConfig: {fileID: 11400000, guid: 5b077f49c33707e409e65c02197aa4d9, type: 2}
   startProductionOnPlace: 0
 --- !u!1 &8215024100667684284
 GameObject:

@@ -2,17 +2,20 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
 {
     [SerializeField] private RectTransform shopPanel;
     [SerializeField] private RectTransform itemView;
     [SerializeField] private RectTransform shopRoot;
+    [SerializeField] private ScrollRect scrollRect;
 
     [SerializeField] private TabButton workerTab;
 
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
     [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private GameObject bottomSpacerPrefab;
 
     private readonly List<ShopItemUI> shopItemUIs = new();
 
@@ -60,7 +63,13 @@ public class ShopUI : MonoBehaviour
 
                 itemUI.Initialize(item, currencyIcon, itemView);
             }
+            Instantiate(bottomSpacerPrefab, parent);
         }
+    }
+
+    public void ScrollUp(float amount)
+    {
+        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition - amount);
     }
 
     public ShopItemUI GetWorkerItem(BusinessType businessType)
@@ -89,15 +98,18 @@ public class ShopUI : MonoBehaviour
             ShopItem item = itemUI.ShopItem;
 
             if (item.Type != ShopCategory.Buildings)
+            {
                 continue;
+            }
 
             if (item.BusinessType != businessType)
+            {
                 continue;
+            }
 
             return itemUI;
         }
 
-        Debug.LogWarning($"Building shop item not found: {businessType}");
         return null;
     }
 
@@ -135,6 +147,8 @@ public class ShopUI : MonoBehaviour
             {
                 isAnimating = false;
                 opened = true;
+
+                Canvas.ForceUpdateCanvases();
 
                 onComplete?.Invoke();
             });

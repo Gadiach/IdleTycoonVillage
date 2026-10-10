@@ -275,21 +275,17 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     public void OpenWorkerShop()
     {
-        BusinessType workerType =
-            currentBuilding.Placeable.AcceptedBusinessType;
+        BusinessType workerType = currentBuilding.Placeable.AcceptedBusinessType;
 
         CloseBuildingPanel();
 
         ShopSystem.Instance.OpenShop(ShopCategory.Workers);
 
-        ShopItemUI targetItem =
-        ShopSystem.Instance.GetWorkerItem(workerType);
+        ShopItemUI targetItem = ShopSystem.Instance.GetWorkerItem(workerType);
 
         if (targetItem != null)
         {
-            TutorialHighlightSystem.Instance.Highlight(
-                targetItem.IconAndArrow
-            );
+            TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
         }
     }
 

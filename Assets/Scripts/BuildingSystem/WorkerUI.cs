@@ -6,12 +6,19 @@ public class WorkerUI : MonoBehaviour
 {
     public static WorkerUI Instance;
 
+    [Header("Upgrade Visual States")]
+    [SerializeField] private GameObject workerCanUpgradeVisuals;
+    [SerializeField] private GameObject workerNotEnoughCurrencyVisuals;
+
+    [SerializeField] private GameObject[] nextTierUpgradeStars;
+    [SerializeField] private GameObject[] nextTierUpgradeStarsInactive;
+
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI currentRarityText;
 
     [SerializeField] private Image[] currentTierRarityStarsColor;
     [SerializeField] private Image[] nextTierRarityStarsColor;
-    [SerializeField] private GameObject[] nextTierUpgradeStars;
+    
     [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
     [SerializeField] private Image workerIcon;
@@ -30,7 +37,10 @@ public class WorkerUI : MonoBehaviour
     [SerializeField] private GameObject workerPanel;
 
     [SerializeField] private Image blueprintImage;
-    [SerializeField] private TextMeshProUGUI upgradePriceText;
+
+    [SerializeField] private TextMeshProUGUI activeUpgradePriceText;
+    [SerializeField] private TextMeshProUGUI inactiveUpgradePriceText;
+
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
 
     [SerializeField] private GameObject blackBackground;
@@ -63,6 +73,8 @@ public class WorkerUI : MonoBehaviour
     {
         UpdateCurrentRarityText();
 
+        UpdateUpgradeVisualState();
+
         UpdateStarUI(currentWorker);
 
         UpdateNextTierUpgradeStar();
@@ -78,6 +90,14 @@ public class WorkerUI : MonoBehaviour
         UpdateStarUpgradeButton();
 
         UpdateBlueprintPriceUI();
+    }
+
+    private void UpdateUpgradeVisualState()
+    {
+        bool canAfford = currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade;
+
+        workerCanUpgradeVisuals.SetActive(canAfford);
+        workerNotEnoughCurrencyVisuals.SetActive(!canAfford);
     }
 
     private void UpdateCurrentRarityText()
@@ -147,7 +167,7 @@ public class WorkerUI : MonoBehaviour
     private void SetBlueprintRequirementVisible(bool visible)
     {
         blueprintImage.gameObject.SetActive(visible);
-        upgradePriceText.gameObject.SetActive(visible);
+        activeUpgradePriceText.gameObject.SetActive(visible);
     }
 
     private void UpdateBlueprintIcon(CurrencyType currencyType)
@@ -157,12 +177,15 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
     {
-        upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
+        string priceText = $"{ownedAmount}/{requiredAmount}";
+
+        activeUpgradePriceText.text = priceText;
+        inactiveUpgradePriceText.text = priceText;
     }
 
     private void UpdateUpgradePriceTextColor()
     {
-        upgradePriceText.color = currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
+        activeUpgradePriceText.color = currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
     }
 
     public void OnAddStarButtonClicked()
@@ -217,6 +240,11 @@ public class WorkerUI : MonoBehaviour
         {
             star.SetActive(false);
         }
+
+        foreach (GameObject star in nextTierUpgradeStarsInactive)
+        {
+            star.SetActive(false);
+        }
     }
 
     private void UpdateNextTierUpgradeStar()
@@ -237,7 +265,14 @@ public class WorkerUI : MonoBehaviour
             upgradeStarIndex = (int)currentWorker.NextTier - 1;
         }
 
-        nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
+        if (currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade)
+        {
+            nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
+        }
+        else
+        {
+            nextTierUpgradeStarsInactive[upgradeStarIndex].SetActive(true);
+        }
     }
 
     public void ClosePanel()

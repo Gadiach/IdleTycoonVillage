@@ -68,14 +68,11 @@ public class StarUpgradeVFX : MonoBehaviour
         Sprite flyingStarSprite,
         Color targetColor)
     {
-        GameObject starObject =
-            Instantiate(flyingStarPrefab, flyingStarsContainer);
+        GameObject starObject = Instantiate(flyingStarPrefab, flyingStarsContainer);
 
-        RectTransform starRect =
-            starObject.GetComponent<RectTransform>();
+        RectTransform starRect = starObject.GetComponent<RectTransform>();
 
-        Image starImage =
-            starObject.GetComponent<Image>();
+        Image starImage = starObject.GetComponent<Image>();
 
         starImage.sprite = flyingStarSprite;
 

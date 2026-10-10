@@ -37,7 +37,8 @@ public class BuildingUI : MonoBehaviour
     [SerializeField] private GameObject buildingPanel;
 
     [SerializeField] private Image blueprintImage;
-    [SerializeField] private TextMeshProUGUI upgradePriceText;
+    [SerializeField] private TextMeshProUGUI activeUpgradePriceText;
+    [SerializeField] private TextMeshProUGUI inactiveUpgradePriceText;
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
 
     [SerializeField] private GameObject blackBackground;
@@ -147,9 +148,7 @@ public class BuildingUI : MonoBehaviour
         UpdateBlueprintRequirement(currentBuilding.TierOrRarityUpgradeCurrency,currentBuilding.PriceToUpgradeTierOrRarity);
     }
 
-    private void UpdateBlueprintRequirement(
-    CurrencyType currencyType,
-    int requiredAmount)
+    private void UpdateBlueprintRequirement(CurrencyType currencyType,int requiredAmount)
     {
         int ownedAmount = CurrencySystem.GetCurrencyAmount(currencyType);
 
@@ -163,7 +162,7 @@ public class BuildingUI : MonoBehaviour
     private void SetBlueprintRequirementVisible(bool visible)
     {
         blueprintImage.gameObject.SetActive(visible);
-        upgradePriceText.gameObject.SetActive(visible);
+        activeUpgradePriceText.gameObject.SetActive(visible);
     }
 
     private void UpdateBlueprintIcon(CurrencyType currencyType)
@@ -173,12 +172,38 @@ public class BuildingUI : MonoBehaviour
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
     {
-        upgradePriceText.text = $"{ownedAmount}/{requiredAmount}";
+        string priceText = $"{ownedAmount}/{requiredAmount}";
+
+        activeUpgradePriceText.text = priceText;
+        inactiveUpgradePriceText.text = priceText;
+    }
+
+    public void OnAddBPBtnClicked()
+    {
+        BuildingData university = EntityRegistry.Instance.GetBuilding(BusinessType.Science);
+
+        BuildingMainMenuUI.Instance.CloseBuildingPanel();
+        ClosePanel();
+
+        if (university != null)
+        {
+            UniversityUI.Instance.OpenUniversityPanel();
+
+            return;
+        }
+
+        ShopSystem.Instance.OpenShop(ShopCategory.Buildings);
+
+        ShopItemUI targetItem = ShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+
+        TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
+
+        ShopSystem.Instance.ScrollUp(1f);
     }
 
     private void UpdateUpgradePriceTextColor()
     {
-        upgradePriceText.color = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
+        activeUpgradePriceText.color = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade ? Color.white : Color.red;
     }
 
     private void UpdateStarUpgradeButton()
