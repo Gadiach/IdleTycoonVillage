@@ -66,7 +66,7 @@ public class GridPlacementSystem : MonoBehaviour
     #region Building Placement
 
 
-    public void InitializeWithObject(GameObject prefab, Vector3 pos, ShopItem item)
+    public void InitializeWithObject(GameObject prefab, Vector3 pos, BuildShopItem item)
     {
         pos.z = 0;
 

@@ -67,7 +67,7 @@ public class PanZoom : MonoBehaviour
 
         if (CurrencyShopUI.Instance != null)
         {
-            CurrencyShopUI.Instance.Close();
+            CurrencyShopUI.Instance.CloseCurrencyShop();
         }
     }
 

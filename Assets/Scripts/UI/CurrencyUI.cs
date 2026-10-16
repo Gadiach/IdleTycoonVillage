@@ -74,11 +74,11 @@ public class CurrencyUI : MonoBehaviour
 
         if (CurrencyShopUI.Instance.IsOpened)
         {
-            CurrencyShopUI.Instance.Close();
+            CurrencyShopUI.Instance.CloseCurrencyShop();
         }
         else
         {
-            CurrencyShopUI.Instance.Open();
+            CurrencyShopUI.Instance.OpenCurrencyShop();
         }
     }
 

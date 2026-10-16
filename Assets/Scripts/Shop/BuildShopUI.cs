@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopUI : MonoBehaviour
+public class BuildShopUI : MonoBehaviour
 {
-    [SerializeField] private RectTransform shopPanel;
+    public static BuildShopUI Instance;
+
+    [SerializeField] private RectTransform buildShopPanel;
     [SerializeField] private RectTransform itemView;
     [SerializeField] private RectTransform shopRoot;
     [SerializeField] private ScrollRect scrollRect;
@@ -14,10 +16,10 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private TabButton workerTab;
 
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private GameObject buildShopItemPrefab;
     [SerializeField] private GameObject bottomSpacerPrefab;
 
-    private readonly List<ShopItemUI> shopItemUIs = new();
+    private readonly List<BuildShopItemUI> shopItemUIs = new();
 
     private Vector2 closedPosition;
     private Vector2 openedPosition;
@@ -36,26 +38,26 @@ public class ShopUI : MonoBehaviour
     {
         InitializeShopPanelPositions();
 
-        shopPanel.gameObject.SetActive(false);
+        buildShopPanel.gameObject.SetActive(false);
     }
 
     private void InitializeShopPanelPositions()
     {
         closedPosition = shopRoot.anchoredPosition;
-        openedPosition = closedPosition + new Vector2(shopPanel.rect.width, 0);
+        openedPosition = closedPosition + new Vector2(buildShopPanel.rect.width, 0);
     }
 
     #endregion
 
-    public void CreateAndInitializeShopItems(Dictionary<ShopCategory, List<ShopItem>> shopItems)
+    public void CreateAndInitializeShopItems(Dictionary<BuildShopCategory, List<BuildShopItem>> shopItems)
     {
         for (int i = 0; i < shopItems.Keys.Count; i++)
         {
             Transform parent = tabGroup.objectsToSwap[i].transform;
 
-            foreach (var item in shopItems[(ShopCategory)i])
+            foreach (var item in shopItems[(BuildShopCategory)i])
             {
-                ShopItemUI itemUI = Instantiate(itemPrefab, parent).GetComponent<ShopItemUI>();
+                BuildShopItemUI itemUI = Instantiate(buildShopItemPrefab, parent).GetComponent<BuildShopItemUI>();
 
                 shopItemUIs.Add(itemUI);
 
@@ -72,13 +74,13 @@ public class ShopUI : MonoBehaviour
         scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition - amount);
     }
 
-    public ShopItemUI GetWorkerItem(BusinessType businessType)
+    public BuildShopItemUI GetWorkerItem(BusinessType businessType)
     {
-        foreach (ShopItemUI itemUI in shopItemUIs)
+        foreach (BuildShopItemUI itemUI in shopItemUIs)
         {
-            ShopItem item = itemUI.ShopItem;
+            BuildShopItem item = itemUI.ShopItem;
 
-            if (item.Type != ShopCategory.Workers)
+            if (item.Type != BuildShopCategory.Workers)
                 continue;
 
             if (item.BusinessType != businessType)
@@ -91,13 +93,13 @@ public class ShopUI : MonoBehaviour
         return null;
     }
 
-    public ShopItemUI GetBuildingItem(BusinessType businessType)
+    public BuildShopItemUI GetBuildingItem(BusinessType businessType)
     {
-        foreach (ShopItemUI itemUI in shopItemUIs)
+        foreach (BuildShopItemUI itemUI in shopItemUIs)
         {
-            ShopItem item = itemUI.ShopItem;
+            BuildShopItem item = itemUI.ShopItem;
 
-            if (item.Type != ShopCategory.Buildings)
+            if (item.Type != BuildShopCategory.Buildings)
             {
                 continue;
             }
@@ -137,7 +139,7 @@ public class ShopUI : MonoBehaviour
             return;
         }
 
-        shopPanel.gameObject.SetActive(true);
+        buildShopPanel.gameObject.SetActive(true);
 
         isAnimating = true;
 
@@ -156,7 +158,7 @@ public class ShopUI : MonoBehaviour
 
     public void Close()
     {
-        if (!shopPanel.gameObject.activeSelf)
+        if (!buildShopPanel.gameObject.activeSelf)
             return;
 
         shopRoot.DOKill();
@@ -169,7 +171,7 @@ public class ShopUI : MonoBehaviour
             {
                 isAnimating = false;
                 opened = false;
-                shopPanel.gameObject.SetActive(false);
+                buildShopPanel.gameObject.SetActive(false);
             });
     }
 

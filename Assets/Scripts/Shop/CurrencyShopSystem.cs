@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CurrencyShopSystem : MonoBehaviour
 {
     public static CurrencyShopSystem Instance;
 
-    [SerializeField] private CurrencyShopUI shopUI;
+    [SerializeField] private CurrencyShopUI currencyShopUI;
 
-    private const string ShopItemsPath = "CurrencyShopItems";
+    private const string currencyShopItemsPath = "CurrencyShopItems";
+
+    private Dictionary<CurrencyShopCategory, List<CurrencyShopItem>> currencyShopItems = new();
 
     private void Awake()
     {
@@ -26,23 +29,39 @@ public class CurrencyShopSystem : MonoBehaviour
 
     private void Start()
     {
+        InitializeCategories();
+
         Load();
+
+        currencyShopUI.CreateAndInitializeShopItems(currencyShopItems);
     }
+
+    private void InitializeCategories()
+    {
+        foreach (CurrencyShopCategory category in System.Enum.GetValues(typeof(CurrencyShopCategory)))
+        {
+            currencyShopItems.Add(category,new List<CurrencyShopItem>());
+        }
+    }
+
 
     private void Load()
     {
-        CurrencyShopItem[] items = Resources.LoadAll<CurrencyShopItem>(ShopItemsPath);
+        CurrencyShopItem[] items = Resources.LoadAll<CurrencyShopItem>(currencyShopItemsPath);
 
-        shopUI.CreateAndInitializeShopItems(items);
+        foreach (CurrencyShopItem item in items)
+        {
+            currencyShopItems[item.Category].Add(item);
+        }
     }
 
     public void OpenShop()
     {
-        shopUI.Open();
+        currencyShopUI.OpenCurrencyShop();
     }
 
     public void CloseShop()
     {
-        shopUI.Close();
+        currencyShopUI.CloseCurrencyShop();
     }
 }

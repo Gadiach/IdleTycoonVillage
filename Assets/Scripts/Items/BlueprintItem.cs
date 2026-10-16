@@ -9,9 +9,9 @@ public class BlueprintItem : ScriptableObject
     private CurrencyType studyCurrency = CurrencyType.Coins;
     [SerializeField] private float studyTime;
     [SerializeField] private CurrencyType type;
-    [SerializeField] private ShopCategory category;
+    [SerializeField] private BuildShopCategory category;
 
-    public ShopCategory Category => category;
+    public BuildShopCategory Category => category;
 
     public CurrencyType Type => type;
     public int StudyCost => studyCost;

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Shop Item", menuName = "Shop/Shop Item", order = 0)]
+[CreateAssetMenu(fileName = "New Shop Item", menuName = "BuildShop/Build Shop Item", order = 0)]
 
-public class ShopItem : ScriptableObject
+public class BuildShopItem : ScriptableObject
 {
     public string Name = "Default";
     public int PurchasePrice;
     public CurrencyType Currency;
-    public ShopCategory Type;
+    public BuildShopCategory Type;
     public Sprite Icon;
     public GameObject Prefab;
     public BusinessType BusinessType;

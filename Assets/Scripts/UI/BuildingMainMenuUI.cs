@@ -177,7 +177,7 @@ public class BuildingMainMenuUI : MonoBehaviour
     {
         CloseBuildingPanel();
 
-        CurrencyShopUI.Instance.Open();
+        CurrencyShopUI.Instance.OpenCurrencyShop();
     }
 
     private void UpdateUpgradeIndicators()
@@ -282,9 +282,9 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         CloseBuildingPanel();
 
-        BuildShopSystem.Instance.OpenShop(ShopCategory.Workers);
+        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Workers);
 
-        ShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(workerType);
+        BuildShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(workerType);
 
         if (targetItem != null)
         {

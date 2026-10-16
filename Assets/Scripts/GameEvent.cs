@@ -211,9 +211,9 @@ public class BuildingClickedEvent : GameEvent
 
 public class ShopItemDragStartedEvent : GameEvent
 {
-    public ShopItem ShopItem { get; }
+    public BuildShopItem ShopItem { get; }
 
-    public ShopItemDragStartedEvent(ShopItem shopItem)
+    public ShopItemDragStartedEvent(BuildShopItem shopItem)
     {
         ShopItem = shopItem;
     }

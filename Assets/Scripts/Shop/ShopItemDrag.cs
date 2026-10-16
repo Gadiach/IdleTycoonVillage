@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    private ShopItem shopItem;
+    private BuildShopItem shopItem;
 
     private RectTransform itemView;
     private bool hasSpawnedPreview;
@@ -15,7 +15,7 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
 
     private Vector3 originPos;
 
-    public void Initialize(ShopItem item, RectTransform itemView)
+    public void Initialize(BuildShopItem item, RectTransform itemView)
     {
         shopItem = item;
         this.itemView = itemView;

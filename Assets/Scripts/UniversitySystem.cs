@@ -11,7 +11,7 @@ public class UniversitySystem : MonoBehaviour
 
     private const string BlueprintItemsPath = "BlueprintItems";
 
-    private Dictionary<ShopCategory, List<BlueprintItem>> blueprintItems = new(capacity: 2);
+    private Dictionary<BuildShopCategory, List<BlueprintItem>> blueprintItems = new(capacity: 2);
 
     public bool IsStudyInProgress => activeProduction != null && activeProduction.HasActiveStudy;
 
@@ -53,7 +53,7 @@ public class UniversitySystem : MonoBehaviour
 
     private void InitializeCategories()
     {
-        foreach (ShopCategory category in System.Enum.GetValues(typeof(ShopCategory)))
+        foreach (BuildShopCategory category in System.Enum.GetValues(typeof(BuildShopCategory)))
         {
             blueprintItems.Add(category, new List<BlueprintItem>());
         }

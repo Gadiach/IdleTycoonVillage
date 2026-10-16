@@ -1,4 +1,4 @@
-public enum ShopCategory
+public enum BuildShopCategory
 {
     Buildings,
     Workers

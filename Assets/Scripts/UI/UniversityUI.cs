@@ -24,7 +24,7 @@ public class UniversityUI : MonoBehaviour
     }
 
 
-    public void CreateAndInitializeBlueprintItems(Dictionary<ShopCategory, List<BlueprintItem>> blueprintItems)
+    public void CreateAndInitializeBlueprintItems(Dictionary<BuildShopCategory, List<BlueprintItem>> blueprintItems)
     {
         foreach (var pair in blueprintItems)
         {
@@ -32,7 +32,7 @@ public class UniversityUI : MonoBehaviour
         }
     }
 
-    private void CreateCategoryItems(List<BlueprintItem> items, ShopCategory category)
+    private void CreateCategoryItems(List<BlueprintItem> items, BuildShopCategory category)
     {
         Transform parent = tabGroup.objectsToSwap[(int)category].transform;
 

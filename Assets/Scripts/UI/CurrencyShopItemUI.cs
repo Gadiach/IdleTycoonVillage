@@ -4,20 +4,16 @@ using UnityEngine.UI;
 
 public class CurrencyShopItemUI : MonoBehaviour
 {
-    [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI amountText;
-    [SerializeField] private TextMeshProUGUI priceText;
-    [SerializeField] private Button buyButton;
-
-    private CurrencyShopItem item;
+    [SerializeField] private Image rewardIconImage;
+    [SerializeField] private TextMeshProUGUI purchasePriceText;
+    [SerializeField] private TextMeshProUGUI rewardText;
+    [SerializeField] private Button purchaseButton;
 
     public void Initialize(CurrencyShopItem item)
     {
-        this.item = item;
-
-        iconImage.sprite = item.Icon;
-        amountText.text = item.Amount.ToString();
-        priceText.text = item.PriceText;
+        rewardIconImage.sprite = item.Icon;
+        purchasePriceText.text = item.Price.ToString();
+        rewardText.text = item.Reward.ToString();
     }
 
     public void OnBuyButtonClicked()

@@ -113,14 +113,14 @@ public class TutorialSystem : MonoBehaviour
         BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
         BuildShopSystem.Instance.OpenShop(
-            ShopCategory.Buildings,
+            BuildShopCategory.Buildings,
             StartFarmDragHint
         );
     }
 
     private void StartFarmDragHint()
     {
-        ShopItemUI farmItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Farming);
+        BuildShopItemUI farmItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Farming);
 
         if (farmItem == null)
             return;
@@ -224,12 +224,12 @@ public class TutorialSystem : MonoBehaviour
     {
         BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        BuildShopSystem.Instance.OpenShop(ShopCategory.Workers,StartWorkerDragHint);
+        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Workers,StartWorkerDragHint);
     }
 
     private void StartWorkerDragHint()
     {
-        ShopItemUI workerItem = BuildShopSystem.Instance.GetWorkerItem(BusinessType.Farming);
+        BuildShopItemUI workerItem = BuildShopSystem.Instance.GetWorkerItem(BusinessType.Farming);
 
         if (workerItem == null || tutorialFarm == null)
             return;
@@ -366,7 +366,7 @@ public class TutorialSystem : MonoBehaviour
     {
         if (currentStep == TutorialStep.BuildFarm)
         {
-            if (info.ShopItem.Type != ShopCategory.Buildings)
+            if (info.ShopItem.Type != BuildShopCategory.Buildings)
                 return;
 
             if (info.ShopItem.BusinessType != BusinessType.Farming)
@@ -378,7 +378,7 @@ public class TutorialSystem : MonoBehaviour
 
         if (currentStep == TutorialStep.HireWorker)
         {
-            if (info.ShopItem.Type != ShopCategory.Workers)
+            if (info.ShopItem.Type != BuildShopCategory.Workers)
                 return;
 
             if (info.ShopItem.BusinessType != BusinessType.Farming)

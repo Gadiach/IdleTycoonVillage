@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 7030714812652784797}
   - component: {fileID: -1521569334989363551}
   m_Layer: 5
-  m_Name: ShopItemHolder
+  m_Name: BuildShopItemHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2420789640511823449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acfad0c288d8e4b4caf74281fb29b475, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e67102f7ea56b44b8b100241b5676fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 751770311003675419}

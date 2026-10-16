@@ -200,9 +200,9 @@ public class BuildingUI : MonoBehaviour
             return;
         }
 
-        BuildShopSystem.Instance.OpenShop(ShopCategory.Buildings);
+        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Buildings);
 
-        ShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+        BuildShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
 
         TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
 

@@ -5,13 +5,13 @@ public class BuildShopSystem : MonoBehaviour
 {
     public static BuildShopSystem Instance;
 
-    [SerializeField] private ShopUI shopUI;
+    [SerializeField] private BuildShopUI buildShopUI;
 
-    private const string ShopItemsPath = "ShopItems";
+    private const string buildShopItemsPath = "BuildShopItems";
 
     private bool canPlayerCloseShop = true;
 
-    private Dictionary<ShopCategory, List<ShopItem>> shopItems = new Dictionary<ShopCategory, List<ShopItem>>(capacity: 3);
+    private Dictionary<BuildShopCategory, List<BuildShopItem>> buildShopItems = new Dictionary<BuildShopCategory, List<BuildShopItem>>(capacity: 3);
 
     private void Awake()
     {
@@ -48,60 +48,60 @@ public class BuildShopSystem : MonoBehaviour
 
         Load();
 
-        shopUI.CreateAndInitializeShopItems(shopItems);
+        buildShopUI.CreateAndInitializeShopItems(buildShopItems);
     }
 
     private void InitializeCategories()
     {
-        foreach (ShopCategory category in System.Enum.GetValues(typeof(ShopCategory)))
+        foreach (BuildShopCategory category in System.Enum.GetValues(typeof(BuildShopCategory)))
         {
-            shopItems.Add(category, new List<ShopItem>());
+            buildShopItems.Add(category, new List<BuildShopItem>());
         }
     }
 
     private void Load()
     {
-        ShopItem[] items = Resources.LoadAll<ShopItem>(ShopItemsPath);
+        BuildShopItem[] items = Resources.LoadAll<BuildShopItem>(buildShopItemsPath);
 
         foreach (var item in items)
         {
-            shopItems[item.Type].Add(item);
+            buildShopItems[item.Type].Add(item);
         }
     }
 
     private void OnCurrencyChanged(CurrencyAddedEvent info) 
     {
-        shopUI.UpdateShopItems();
+        buildShopUI.UpdateShopItems();
     } 
     private void OnCurrencyChanged(CurrencySpentEvent info) 
     {
-        shopUI.UpdateShopItems();
+        buildShopUI.UpdateShopItems();
     }
 
-    public ShopItemUI GetWorkerItem(BusinessType businessType)
+    public BuildShopItemUI GetWorkerItem(BusinessType businessType)
     {
-        return shopUI.GetWorkerItem(businessType);
+        return buildShopUI.GetWorkerItem(businessType);
     }
 
-    public ShopItemUI GetBuildingItem(BusinessType businessType)
+    public BuildShopItemUI GetBuildingItem(BusinessType businessType)
     {
-        return shopUI.GetBuildingItem(businessType);
+        return buildShopUI.GetBuildingItem(businessType);
     }
 
     public void ScrollUp(float amount)
     {
-        shopUI.ScrollUp(amount);
+        buildShopUI.ScrollUp(amount);
     }
 
     public void ShopButton_Click()
     {
-        if (shopUI.IsOpened)
+        if (buildShopUI.IsOpened)
         {
             TryCloseShop();
         }
         else
         {
-            OpenShop(ShopCategory.Buildings);
+            OpenShop(BuildShopCategory.Buildings);
         }
     }
 
@@ -113,12 +113,12 @@ public class BuildShopSystem : MonoBehaviour
         CloseShop();
     }
 
-    public void OpenShop(ShopCategory category, Action onComplete = null)
+    public void OpenShop(BuildShopCategory category, Action onComplete = null)
     {
-        shopUI.UpdateAvailableTabs();
-        shopUI.UpdateShopItems();
-        shopUI.SelectTab((int)category);
-        shopUI.Open(onComplete);
+        buildShopUI.UpdateAvailableTabs();
+        buildShopUI.UpdateShopItems();
+        buildShopUI.SelectTab((int)category);
+        buildShopUI.Open(onComplete);
     }
 
     public void SetPlayerCloseEnabled(bool enabled)
@@ -128,6 +128,6 @@ public class BuildShopSystem : MonoBehaviour
 
     public void CloseShop()
     {
-        shopUI.Close();
+        buildShopUI.Close();
     }
 }

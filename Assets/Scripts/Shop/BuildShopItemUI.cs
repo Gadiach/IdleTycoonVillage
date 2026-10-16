@@ -2,10 +2,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopItemUI : MonoBehaviour
+public class BuildShopItemUI : MonoBehaviour
 {
-    private ShopItem shopItem;
-    public ShopItem ShopItem => shopItem;
+    private BuildShopItem shopItem;
+    public BuildShopItem ShopItem => shopItem;
 
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private Image iconImage;
@@ -21,7 +21,7 @@ public class ShopItemUI : MonoBehaviour
     public RectTransform IconAndArrow => iconAndArrow;
 
     #region Initialization
-    public void Initialize(ShopItem item, Sprite currencyIcon, RectTransform itemView)
+    public void Initialize(BuildShopItem item, Sprite currencyIcon, RectTransform itemView)
     {
         shopItem = item;
 

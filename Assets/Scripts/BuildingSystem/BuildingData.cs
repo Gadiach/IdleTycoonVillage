@@ -9,7 +9,7 @@ public class BuildingData : MonoBehaviour
     public string Name;
     public string Description;
     public CurrencyType LevelUpgradeCurrency;
-    public ShopCategory Type;
+    public BuildShopCategory Type;
     public BusinessType BusinessType;
     public Sprite Icon;
     public int PurchasePrice;
@@ -145,7 +145,7 @@ public class BuildingData : MonoBehaviour
         Placeable = placeable;
     }
 
-    public void Initialize(ShopItem item)
+    public void Initialize(BuildShopItem item)
     {
         Name = item.Name;
         PurchasePrice = item.PurchasePrice;
