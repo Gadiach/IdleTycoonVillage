@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e7ae4cfcf42149863866fc0aeeb56, type: 3}
   m_Name: AdItem1
   m_EditorClassIdentifier: 
-  Name: 
   Category: 1
-  CurrencyType: 0
-  Price: 0
-  Icon: {fileID: 21300000, guid: 85376b5de77dc9e4f8e0a3d1919d6bbe, type: 3}
+  RewardType: 1
+  Price: 250
+  Reward: 100
+  Icon: {fileID: 21300000, guid: dd8aff64cd43da34a919a52269e4f5f1, type: 3}

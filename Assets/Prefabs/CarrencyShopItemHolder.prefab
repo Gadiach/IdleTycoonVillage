@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.2, y: 32.5}
-  m_SizeDelta: {x: -50.2, y: -75.0968}
+  m_AnchoredPosition: {x: 2.2, y: 33.4}
+  m_SizeDelta: {x: -25.0466, y: -55.9128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5858610504325800024
 CanvasRenderer:
@@ -76,8 +76,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282212474
-  m_fontColor: {r: 0.4784314, g: 0.37647063, b: 0.2392157, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -94,15 +94,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -172,8 +172,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -35.1}
-  m_SizeDelta: {x: 86.0987, y: 24.9032}
+  m_AnchoredPosition: {x: 0, y: -26.1}
+  m_SizeDelta: {x: 73.7085, y: 21.3194}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9000509214394420103
 CanvasRenderer:
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 4862783916910503645}
   - component: {fileID: 149287318401257111}
   m_Layer: 5
-  m_Name: PurchasePrice
+  m_Name: PurchaseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $0.99
+  m_text: "\u20AC0.99"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 35e3becd7a40b5f4c99b01ea9e139614, type: 2}
   m_sharedMaterial: {fileID: 3827514691953667053, guid: 35e3becd7a40b5f4c99b01ea9e139614, type: 2}
@@ -349,8 +349,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -500,8 +500,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.3, y: -1.1}
-  m_SizeDelta: {x: 38.0189, y: 38.0189}
+  m_AnchoredPosition: {x: -1.3, y: 5.2}
+  m_SizeDelta: {x: 47.6847, y: 47.6847}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1052839148691035598
 CanvasRenderer:
@@ -531,7 +531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2faa496505512b041bfefe00aa51a9b4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8516092abf1eed549b786e01c09388d8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -579,8 +579,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -66, y: 165}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 86.3139}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6999870423094435876
 CanvasRenderer:
@@ -603,6 +603,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardIconImage: {fileID: 8027180032915785177}
-  purchasePriceText: {fileID: 149287318401257111}
+  purchaseText: {fileID: 149287318401257111}
   rewardText: {fileID: 707741333965909161}
   purchaseButton: {fileID: 6580550489797768976}

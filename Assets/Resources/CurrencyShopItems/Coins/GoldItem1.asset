@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e7ae4cfcf42149863866fc0aeeb56, type: 3}
   m_Name: GoldItem1
   m_EditorClassIdentifier: 
-  Name: Gold 500
   Category: 0
-  CurrencyType: 0
-  Price: 0
-  Icon: {fileID: 21300000, guid: 2faa496505512b041bfefe00aa51a9b4, type: 3}
+  RewardType: 0
+  Price: 0.99
+  Reward: 100
+  Icon: {fileID: 21300000, guid: 8516092abf1eed549b786e01c09388d8, type: 3}

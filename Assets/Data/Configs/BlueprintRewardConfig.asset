@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c4fd1b2c2a23b4898ca90c3edcb45e, type: 3}
+  m_Name: BlueprintRewardConfig
+  m_EditorClassIdentifier: 
+  rewards:
+  - blueprintType: 2
+    weight: 0
+  - blueprintType: 3
+    weight: 0
+  - blueprintType: 4
+    weight: 0
+  - blueprintType: 5
+    weight: 0
+  - blueprintType: 6
+    weight: 0
+  - blueprintType: 7
+    weight: 0
+  - blueprintType: 8
+    weight: 0
+  - blueprintType: 9
+    weight: 0
+  - blueprintType: 10
+    weight: 0
+  - blueprintType: 11
+    weight: 0
