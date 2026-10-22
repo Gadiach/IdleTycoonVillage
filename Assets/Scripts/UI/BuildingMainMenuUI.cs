@@ -61,9 +61,6 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI buildingLevelText;
 
-    [SerializeField] private Button buildingGetCurrencyButton;
-    [SerializeField] private Button workerGetCurrencyButton;
-
     [Header("Worker Level Upgrade Button UI")]
 
     [SerializeField] private Button workerLevelUpgradeButton;
@@ -138,8 +135,6 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
         EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
-        buildingGetCurrencyButton.onClick.AddListener(OnBuildingGetCurrencyClicked);
-        workerGetCurrencyButton.onClick.AddListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnDisable()
@@ -154,8 +149,6 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
         EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
-        buildingGetCurrencyButton.onClick.RemoveListener(OnBuildingGetCurrencyClicked);
-        workerGetCurrencyButton.onClick.RemoveListener(OnBuildingGetCurrencyClicked);
     }
 
     private void OnCurrencyChanged(CurrencyChangedEvent evt)
@@ -173,11 +166,11 @@ public class BuildingMainMenuUI : MonoBehaviour
         UpdateUpgradeIndicators();
     }
 
-    private void OnBuildingGetCurrencyClicked()
+    public void CloseBuildingPanelAndOpenGoldShop()  
     {
         CloseBuildingPanel();
 
-        CurrencyShopUI.Instance.OpenCurrencyShop();
+        CurrencyShopSystem.Instance.OpenGoldTab();
     }
 
     private void UpdateUpgradeIndicators()
@@ -185,16 +178,11 @@ public class BuildingMainMenuUI : MonoBehaviour
         if (currentBuilding == null)
             return;
 
-        buildingStarUpgradeIndicator.SetActive(
-            currentBuilding.CanUpgradeTierOrRarity
-        );
+        buildingStarUpgradeIndicator.SetActive(currentBuilding.CanUpgradeTierOrRarity);
 
         bool hasWorker = currentWorker != null;
 
-        workerStarUpgradeIndicator.SetActive(
-            hasWorker &&
-            currentWorker.CanUpgradeTierOrRarity
-        );
+        workerStarUpgradeIndicator.SetActive(hasWorker && currentWorker.CanUpgradeTierOrRarity);
     }
 
     private void OnBuildingUpgraded(BuildingUpgradedEvent evt)
@@ -282,7 +270,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         CloseBuildingPanel();
 
-        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Workers);
+        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Workers);
 
         BuildShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(workerType);
 

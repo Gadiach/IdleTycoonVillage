@@ -18,31 +18,50 @@ public class TabGroup : MonoBehaviour
     [NonSerialized]
     public TabButton selectedTab;
 
-    private void Start()
+    private void Awake()
     {
-        OnTabSelected(tabButtons[0]);
+        InitializeTabButtons();
+    }
+
+    private void InitializeTabButtons()
+    {
+        tabButtons.Clear();
+
+        TabButton[] buttons = GetComponentsInChildren<TabButton>(true);
+
+        foreach (TabButton button in buttons)
+        {
+            if (button.TabGroup == this)
+            {
+                tabButtons.Add(button);
+            }
+        }
+
+        SortButtonsByHierarchy();
     }
 
     public void Subscribe(TabButton button)
     {
+        if (tabButtons.Contains(button))
+            return;
+
         tabButtons.Add(button);
         SortButtonsByHierarchy();
     }
 
     private void SortButtonsByHierarchy()
     {
-        tabButtons.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+        tabButtons.Sort(
+            (a, b) => a.transform.GetSiblingIndex()
+                .CompareTo(b.transform.GetSiblingIndex())
+        );
     }
 
     private void ResetTabs()
     {
-        foreach (var button in tabButtons)
+        foreach (TabButton button in tabButtons)
         {
-            if (selectedTab != null && button == selectedTab)
-                continue;
-
             button.background.sprite = tabIdle;
-
             button.SetSelected(false);
         }
     }
@@ -60,12 +79,11 @@ public class TabGroup : MonoBehaviour
 
     public void OnTabSelected(TabButton button)
     {
-        selectedTab = button;
-
         ResetTabs();
 
-        button.background.sprite = tabActive;
+        selectedTab = button;
 
+        button.background.sprite = tabActive;
         button.SetSelected(true);
 
         int index = tabButtons.IndexOf(button);
@@ -77,7 +95,9 @@ public class TabGroup : MonoBehaviour
             objectsToSwap[i].SetActive(i == index);
         }
 
-        if (itemView != null && tabContents.Count > index && tabContents[index] != null)
+        if (itemView != null &&
+            tabContents.Count > index &&
+            tabContents[index] != null)
         {
             itemView.content = tabContents[index];
             itemView.normalizedPosition = new Vector2(0, 1);

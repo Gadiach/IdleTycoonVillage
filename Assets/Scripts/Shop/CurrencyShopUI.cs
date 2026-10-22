@@ -37,24 +37,18 @@ public class CurrencyShopUI : MonoBehaviour
     {
         closedPosition = currencyShopRoot.anchoredPosition;
 
-        openedPosition =
-            closedPosition -
-            new Vector2(currencyShopPanel.rect.width, 0);
+        openedPosition = closedPosition - new Vector2(currencyShopPanel.rect.width, 0);
     }
 
-    public void CreateAndInitializeShopItems(
-        Dictionary<CurrencyShopCategory, List<CurrencyShopItem>> shopItems)
+    public void CreateAndInitializeShopItems(Dictionary<CurrencyShopCategory, List<CurrencyShopItem>> shopItems)
     {
         for (int i = 0; i < shopItems.Count; i++)
         {
-            Transform parent =
-                tabGroup.objectsToSwap[i].transform;
+            Transform parent = tabGroup.objectsToSwap[i].transform;
 
-            foreach (CurrencyShopItem item
-                     in shopItems[(CurrencyShopCategory)i])
+            foreach (CurrencyShopItem item in shopItems[(CurrencyShopCategory)i])
             {
-                CurrencyShopItemUI itemUI =
-                    Instantiate(currencyItemHolderPrefab, parent);
+                CurrencyShopItemUI itemUI = Instantiate(currencyItemHolderPrefab, parent);
 
                 shopItemUIs.Add(itemUI);
 
@@ -63,12 +57,19 @@ public class CurrencyShopUI : MonoBehaviour
         }
     }
 
-    public void OpenCurrencyShop()
+    public void SelectCurrencyShopTab(CurrencyShopCategory category)
+    {
+        tabGroup.SelectTabByIndex((int)category);
+    }
+
+    public void OpenCurrencyShop(CurrencyShopCategory category)
     {
         if (isAnimating || opened)
             return;
 
         currencyShopPanel.gameObject.SetActive(true);
+
+        SelectCurrencyShopTab(category);
 
         currencyShopRoot.DOKill();
 

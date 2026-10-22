@@ -128,7 +128,7 @@ public class BuildShopUI : MonoBehaviour
         );
     }
 
-    public void Open(Action onComplete = null)
+    public void OpenBuildShop(Action onComplete = null)
     {
         if (isAnimating)
             return;
@@ -156,7 +156,7 @@ public class BuildShopUI : MonoBehaviour
             });
     }
 
-    public void Close()
+    public void CloseBuildShop()
     {
         if (!buildShopPanel.gameObject.activeSelf)
             return;
@@ -175,9 +175,9 @@ public class BuildShopUI : MonoBehaviour
             });
     }
 
-    public void SelectTab(int index)
+    public void SelectBuildShopTab(BuildShopCategory category)
     {
-        tabGroup.SelectTabByIndex(index);
+        tabGroup.SelectTabByIndex((int)category);
     }
 
     public void UpdateShopItems()

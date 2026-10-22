@@ -46,7 +46,6 @@ public class CurrencyShopSystem : MonoBehaviour
         }
     }
 
-
     private void Load()
     {
         CurrencyShopItem[] items = Resources.LoadAll<CurrencyShopItem>(currencyShopItemsPath);
@@ -107,6 +106,28 @@ public class CurrencyShopSystem : MonoBehaviour
     private void GiveGold(int amount)
     {
         CurrencySystem.Instance.AddCurrency(CurrencyType.Coins,amount);
+    }
+
+    public void OpenAdsTab()
+    {
+        if (currencyShopUI.IsOpened)
+        {
+            currencyShopUI.CloseCurrencyShop();
+            return;
+        }
+
+        currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Ads);
+    }
+
+    public void OpenGoldTab()
+    {
+        if (currencyShopUI.IsOpened)
+        {
+            currencyShopUI.CloseCurrencyShop();
+            return;
+        }
+
+        currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Gold);
     }
 
     private void GiveRandomBlueprint()

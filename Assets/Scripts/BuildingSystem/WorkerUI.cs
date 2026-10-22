@@ -231,7 +231,7 @@ public class WorkerUI : MonoBehaviour
             return;
         }
 
-        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Buildings);
+        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
 
         BuildShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
 

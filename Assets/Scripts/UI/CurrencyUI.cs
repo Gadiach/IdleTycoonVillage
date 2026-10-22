@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CurrencyUI : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class CurrencyUI : MonoBehaviour
         public TextMeshProUGUI Text;
     }
 
-    [SerializeField] private Button currencyShopButton;
 
     [SerializeField] private CurrencyTextBinding[] currencyBindings;
 
@@ -23,14 +21,10 @@ public class CurrencyUI : MonoBehaviour
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyChanged);
         EventManager.Instance.AddListener<CurrencySpentEvent>(OnCurrencyChanged);
-
-        currencyShopButton.onClick.AddListener(OnCurrencyShopButtonClicked);
     }
 
     private void OnDisable()
     {
-        currencyShopButton.onClick.RemoveListener(OnCurrencyShopButtonClicked);
-
         if (EventManager.Instance == null)
             return;
 
@@ -64,21 +58,6 @@ public class CurrencyUI : MonoBehaviour
         foreach (var pair in currencyTexts)
         {
             pair.Value.text = CurrencySystem.GetCurrencyAmount(pair.Key).ToString();
-        }
-    }
-
-    private void OnCurrencyShopButtonClicked()
-    {
-        if (CurrencyShopUI.Instance == null)
-            return;
-
-        if (CurrencyShopUI.Instance.IsOpened)
-        {
-            CurrencyShopUI.Instance.CloseCurrencyShop();
-        }
-        else
-        {
-            CurrencyShopUI.Instance.OpenCurrencyShop();
         }
     }
 

@@ -40,12 +40,11 @@ public class BuildShopSystem : MonoBehaviour
         if (EventManager.Instance == null) return; 
         EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyChanged); 
         EventManager.Instance.RemoveListener<CurrencySpentEvent>(OnCurrencyChanged); 
-    } 
-   
-    private void Start() 
+    }
+
+    private void Start()
     {
         InitializeCategories();
-
         Load();
 
         buildShopUI.CreateAndInitializeShopItems(buildShopItems);
@@ -93,16 +92,27 @@ public class BuildShopSystem : MonoBehaviour
         buildShopUI.ScrollUp(amount);
     }
 
-    public void ShopButton_Click()
+    public void OpenBuildingsTab()
     {
         if (buildShopUI.IsOpened)
         {
             TryCloseShop();
+            return;
         }
-        else
+
+        buildShopUI.SelectBuildShopTab(BuildShopCategory.Buildings);
+        buildShopUI.OpenBuildShop();
+    }
+
+    public void OpenWorkersTab()
+    {
+        if (buildShopUI.IsOpened)
         {
-            OpenShop(BuildShopCategory.Buildings);
+            TryCloseShop();
+            return;
         }
+
+        OpenBuildShop(BuildShopCategory.Workers);
     }
 
     public void TryCloseShop()
@@ -110,15 +120,15 @@ public class BuildShopSystem : MonoBehaviour
         if (!canPlayerCloseShop)
             return;
 
-        CloseShop();
+        CloseBuildShop();
     }
 
-    public void OpenShop(BuildShopCategory category, Action onComplete = null)
+    public void OpenBuildShop(BuildShopCategory category, Action onComplete = null)
     {
+        buildShopUI.SelectBuildShopTab(category);
         buildShopUI.UpdateAvailableTabs();
-        buildShopUI.UpdateShopItems();
-        buildShopUI.SelectTab((int)category);
-        buildShopUI.Open(onComplete);
+        buildShopUI.UpdateShopItems(); 
+        buildShopUI.OpenBuildShop(onComplete);
     }
 
     public void SetPlayerCloseEnabled(bool enabled)
@@ -126,8 +136,8 @@ public class BuildShopSystem : MonoBehaviour
         canPlayerCloseShop = enabled;
     }
 
-    public void CloseShop()
+    public void CloseBuildShop()
     {
-        buildShopUI.Close();
+        buildShopUI.CloseBuildShop();
     }
 }

@@ -112,7 +112,7 @@ public class TutorialSystem : MonoBehaviour
     {
         BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        BuildShopSystem.Instance.OpenShop(
+        BuildShopSystem.Instance.OpenBuildShop(
             BuildShopCategory.Buildings,
             StartFarmDragHint
         );
@@ -202,7 +202,7 @@ public class TutorialSystem : MonoBehaviour
     {
         currentStep = TutorialStep.HireWorker;
 
-        BuildShopSystem.Instance.CloseShop();
+        BuildShopSystem.Instance.CloseBuildShop();
 
         if (tutorialFarm != null)
         {
@@ -224,7 +224,7 @@ public class TutorialSystem : MonoBehaviour
     {
         BuildShopSystem.Instance.SetPlayerCloseEnabled(false);
 
-        BuildShopSystem.Instance.OpenShop(BuildShopCategory.Workers,StartWorkerDragHint);
+        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Workers,StartWorkerDragHint);
     }
 
     private void StartWorkerDragHint()
@@ -262,7 +262,7 @@ public class TutorialSystem : MonoBehaviour
 
         currentStep = TutorialStep.CollectIncome;
 
-        BuildShopSystem.Instance.CloseShop();
+        BuildShopSystem.Instance.CloseBuildShop();
 
         dialogueUI.Show(
             "Great! Your farm is running! Now wait for your first income and collect it.",

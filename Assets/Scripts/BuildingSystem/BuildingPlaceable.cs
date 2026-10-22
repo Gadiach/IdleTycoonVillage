@@ -94,7 +94,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         }
         else
         {
-            BuildShopSystem.Instance.OpenShop(BuildShopCategory.Workers);
+            BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Workers);
 
             BuildShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(acceptedBusinessType);
 
@@ -155,7 +155,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
             else
             {
                 Destroy(gameObject);
-                BuildShopSystem.Instance.OpenShop(BuildShopCategory.Buildings);
+                BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
             }
 
             return;
