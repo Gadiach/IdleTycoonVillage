@@ -13,6 +13,10 @@ public class CurrencyShopSystem : MonoBehaviour
 
     [SerializeField] private BlueprintRewardConfig blueprintRewardConfig;
 
+    private Dictionary<CurrencyShopItem, int> dailyAdViews = new();
+
+    private Dictionary<CurrencyShopItem, int> freeRewardsClaimed = new();
+
     private void Awake()
     {
         InitializeSingleton();
@@ -56,6 +60,32 @@ public class CurrencyShopSystem : MonoBehaviour
         }
     }
 
+    public int GetRemainingFreeRewards(CurrencyShopItem item)
+    {
+        if (!freeRewardsClaimed.TryGetValue(item, out int claimed))
+            claimed = 0;
+
+        return Mathf.Max(0, item.FreeRewardLimit - claimed);
+    }
+
+    public bool CanClaimFreeReward(CurrencyShopItem item)
+    {
+        return GetRemainingFreeRewards(item) > 0;
+    }
+
+    public int GetRemainingAdViews(CurrencyShopItem item)
+    {
+        if (!dailyAdViews.TryGetValue(item, out int views))
+            views = 0;
+
+        return Mathf.Max(0, item.DailyAdLimit - views);
+    }
+
+    public bool CanWatchAd(CurrencyShopItem item)
+    {
+        return GetRemainingAdViews(item) > 0;
+    }
+
     public void Purchase(CurrencyShopItem item)
     {
         switch (item.Category)
@@ -72,7 +102,10 @@ public class CurrencyShopSystem : MonoBehaviour
 
     private void WatchAd(CurrencyShopItem item)
     {
-        // Тут пізніше викликаємо рекламну систему.
+        if (!CanWatchAd(item))
+            return;
+
+        // Пізніше тут запускаємо rewarded ad.
 
         // ТИМЧАСОВО:
         OnAdCompleted(item);
@@ -80,15 +113,39 @@ public class CurrencyShopSystem : MonoBehaviour
 
     private void OnAdCompleted(CurrencyShopItem item)
     {
+        if (!dailyAdViews.ContainsKey(item))
+            dailyAdViews[item] = 0;
+
+        dailyAdViews[item]++;
+
         GiveReward(item);
+
+        currencyShopUI.UpdateCurrencyShopItem(item);
     }
 
     private void PurchaseGold(CurrencyShopItem item)
     {
+        if (CanClaimFreeReward(item))
+        {
+            ClaimFreeReward(item);
+            return;
+        }
+
         // Тут пізніше буде IAP.
         // Після успішної покупки:
+        GiveReward(item);
+    }
+
+    private void ClaimFreeReward(CurrencyShopItem item)
+    {
+        if (!freeRewardsClaimed.ContainsKey(item))
+            freeRewardsClaimed[item] = 0;
+
+        freeRewardsClaimed[item]++;
 
         GiveReward(item);
+
+        currencyShopUI.UpdateCurrencyShopItem(item);
     }
 
     private void GiveReward(CurrencyShopItem item)

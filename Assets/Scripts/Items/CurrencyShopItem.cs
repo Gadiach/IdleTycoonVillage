@@ -8,4 +8,10 @@ public class CurrencyShopItem : ScriptableObject
     public float Price;
     public int Reward;
     public Sprite Icon;
+
+    [Header("Ads")]
+    public int DailyAdLimit;
+
+    [Header("Gold")]
+    public int FreeRewardLimit;
 }

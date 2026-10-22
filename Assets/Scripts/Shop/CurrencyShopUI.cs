@@ -57,6 +57,18 @@ public class CurrencyShopUI : MonoBehaviour
         }
     }
 
+    public void UpdateCurrencyShopItem(CurrencyShopItem item)
+    {
+        foreach (CurrencyShopItemUI itemUI in shopItemUIs)
+        {
+            if (itemUI.ShopItem != item)
+                continue;
+
+            itemUI.UpdateItemState();
+            return;
+        }
+    }
+
     public void SelectCurrencyShopTab(CurrencyShopCategory category)
     {
         tabGroup.SelectTabByIndex((int)category);
