@@ -1,5 +1,5 @@
 public enum CurrencyShopRewardType
 {
-    Gold,
+    Coin,
     RandomBlueprint
 }

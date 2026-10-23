@@ -69,6 +69,23 @@ public class MissionRewardClaimedEvent : GameEvent
     }
 }
 
+public class CurrencyShopRewardClaimedEvent : GameEvent
+{
+    public CurrencyType CurrencyType { get; private set; }
+    public int Amount { get; private set; }
+    public Vector3 SourcePosition { get; private set; }
+
+    public CurrencyShopRewardClaimedEvent(
+        CurrencyType currencyType,
+        int amount,
+        Vector3 sourcePosition)
+    {
+        CurrencyType = currencyType;
+        Amount = amount;
+        SourcePosition = sourcePosition;
+    }
+}
+
 public class BuildingIncomeCollectedEvent : GameEvent
 {
     public Vector3 Position { get; }
@@ -99,6 +116,10 @@ public class CurrencyChangedEvent : GameEvent
     {
         CurrencyType = currencyType;
     }
+}
+
+public class CurrencyShopAvailabilityChangedEvent : GameEvent
+{
 }
 
 public class NotEnoughCurrencyEvent : GameEvent

@@ -17,3 +17,6 @@ MonoBehaviour:
   Price: 4.99
   Reward: 1000
   Icon: {fileID: 21300000, guid: 4830fe64a5e70004cb95152ee5cb912f, type: 3}
+  Order: 1
+  DailyAdLimit: 0
+  FreeRewardLimit: 0

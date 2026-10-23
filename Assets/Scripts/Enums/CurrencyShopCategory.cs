@@ -1,5 +1,5 @@
 public enum CurrencyShopCategory
 {
-    Gold,
+    Coin,
     Ads
 }

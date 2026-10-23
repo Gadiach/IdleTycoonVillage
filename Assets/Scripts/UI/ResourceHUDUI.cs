@@ -2,15 +2,18 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class CurrencyUI : MonoBehaviour
+public class ResourceHUDUI : MonoBehaviour
 {
+    [Header("Notification Elements")]
+    [SerializeField] private GameObject addCoinButtonNotificationCircleImg;
+    [SerializeField] private GameObject adsButton;
+
     [System.Serializable]
     public class CurrencyTextBinding
     {
         public CurrencyType CurrencyType;
         public TextMeshProUGUI Text;
     }
-
 
     [SerializeField] private CurrencyTextBinding[] currencyBindings;
 
@@ -21,6 +24,9 @@ public class CurrencyUI : MonoBehaviour
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyChanged);
         EventManager.Instance.AddListener<CurrencySpentEvent>(OnCurrencyChanged);
+        EventManager.Instance.AddListener<CurrencyShopAvailabilityChangedEvent>(
+        OnCurrencyShopAvailabilityChanged
+    );
     }
 
     private void OnDisable()
@@ -30,6 +36,9 @@ public class CurrencyUI : MonoBehaviour
 
         EventManager.Instance.RemoveListener<CurrencyAddedEvent>(OnCurrencyChanged);
         EventManager.Instance.RemoveListener<CurrencySpentEvent>(OnCurrencyChanged);
+        EventManager.Instance.RemoveListener<CurrencyShopAvailabilityChangedEvent>(
+        OnCurrencyShopAvailabilityChanged
+    );
     }
 
     private void Awake()
@@ -40,6 +49,8 @@ public class CurrencyUI : MonoBehaviour
     private void Start()
     {
         UpdateAllCurrencies();
+        UpdateCoinNotificator();
+        UpdateAdsButton();
     }
 
     private void InitializeCurrencyTextBindings()
@@ -59,6 +70,28 @@ public class CurrencyUI : MonoBehaviour
         {
             pair.Value.text = CurrencySystem.GetCurrencyAmount(pair.Key).ToString();
         }
+    }
+
+    private void UpdateCoinNotificator()
+    {
+        bool hasFreeCoinReward = CurrencyShopSystem.Instance.HasAvailableFreeCoinReward();
+
+        addCoinButtonNotificationCircleImg.SetActive(hasFreeCoinReward);
+    }
+
+    private void UpdateAdsButton()
+    {
+        bool hasAvailableAds =
+            CurrencyShopSystem.Instance.HasAvailableAds();
+
+        adsButton.SetActive(hasAvailableAds);
+    }
+
+    private void OnCurrencyShopAvailabilityChanged(
+    CurrencyShopAvailabilityChangedEvent info)
+    {
+        UpdateCoinNotificator();
+        UpdateAdsButton();
     }
 
     private void OnCurrencyChanged(CurrencyAddedEvent info)

@@ -9,6 +9,8 @@ public class CurrencyShopItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rewardText;
     [SerializeField] private Button purchaseButton;
 
+    public Vector3 RewardIconPosition => rewardIconImage.rectTransform.position;
+
     [SerializeField] private float timerFontSize = 12f;
 
     private float defaultPurchaseFontSize;
@@ -43,7 +45,7 @@ public class CurrencyShopItemUI : MonoBehaviour
             return;
         }
 
-        if (item.Category == CurrencyShopCategory.Gold)
+        if (item.Category == CurrencyShopCategory.Coin)
         {
             UpdateGoldState();
         }
@@ -86,6 +88,6 @@ public class CurrencyShopItemUI : MonoBehaviour
 
     public void OnBuyButtonClicked()
     {
-        CurrencyShopSystem.Instance.Purchase(item);
+        CurrencyShopSystem.Instance.Purchase(item, RewardIconPosition);
     }
 }

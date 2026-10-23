@@ -58,6 +58,11 @@ public class CurrencyShopSystem : MonoBehaviour
         {
             currencyShopItems[item.Category].Add(item);
         }
+
+        foreach (List<CurrencyShopItem> itemsList in currencyShopItems.Values)
+        {
+            itemsList.Sort((a, b) => a.Order.CompareTo(b.Order));
+        }
     }
 
     public int GetRemainingFreeRewards(CurrencyShopItem item)
@@ -86,83 +91,141 @@ public class CurrencyShopSystem : MonoBehaviour
         return GetRemainingAdViews(item) > 0;
     }
 
-    public void Purchase(CurrencyShopItem item)
+    public void Purchase(CurrencyShopItem item, Vector3 sourcePosition)
     {
         switch (item.Category)
         {
             case CurrencyShopCategory.Ads:
-                WatchAd(item);
+                WatchAd(item, sourcePosition);
                 break;
 
-            case CurrencyShopCategory.Gold:
-                PurchaseGold(item);
+            case CurrencyShopCategory.Coin:
+                PurchaseCoin(item, sourcePosition);
                 break;
         }
     }
 
-    private void WatchAd(CurrencyShopItem item)
+    private void WatchAd(CurrencyShopItem item, Vector3 sourcePosition)
     {
         if (!CanWatchAd(item))
             return;
 
-        // ѕ≥зн≥ше тут запускаЇмо rewarded ad.
-
-        // “»ћ„ј—ќ¬ќ:
-        OnAdCompleted(item);
+        OpenRewardedAd(item, sourcePosition);
     }
 
-    private void OnAdCompleted(CurrencyShopItem item)
+    private void OpenRewardedAd(CurrencyShopItem item, Vector3 sourcePosition)
+    {
+        Debug.Log(
+            $"Rewarded ad opened for {item.name}. " +
+            "Ad SDK will be implemented later."
+        );
+
+        // TEMPORARY: simulate successful ad completion
+        OnAdCompleted(item, sourcePosition);
+    }
+
+    private void OnAdCompleted(CurrencyShopItem item, Vector3 sourcePosition)
     {
         if (!dailyAdViews.ContainsKey(item))
             dailyAdViews[item] = 0;
 
         dailyAdViews[item]++;
 
-        GiveReward(item);
+        GiveReward(item, sourcePosition);
 
         currencyShopUI.UpdateCurrencyShopItem(item);
+
+        EventManager.Instance.QueueEvent(
+        new CurrencyShopAvailabilityChangedEvent()
+    );
     }
 
-    private void PurchaseGold(CurrencyShopItem item)
+    private void PurchaseCoin(CurrencyShopItem item, Vector3 sourcePosition)
     {
         if (CanClaimFreeReward(item))
         {
-            ClaimFreeReward(item);
+            ClaimFreeReward(item, sourcePosition);
             return;
         }
 
-        // “ут п≥зн≥ше буде IAP.
-        // ѕ≥сл€ усп≥шноњ покупки:
-        GiveReward(item);
+        OpenPurchasePanel(item);
     }
 
-    private void ClaimFreeReward(CurrencyShopItem item)
+    private void OpenPurchasePanel(CurrencyShopItem item)
+    {
+        Debug.Log($"Purchase panel opened for {item.name}. " + $"Price: И{item.Price}. IAP will be implemented later.");
+    }
+
+    private void ClaimFreeReward(
+    CurrencyShopItem item,
+    Vector3 sourcePosition)
     {
         if (!freeRewardsClaimed.ContainsKey(item))
             freeRewardsClaimed[item] = 0;
 
         freeRewardsClaimed[item]++;
 
-        GiveReward(item);
+        GiveReward(item, sourcePosition);
 
         currencyShopUI.UpdateCurrencyShopItem(item);
+
+        EventManager.Instance.QueueEvent(
+        new CurrencyShopAvailabilityChangedEvent()
+    );
     }
 
-    private void GiveReward(CurrencyShopItem item)
+    private void GiveReward(
+    CurrencyShopItem item,
+    Vector3 sourcePosition)
     {
         switch (item.RewardType)
         {
-            case CurrencyShopRewardType.Gold : GiveGold(item.Reward);
+            case CurrencyShopRewardType.Coin:
+                GiveCoin(item.Reward, sourcePosition);
                 break;
 
-            case CurrencyShopRewardType.RandomBlueprint : GiveRandomBlueprint();
+            case CurrencyShopRewardType.RandomBlueprint:
+                GiveRandomBlueprint();
                 break;
         }
     }
 
-    private void GiveGold(int amount)
+    private void GiveCoin(int amount, Vector3 sourcePosition)
     {
-        CurrencySystem.Instance.AddCurrency(CurrencyType.Coins,amount);
+        CurrencySystem.Instance.AddCurrency(
+            CurrencyType.Coins,
+            amount
+        );
+
+        EventManager.Instance.QueueEvent(
+            new CurrencyShopRewardClaimedEvent(
+                CurrencyType.Coins,
+                amount,
+                sourcePosition
+            )
+        );
+    }
+
+    public bool HasAvailableFreeCoinReward()
+    {
+        foreach (CurrencyShopItem item in currencyShopItems[CurrencyShopCategory.Coin])
+        {
+            if (CanClaimFreeReward(item))
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool HasAvailableAds()
+    {
+        foreach (CurrencyShopItem item in currencyShopItems[CurrencyShopCategory.Ads])
+        {
+            if (CanWatchAd(item))
+                return true;
+        }
+
+        return false;
     }
 
     public void OpenAdsTab()
@@ -184,7 +247,7 @@ public class CurrencyShopSystem : MonoBehaviour
             return;
         }
 
-        currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Gold);
+        currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Coin);
     }
 
     private void GiveRandomBlueprint()

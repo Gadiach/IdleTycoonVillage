@@ -9,6 +9,7 @@ public class CurrencyShopItemEditor : Editor
 
         SerializedProperty category = serializedObject.FindProperty("Category");
         SerializedProperty rewardType = serializedObject.FindProperty("RewardType");
+        SerializedProperty order = serializedObject.FindProperty("Order");
         SerializedProperty price = serializedObject.FindProperty("Price");
         SerializedProperty reward = serializedObject.FindProperty("Reward");
         SerializedProperty icon = serializedObject.FindProperty("Icon");
@@ -17,6 +18,7 @@ public class CurrencyShopItemEditor : Editor
 
         EditorGUILayout.PropertyField(category);
         EditorGUILayout.PropertyField(rewardType);
+        EditorGUILayout.PropertyField(order);
 
         CurrencyShopCategory shopCategory =
             (CurrencyShopCategory)category.enumValueIndex;
@@ -24,7 +26,7 @@ public class CurrencyShopItemEditor : Editor
         CurrencyShopRewardType type =
             (CurrencyShopRewardType)rewardType.enumValueIndex;
 
-        bool isGold = shopCategory == CurrencyShopCategory.Gold;
+        bool isGold = shopCategory == CurrencyShopCategory.Coin;
         bool isAd = shopCategory == CurrencyShopCategory.Ads;
         bool isRandomBlueprint = type == CurrencyShopRewardType.RandomBlueprint;
 
@@ -40,15 +42,7 @@ public class CurrencyShopItemEditor : Editor
         }
 
         // Reward
-        bool rewardEnabled = !isRandomBlueprint;
-
-        if (!rewardEnabled)
-            reward.intValue = 0;
-
-        using (new EditorGUI.DisabledScope(!rewardEnabled))
-        {
-            EditorGUILayout.PropertyField(reward);
-        }
+        EditorGUILayout.PropertyField(reward);
 
         EditorGUILayout.PropertyField(icon);
 

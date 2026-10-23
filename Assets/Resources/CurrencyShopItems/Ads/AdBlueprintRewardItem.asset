@@ -15,7 +15,8 @@ MonoBehaviour:
   Category: 1
   RewardType: 1
   Price: 0
-  Reward: 0
+  Reward: 1
   Icon: {fileID: 21300000, guid: 204289fab66a3dd4ebd9d7e1c7a48395, type: 3}
-  DailyAdLimit: 0
+  Order: 1
+  DailyAdLimit: 1
   FreeRewardLimit: 0

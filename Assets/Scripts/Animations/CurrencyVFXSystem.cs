@@ -22,7 +22,8 @@ public class CurrencyVFXSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener<MissionRewardClaimedEvent>(OnCurrencyClaimed);
+        EventManager.Instance.AddListener<MissionRewardClaimedEvent>(OnMissionRewardClaimed);
+        EventManager.Instance.AddListener<CurrencyShopRewardClaimedEvent>(OnCurrencyShopRewardClaimed);
     }
 
     private void OnDisable()
@@ -30,7 +31,8 @@ public class CurrencyVFXSystem : MonoBehaviour
         if (EventManager.Instance == null)
             return;
 
-        EventManager.Instance.RemoveListener<MissionRewardClaimedEvent>(OnCurrencyClaimed);
+        EventManager.Instance.RemoveListener<MissionRewardClaimedEvent>(OnMissionRewardClaimed);
+        EventManager.Instance.RemoveListener<CurrencyShopRewardClaimedEvent>(OnCurrencyShopRewardClaimed);
     }
 
     private void Awake()
@@ -45,16 +47,30 @@ public class CurrencyVFXSystem : MonoBehaviour
         }
     }
 
-    private void OnCurrencyClaimed(MissionRewardClaimedEvent info)
+    private void OnMissionRewardClaimed(MissionRewardClaimedEvent info)
     {
-        Sprite currencyIcon = currencyIconDatabase.GetIcon(info.CurrencyType);
+        PlayCurrencyVFX(info.CurrencyType, info.SourcePosition);
+    }
 
-        RectTransform targetIcon = GetTargetIcon(info.CurrencyType);
+    private void OnCurrencyShopRewardClaimed(CurrencyShopRewardClaimedEvent info)
+    {
+        PlayCurrencyVFX(info.CurrencyType, info.SourcePosition);
+    }
+
+    private void PlayCurrencyVFX(CurrencyType currencyType,Vector3 sourcePosition)
+    {
+        Sprite currencyIcon = currencyIconDatabase.GetIcon(currencyType);
+        RectTransform targetIcon = GetTargetIcon(currencyType);
 
         if (currencyIcon == null || targetIcon == null)
             return;
 
-        Play(info.SourcePosition, currencyIcon, targetIcon, info.CurrencyType);
+        Play(
+            sourcePosition,
+            currencyIcon,
+            targetIcon,
+            currencyType
+        );
     }
 
     private void Play(Vector3 startPosition, Sprite currencyIcon, RectTransform targetIcon, CurrencyType currencyType)
