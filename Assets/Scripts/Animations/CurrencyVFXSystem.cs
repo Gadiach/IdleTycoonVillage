@@ -49,39 +49,82 @@ public class CurrencyVFXSystem : MonoBehaviour
 
     private void OnMissionRewardClaimed(MissionRewardClaimedEvent info)
     {
-        PlayCurrencyVFX(info.CurrencyType, info.SourcePosition);
+        PlayCurrencyVFX(
+            info.CurrencyType,
+            info.Amount,
+            info.SourcePosition
+        );
     }
 
     private void OnCurrencyShopRewardClaimed(CurrencyShopRewardClaimedEvent info)
     {
-        PlayCurrencyVFX(info.CurrencyType, info.SourcePosition);
+        PlayCurrencyVFX(
+            info.CurrencyType,
+            info.Amount,
+            info.SourcePosition
+        );
     }
 
-    private void PlayCurrencyVFX(CurrencyType currencyType,Vector3 sourcePosition)
+    private void PlayCurrencyVFX(
+    CurrencyType currencyType,
+    int amount,
+    Vector3 sourcePosition)
     {
-        Sprite currencyIcon = currencyIconDatabase.GetIcon(currencyType);
-        RectTransform targetIcon = GetTargetIcon(currencyType);
+        Sprite currencyIcon =
+            currencyIconDatabase.GetIcon(currencyType);
+
+        RectTransform targetIcon =
+            GetTargetIcon(currencyType);
 
         if (currencyIcon == null || targetIcon == null)
             return;
+
+        int iconCount = IsBlueprint(currencyType)
+            ? amount
+            : flyingIconCount;
 
         Play(
             sourcePosition,
             currencyIcon,
             targetIcon,
-            currencyType
+            currencyType,
+            iconCount
         );
     }
 
-    private void Play(Vector3 startPosition, Sprite currencyIcon, RectTransform targetIcon, CurrencyType currencyType)
+    private bool IsBlueprint(CurrencyType currencyType)
     {
-        for (int i = 0; i < flyingIconCount; i++)
+        return currencyType != CurrencyType.Coins &&
+               currencyType != CurrencyType.Crystals;
+    }
+
+    private void Play(
+    Vector3 startPosition,
+    Sprite currencyIcon,
+    RectTransform targetIcon,
+    CurrencyType currencyType,
+    int iconCount)
+    {
+        for (int i = 0; i < iconCount; i++)
         {
-            SpawnCurrencyIcon(startPosition, currencyIcon, targetIcon, currencyType, i);
+            SpawnCurrencyIcon(
+                startPosition,
+                currencyIcon,
+                targetIcon,
+                currencyType,
+                i,
+                iconCount
+            );
         }
     }
 
-    private void SpawnCurrencyIcon(Vector3 startPosition, Sprite currencyIcon, RectTransform targetIcon, CurrencyType currencyType, int index)
+    private void SpawnCurrencyIcon(
+    Vector3 startPosition,
+    Sprite currencyIcon,
+    RectTransform targetIcon,
+    CurrencyType currencyType,
+    int index,
+    int iconCount)
     {
         GameObject currencyObject = Instantiate(flyingCurrencyIconPrefab,flyingCurrencyPrefabsContainer);
 
@@ -129,22 +172,59 @@ public class CurrencyVFXSystem : MonoBehaviour
             PulseTarget(targetIcon);
             Destroy(currencyObject);
 
-            if (index == flyingIconCount - 1)
+            if (index == iconCount - 1)
             {
-                EventManager.Instance.QueueEvent(new CurrencyVFXCompletedEvent(currencyType));
+                EventManager.Instance.QueueEvent(
+                    new CurrencyVFXCompletedEvent(currencyType)
+                );
             }
         });
     }
 
+    private CurrencyVFXTargetType GetTargetType(CurrencyType currencyType)
+    {
+        switch (currencyType)
+        {
+            case CurrencyType.Coins:
+                return CurrencyVFXTargetType.Coin;
+
+            case CurrencyType.BuildingBlueprint_Primitive:
+            case CurrencyType.BuildingBlueprint_Developed:
+            case CurrencyType.BuildingBlueprint_Industrial:
+            case CurrencyType.BuildingBlueprint_Modern:
+            case CurrencyType.BuildingBlueprint_Futuristic:
+                return CurrencyVFXTargetType.BuildingBlueprints;
+
+            case CurrencyType.WorkerBlueprint_Primitive:
+            case CurrencyType.WorkerBlueprint_Developed:
+            case CurrencyType.WorkerBlueprint_Industrial:
+            case CurrencyType.WorkerBlueprint_Modern:
+            case CurrencyType.WorkerBlueprint_Futuristic:
+                return CurrencyVFXTargetType.WorkerBlueprints;
+
+            default:
+                throw new ArgumentOutOfRangeException(
+                    nameof(currencyType),
+                    currencyType,
+                    null
+                );
+        }
+    }
+
     private RectTransform GetTargetIcon(CurrencyType currencyType)
     {
+        CurrencyVFXTargetType targetType =
+            GetTargetType(currencyType);
+
         foreach (CurrencyVFXTarget target in currencyTargets)
         {
-            if (target.currencyType == currencyType)
+            if (target.targetType == targetType)
                 return target.targetIcon;
         }
 
-        Debug.LogWarning($"No VFX target found for currency: {currencyType}");
+        Debug.LogWarning(
+            $"No VFX target found for: {targetType}"
+        );
 
         return null;
     }
@@ -169,6 +249,6 @@ public class CurrencyVFXSystem : MonoBehaviour
 [Serializable]
 public class CurrencyVFXTarget
 {
-    public CurrencyType currencyType;
+    public CurrencyVFXTargetType targetType;
     public RectTransform targetIcon;
 }

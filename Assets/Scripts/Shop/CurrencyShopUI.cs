@@ -33,6 +33,23 @@ public class CurrencyShopUI : MonoBehaviour
         currencyShopPanel.gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<BlueprintDropdownOpenedEvent>(
+            OnBlueprintDropdownOpened
+        );
+    }
+
+    private void OnDisable()
+    {
+        if (EventManager.Instance == null)
+            return;
+
+        EventManager.Instance.RemoveListener<BlueprintDropdownOpenedEvent>(
+            OnBlueprintDropdownOpened
+        );
+    }
+
     private void InitializePanelPositions()
     {
         closedPosition = currencyShopRoot.anchoredPosition;
@@ -57,6 +74,11 @@ public class CurrencyShopUI : MonoBehaviour
         }
     }
 
+    private void OnBlueprintDropdownOpened(BlueprintDropdownOpenedEvent info)
+    {
+        CloseCurrencyShop();
+    }
+
     public void UpdateCurrencyShopItem(CurrencyShopItem item)
     {
         foreach (CurrencyShopItemUI itemUI in shopItemUIs)
@@ -78,6 +100,8 @@ public class CurrencyShopUI : MonoBehaviour
     {
         if (isAnimating || opened)
             return;
+
+        EventManager.Instance.QueueEvent(new CurrencyShopOpenedEvent());
 
         currencyShopPanel.gameObject.SetActive(true);
 

@@ -185,7 +185,7 @@ public class CurrencyShopSystem : MonoBehaviour
                 break;
 
             case CurrencyShopRewardType.RandomBlueprint:
-                GiveRandomBlueprint();
+                GiveRandomBlueprint(sourcePosition);
                 break;
         }
     }
@@ -250,11 +250,22 @@ public class CurrencyShopSystem : MonoBehaviour
         currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Coin);
     }
 
-    private void GiveRandomBlueprint()
+    private void GiveRandomBlueprint(Vector3 sourcePosition)
     {
         CurrencyType blueprint = GetRandomBlueprint();
 
-        CurrencySystem.Instance.AddCurrency(blueprint,1);
+        CurrencySystem.Instance.AddCurrency(
+            blueprint,
+            1
+        );
+
+        EventManager.Instance.QueueEvent(
+            new CurrencyShopRewardClaimedEvent(
+                blueprint,
+                1,
+                sourcePosition
+            )
+        );
     }
 
     private CurrencyType GetRandomBlueprint()

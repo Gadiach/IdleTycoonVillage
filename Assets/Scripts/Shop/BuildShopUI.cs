@@ -141,6 +141,8 @@ public class BuildShopUI : MonoBehaviour
 
         buildShopPanel.gameObject.SetActive(true);
 
+        EventManager.Instance.QueueEvent(new BuildShopOpenedEvent());
+
         isAnimating = true;
 
         shopRoot

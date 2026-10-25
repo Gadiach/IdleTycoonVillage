@@ -15,6 +15,22 @@ public class CurrencyAddedEvent : GameEvent
     }
 }
 
+public class BuildShopOpenedEvent : GameEvent
+{
+}
+
+public class MapTappedEvent : GameEvent
+{
+}
+
+public class CurrencyShopOpenedEvent : GameEvent
+{
+}
+
+public class BlueprintDropdownOpenedEvent : GameEvent
+{
+}
+
 public class MissionProgressChangedEvent : GameEvent
 {
     public MissionRuntime Mission { get; }

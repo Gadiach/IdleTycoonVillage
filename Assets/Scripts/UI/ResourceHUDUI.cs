@@ -107,10 +107,7 @@ public class ResourceHUDUI : MonoBehaviour
     private void UpdateCurrency(CurrencyType currencyType)
     {
         if (!currencyTexts.TryGetValue(currencyType, out var text))
-        {
-            Debug.LogWarning($"No UI binding found for currency: {currencyType}");
             return;
-        }
 
         text.text = CurrencySystem.GetCurrencyAmount(currencyType).ToString();
     }

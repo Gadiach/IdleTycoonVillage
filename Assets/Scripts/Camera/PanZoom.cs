@@ -61,7 +61,7 @@ public class PanZoom : MonoBehaviour
         Zoom(scroll * zoomSencitivity);
     }
 
-    private void TryCloseOpenedShops()
+    private void TryCloseOpenedUI()
     {
         BuildShopSystem.Instance.TryCloseShop();
 
@@ -207,7 +207,9 @@ public class PanZoom : MonoBehaviour
         if (dragDistance >= dragThreshold)
             return;
 
-        TryCloseOpenedShops();
+        EventManager.Instance.QueueEvent(new MapTappedEvent());
+
+        TryCloseOpenedUI();
     }
 
     private bool IsTouchOverUI(Touch touch)
