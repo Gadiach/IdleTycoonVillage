@@ -135,6 +135,9 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.AddListener(OnAutomationInfoClicked);
         EventManager.Instance.AddListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        EventManager.Instance.AddListener<CurrencyShopOpenedEvent>(
+    OnCurrencyShopOpened
+);
     }
 
     private void OnDisable()
@@ -149,6 +152,9 @@ public class BuildingMainMenuUI : MonoBehaviour
         EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
         automationInfoButton.onClick.RemoveListener(OnAutomationInfoClicked);
         EventManager.Instance.RemoveListener<CurrencyChangedEvent>(OnCurrencyChanged);
+        EventManager.Instance.RemoveListener<CurrencyShopOpenedEvent>(
+    OnCurrencyShopOpened
+);
     }
 
     private void OnCurrencyChanged(CurrencyChangedEvent evt)
@@ -164,6 +170,12 @@ public class BuildingMainMenuUI : MonoBehaviour
         }
 
         UpdateUpgradeIndicators();
+    }
+
+    private void OnCurrencyShopOpened(
+    CurrencyShopOpenedEvent info)
+    {
+        CloseBuildingPanel();
     }
 
     public void CloseBuildingPanelAndOpenGoldShop()  

@@ -129,6 +129,10 @@ public class BlueprintDropdownUI : MonoBehaviour
     {
         UpdateBlueprintAmounts();
 
+        EventManager.Instance.QueueEvent(
+            new BlueprintDropdownOpenedEvent()
+        );
+
         dropdownPanel.gameObject.SetActive(true);
 
         dropdownPanel.DOKill();
