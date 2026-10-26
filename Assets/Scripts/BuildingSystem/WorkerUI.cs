@@ -220,7 +220,7 @@ public class WorkerUI : MonoBehaviour
 
     public void OnAddBPBtnClicked()
     {
-        BuildingData university = EntityRegistry.Instance.GetBuilding(BusinessType.Science);
+        BuildingData university = EntityRegistry.Instance.GetBuilding(BusinessType.University);
 
         BuildingMainMenuUI.Instance.CloseBuildingPanel();
         ClosePanel();
@@ -233,7 +233,7 @@ public class WorkerUI : MonoBehaviour
 
         BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
 
-        BuildShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+        BuildShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.University);
 
         if (targetItem != null)
         {

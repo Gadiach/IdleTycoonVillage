@@ -31,7 +31,7 @@ public class ClickableObject : MonoBehaviour
             PanZoom.current.FocusOnObject(transform);
         }
 
-        if (buildingData.BusinessType == BusinessType.Science)
+        if (buildingData.BusinessType == BusinessType.University)
         {
             UniversityUI.Instance.OpenUniversityPanel();
         }

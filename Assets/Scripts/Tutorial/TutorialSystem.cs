@@ -120,7 +120,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void StartFarmDragHint()
     {
-        BuildShopItemUI farmItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Farming);
+        BuildShopItemUI farmItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.AnimalFarm);
 
         if (farmItem == null)
             return;
@@ -137,7 +137,7 @@ public class TutorialSystem : MonoBehaviour
         if (currentStep != TutorialStep.BuildFarm)
             return;
 
-        if (info.Building.BusinessType != BusinessType.Farming)
+        if (info.Building.BusinessType != BusinessType.AnimalFarm)
             return;
 
         tutorialFarm = info.Building;
@@ -229,7 +229,7 @@ public class TutorialSystem : MonoBehaviour
 
     private void StartWorkerDragHint()
     {
-        BuildShopItemUI workerItem = BuildShopSystem.Instance.GetWorkerItem(BusinessType.Farming);
+        BuildShopItemUI workerItem = BuildShopSystem.Instance.GetWorkerItem(BusinessType.AnimalFarm);
 
         if (workerItem == null || tutorialFarm == null)
             return;
@@ -369,7 +369,7 @@ public class TutorialSystem : MonoBehaviour
             if (info.ShopItem.Type != BuildShopCategory.Buildings)
                 return;
 
-            if (info.ShopItem.BusinessType != BusinessType.Farming)
+            if (info.ShopItem.BusinessType != BusinessType.AnimalFarm)
                 return;
 
             dragHint.Stop();
@@ -381,7 +381,7 @@ public class TutorialSystem : MonoBehaviour
             if (info.ShopItem.Type != BuildShopCategory.Workers)
                 return;
 
-            if (info.ShopItem.BusinessType != BusinessType.Farming)
+            if (info.ShopItem.BusinessType != BusinessType.AnimalFarm)
                 return;
 
             dragHint.Stop();

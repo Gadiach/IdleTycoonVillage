@@ -1,6 +1,12 @@
 public enum BusinessType 
 {
-    Farming, 
-    Engineering, 
-    Science
+    AnimalFarm,
+    CropFarm,
+    OilRig, 
+    University,
+    Oasis,
+    Cafe,
+    Hotel,
+    Bank,
+    PowerPlant
 }

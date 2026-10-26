@@ -14,7 +14,7 @@ public class WorkerPlaceable : MonoBehaviour, IPlaceable
 
     public bool UseGridSnapping => false;
 
-    [SerializeField] private BusinessType workerType = BusinessType.Farming;   
+    [SerializeField] private BusinessType workerType = BusinessType.AnimalFarm;   
 
     private void Awake()
     {

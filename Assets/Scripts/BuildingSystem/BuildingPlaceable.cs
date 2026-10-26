@@ -23,7 +23,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     private Image assignedWorkerImage;
 
     private WorkerIconAnimation workerIconAnimation;
-    public BusinessType AcceptedBusinessType => acceptedBusinessType;
+    public BusinessType AcceptedBusinessType => buildingData.BusinessType;
 
     public bool UseGridSnapping => true;
 
@@ -173,7 +173,10 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         }
     }
 
-    public bool AcceptsWorkerType(BusinessType type) => type == acceptedBusinessType;
+    public bool AcceptsWorkerType(BusinessType type)
+    {
+        return type == buildingData.BusinessType;
+    }
 
     public bool HasWorker() => assignedWorker != null;
 

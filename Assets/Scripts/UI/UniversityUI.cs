@@ -77,7 +77,7 @@ public class UniversityUI : MonoBehaviour
     public void TryOpenUniversity()
     {
         BuildingData university =
-            EntityRegistry.Instance.GetBuilding(BusinessType.Science);
+            EntityRegistry.Instance.GetBuilding(BusinessType.University);
 
         if (university != null)
         {
@@ -88,7 +88,7 @@ public class UniversityUI : MonoBehaviour
         BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
 
         BuildShopItemUI targetItem =
-            BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+            BuildShopSystem.Instance.GetBuildingItem(BusinessType.University);
 
         TutorialHighlightSystem.Instance.Highlight(
             targetItem.IconAndArrow
