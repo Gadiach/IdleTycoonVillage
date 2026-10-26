@@ -74,6 +74,29 @@ public class UniversityUI : MonoBehaviour
         }
     }
 
+    public void TryOpenUniversity()
+    {
+        BuildingData university =
+            EntityRegistry.Instance.GetBuilding(BusinessType.Science);
+
+        if (university != null)
+        {
+            OpenUniversityPanel();
+            return;
+        }
+
+        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
+
+        BuildShopItemUI targetItem =
+            BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
+
+        TutorialHighlightSystem.Instance.Highlight(
+            targetItem.IconAndArrow
+        );
+
+        BuildShopSystem.Instance.ScrollUp(1f);
+    }
+
     public void OpenUniversityPanel()
     {
         universityPanel.SetActive(true);

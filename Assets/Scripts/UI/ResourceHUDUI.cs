@@ -24,9 +24,18 @@ public class ResourceHUDUI : MonoBehaviour
     {
         EventManager.Instance.AddListener<CurrencyAddedEvent>(OnCurrencyChanged);
         EventManager.Instance.AddListener<CurrencySpentEvent>(OnCurrencyChanged);
+
         EventManager.Instance.AddListener<CurrencyShopAvailabilityChangedEvent>(
-        OnCurrencyShopAvailabilityChanged
-    );
+            OnCurrencyShopAvailabilityChanged
+        );
+
+        EventManager.Instance.AddListener<CurrencyVFXIconArrivedEvent>(
+            OnCurrencyVFXIconArrived
+        );
+
+        EventManager.Instance.AddListener<CurrencyShopRewardClaimedEvent>(
+            OnCurrencyShopRewardClaimed
+        );
     }
 
     private void OnDisable()
@@ -39,6 +48,12 @@ public class ResourceHUDUI : MonoBehaviour
         EventManager.Instance.RemoveListener<CurrencyShopAvailabilityChangedEvent>(
         OnCurrencyShopAvailabilityChanged
     );
+        EventManager.Instance.RemoveListener<CurrencyVFXIconArrivedEvent>(
+    OnCurrencyVFXIconArrived
+);
+        EventManager.Instance.RemoveListener<CurrencyShopRewardClaimedEvent>(
+    OnCurrencyShopRewardClaimed
+);
     }
 
     private void Awake()
@@ -72,6 +87,26 @@ public class ResourceHUDUI : MonoBehaviour
         }
     }
 
+    private void OnCurrencyShopRewardClaimed(
+    CurrencyShopRewardClaimedEvent info)
+    {
+        if (info.CurrencyType != CurrencyType.Coins)
+            return;
+
+        if (!currencyTexts.TryGetValue(
+            info.CurrencyType,
+            out var text))
+            return;
+
+        int finalAmount =
+            CurrencySystem.GetCurrencyAmount(info.CurrencyType);
+
+        int startAmount =
+            finalAmount - info.Amount;
+
+        text.text = startAmount.ToString();
+    }
+
     private void UpdateCoinNotificator()
     {
         bool hasFreeCoinReward = CurrencyShopSystem.Instance.HasAvailableFreeCoinReward();
@@ -94,9 +129,25 @@ public class ResourceHUDUI : MonoBehaviour
         UpdateAdsButton();
     }
 
+    private void OnCurrencyVFXIconArrived(
+    CurrencyVFXIconArrivedEvent info)
+    {
+        if (!currencyTexts.TryGetValue(
+            info.CurrencyType,
+            out var text))
+            return;
+
+        text.text = info.DisplayedAmount.ToString();
+    }
+
     private void OnCurrencyChanged(CurrencyAddedEvent info)
     {
         UpdateCurrency(info.CurrencyType);
+    }
+
+    public void OnAddBlueprintButtonClicked()
+    {
+        UniversityUI.Instance.TryOpenUniversity();
     }
 
     private void OnCurrencyChanged(CurrencySpentEvent info)

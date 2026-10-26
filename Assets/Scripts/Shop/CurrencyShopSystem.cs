@@ -175,8 +175,8 @@ public class CurrencyShopSystem : MonoBehaviour
     }
 
     private void GiveReward(
-    CurrencyShopItem item,
-    Vector3 sourcePosition)
+     CurrencyShopItem item,
+     Vector3 sourcePosition)
     {
         switch (item.RewardType)
         {
@@ -185,7 +185,10 @@ public class CurrencyShopSystem : MonoBehaviour
                 break;
 
             case CurrencyShopRewardType.RandomBlueprint:
-                GiveRandomBlueprint(sourcePosition);
+                GiveRandomBlueprint(
+                    item.Reward,
+                    sourcePosition
+                );
                 break;
         }
     }
@@ -250,19 +253,23 @@ public class CurrencyShopSystem : MonoBehaviour
         currencyShopUI.OpenCurrencyShop(CurrencyShopCategory.Coin);
     }
 
-    private void GiveRandomBlueprint(Vector3 sourcePosition)
+    private void GiveRandomBlueprint(
+    int amount,
+    Vector3 sourcePosition)
     {
         CurrencyType blueprint = GetRandomBlueprint();
 
+        Debug.Log($"RANDOM BLUEPRINT: {blueprint}");
+
         CurrencySystem.Instance.AddCurrency(
             blueprint,
-            1
+            amount
         );
 
         EventManager.Instance.QueueEvent(
             new CurrencyShopRewardClaimedEvent(
                 blueprint,
-                1,
+                amount,
                 sourcePosition
             )
         );
@@ -275,6 +282,13 @@ public class CurrencyShopSystem : MonoBehaviour
         foreach (BlueprintRewardChance reward in blueprintRewardConfig.rewards)
         {
             totalWeight += reward.weight;
+        }
+
+        if (totalWeight <= 0f)
+        {
+            Debug.LogError("BlueprintRewardConfig has no valid reward weights.");
+
+            return blueprintRewardConfig.rewards[0].blueprintType;
         }
 
         float randomValue = Random.Range(0f, totalWeight);

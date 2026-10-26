@@ -84,12 +84,13 @@ public class CurrencyVFXSystem : MonoBehaviour
             : flyingIconCount;
 
         Play(
-            sourcePosition,
-            currencyIcon,
-            targetIcon,
-            currencyType,
-            iconCount
-        );
+     sourcePosition,
+     currencyIcon,
+     targetIcon,
+     currencyType,
+     amount,
+     iconCount
+ );
     }
 
     private bool IsBlueprint(CurrencyType currencyType)
@@ -103,8 +104,15 @@ public class CurrencyVFXSystem : MonoBehaviour
     Sprite currencyIcon,
     RectTransform targetIcon,
     CurrencyType currencyType,
+    int amount,
     int iconCount)
     {
+        int finalAmount =
+            CurrencySystem.GetCurrencyAmount(currencyType);
+
+        int startAmount =
+            finalAmount - amount;
+
         for (int i = 0; i < iconCount; i++)
         {
             SpawnCurrencyIcon(
@@ -112,6 +120,8 @@ public class CurrencyVFXSystem : MonoBehaviour
                 currencyIcon,
                 targetIcon,
                 currencyType,
+                startAmount,
+                amount,
                 i,
                 iconCount
             );
@@ -123,6 +133,8 @@ public class CurrencyVFXSystem : MonoBehaviour
     Sprite currencyIcon,
     RectTransform targetIcon,
     CurrencyType currencyType,
+    int startAmount,
+    int rewardAmount,
     int index,
     int iconCount)
     {
@@ -170,6 +182,20 @@ public class CurrencyVFXSystem : MonoBehaviour
         sequence.OnComplete(() =>
         {
             PulseTarget(targetIcon);
+
+            int displayedAmount =
+                startAmount +
+                Mathf.RoundToInt(
+                    rewardAmount * ((index + 1f) / iconCount)
+                );
+
+            EventManager.Instance.QueueEvent(
+                new CurrencyVFXIconArrivedEvent(
+                    currencyType,
+                    displayedAmount
+                )
+            );
+
             Destroy(currencyObject);
 
             if (index == iconCount - 1)

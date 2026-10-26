@@ -15,6 +15,20 @@ public class CurrencyAddedEvent : GameEvent
     }
 }
 
+public class CurrencyVFXIconArrivedEvent : GameEvent
+{
+    public CurrencyType CurrencyType { get; }
+    public int DisplayedAmount { get; }
+
+    public CurrencyVFXIconArrivedEvent(
+        CurrencyType currencyType,
+        int displayedAmount)
+    {
+        CurrencyType = currencyType;
+        DisplayedAmount = displayedAmount;
+    }
+}
+
 public class BuildShopOpenedEvent : GameEvent
 {
 }

@@ -188,25 +188,10 @@ public class BuildingUI : MonoBehaviour
 
     public void OnAddBPBtnClicked()
     {
-        BuildingData university = EntityRegistry.Instance.GetBuilding(BusinessType.Science);
-
         BuildingMainMenuUI.Instance.CloseBuildingPanel();
         ClosePanel();
 
-        if (university != null)
-        {
-            UniversityUI.Instance.OpenUniversityPanel();
-
-            return;
-        }
-
-        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Buildings);
-
-        BuildShopItemUI targetItem = BuildShopSystem.Instance.GetBuildingItem(BusinessType.Science);
-
-        TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
-
-        BuildShopSystem.Instance.ScrollUp(1f);
+        UniversityUI.Instance.TryOpenUniversity();
     }
 
     private void UpdateUpgradePriceTextColor()

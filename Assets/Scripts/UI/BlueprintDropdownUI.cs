@@ -26,6 +26,8 @@ public class BlueprintDropdownUI : MonoBehaviour
     {
         InitializePositions();
         InitializeBlueprintIcons();
+
+        dropdownPanel.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -127,9 +129,10 @@ public class BlueprintDropdownUI : MonoBehaviour
     {
         UpdateBlueprintAmounts();
 
-        EventManager.Instance.QueueEvent(new BlueprintDropdownOpenedEvent());
+        dropdownPanel.gameObject.SetActive(true);
 
         dropdownPanel.DOKill();
+        dropdownPanel.anchoredPosition = closedPosition;
 
         isAnimating = true;
 
@@ -145,9 +148,6 @@ public class BlueprintDropdownUI : MonoBehaviour
 
     private void CloseDropdown()
     {
-        if (!isOpened)
-            return;
-
         dropdownPanel.DOKill();
 
         isAnimating = true;
@@ -159,6 +159,8 @@ public class BlueprintDropdownUI : MonoBehaviour
             {
                 isAnimating = false;
                 isOpened = false;
+
+                dropdownPanel.gameObject.SetActive(false);
             });
     }
 
