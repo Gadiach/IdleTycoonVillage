@@ -101,7 +101,6 @@ public class TimerTooltip : MonoBehaviour
         if (buildingData == evt.Building)
         {
             isBusinessAutomated = evt.IsAutomated;
-            Debug.Log($"[TimerTooltip] Automation changed for {evt.Building.Name}: {isBusinessAutomated}");
             UpdateSliderColor();
             RestartTimerLogic();
             ResetSliderUI();

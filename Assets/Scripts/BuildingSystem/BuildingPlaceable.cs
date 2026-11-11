@@ -14,9 +14,6 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     [SerializeField] private TimerUI timerUI;
     [SerializeField] private BuildingProductionController productionController;
 
-    [SerializeField] private BusinessType buildingType;
-    [SerializeField] private BusinessType acceptedBusinessType;
-
     [SerializeField] private GameObject addWorkerObject;
     [SerializeField] private GameObject assignedWorkerObject;
 
@@ -96,7 +93,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         {
             BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Workers);
 
-            BuildShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(acceptedBusinessType);
+            BuildShopItemUI targetItem = BuildShopSystem.Instance.GetWorkerItem(AcceptedBusinessType);
 
             if (targetItem != null)
             {

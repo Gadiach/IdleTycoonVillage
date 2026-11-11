@@ -1298,8 +1298,8 @@ MonoBehaviour:
   timer: {fileID: 8706903682574910408}
   timerUI: {fileID: 0}
   productionController: {fileID: 1214927713397149555}
-  buildingType: 1
-  acceptedBusinessType: 1
+  addWorkerObject: {fileID: 0}
+  assignedWorkerObject: {fileID: 0}
   buildingRoundIconImage: {fileID: 7386149318221317416}
   autoWorkDurationHours: 8
 --- !u!114 &3354500464093890867
@@ -1561,9 +1561,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  Currency: 0
+  LevelUpgradeCurrency: 0
   Type: 0
-  BusinessType: 0
+  BusinessType: 2
   Icon: {fileID: 0}
   PurchasePrice: 0
   baseUpgradePrice: 5

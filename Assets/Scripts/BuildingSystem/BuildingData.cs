@@ -6,8 +6,6 @@ public class BuildingData : MonoBehaviour
     #region Definition Data
 
     [Header("Definition Data")]
-    public string Name;
-    public string Description;
     public CurrencyType LevelUpgradeCurrency;
     public BuildShopCategory Type;
     public BusinessType BusinessType;
@@ -147,7 +145,6 @@ public class BuildingData : MonoBehaviour
 
     public void Initialize(BuildShopItem item)
     {
-        Name = item.Name;
         PurchasePrice = item.PurchasePrice;
         LevelUpgradeCurrency = item.Currency;
         Type = item.Type;

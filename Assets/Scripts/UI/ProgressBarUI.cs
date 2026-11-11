@@ -1,22 +1,96 @@
+using DG.Tweening;
 using UnityEngine;
 
-[ExecuteAlways]
 public class ProgressBarUI : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private RectTransform background;
+    [SerializeField] private RectTransform fillMask;
     [SerializeField] private RectTransform fill;
 
-    [Range(0f, 1f)]
-    [SerializeField] private float testValue;
+    [Header("Animation")]
+    [SerializeField] private float animationDuration = 0.6f;
 
-    [SerializeField] private float maxWidth = 200f;
+    private Tween progressTween;
+    private float currentProgress;
+    private float lastBackgroundWidth = -1f;
 
-    private void Update()
+    private void OnEnable()
     {
-        if (fill == null)
-            return;
+        RefreshSize();
+    }
 
-        fill.sizeDelta = new Vector2(
-            maxWidth * testValue,
-            fill.sizeDelta.y);
+    private void LateUpdate()
+    {
+        if (!Mathf.Approximately(
+                background.rect.width,
+                lastBackgroundWidth))
+        {
+            RefreshSize();
+        }
+    }
+
+    public void SetProgress(float progress, bool animate = true,
+        System.Action onComplete = null)
+    {
+        progress = Mathf.Clamp01(progress);
+
+        progressTween?.Kill();
+
+        RefreshSize();
+
+        if (!animate)
+        {
+            currentProgress = progress;
+            ApplyProgress(currentProgress);
+            onComplete?.Invoke();
+            return;
+        }
+
+        progressTween = DOTween.To(
+                () => currentProgress,
+                value =>
+                {
+                    currentProgress = value;
+                    ApplyProgress(value);
+                },
+                progress,
+                animationDuration)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() =>
+            {
+                currentProgress = progress;
+                ApplyProgress(currentProgress);
+                onComplete?.Invoke();
+            });
+    }
+
+    private void RefreshSize()
+    {
+        float width = background.rect.width;
+
+        lastBackgroundWidth = width;
+
+        fill.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Horizontal,
+            width
+        );
+
+        ApplyProgress(currentProgress);
+    }
+
+    private void ApplyProgress(float progress)
+    {
+        float width = background.rect.width * progress;
+
+        fillMask.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Horizontal,
+            width
+        );
+    }
+
+    private void OnDisable()
+    {
+        progressTween?.Kill();
     }
 }

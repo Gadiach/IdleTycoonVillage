@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +8,11 @@ public class MissionItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI missionNameText;
     [SerializeField] private TextMeshProUGUI progressText;
     [SerializeField] private Image iconImage;
-    [SerializeField] private Image progressFillImage;
     [SerializeField] private Button claimButton;
     [SerializeField] private TextMeshProUGUI claimRewardText; 
     [SerializeField] private RectTransform rewardIcon;
 
-    private Tween progressTween;
+    [SerializeField] private ProgressBarUI progressBar;
 
     private MissionRuntime mission;
     public MissionRuntime Mission => mission;
@@ -28,7 +26,7 @@ public class MissionItemUI : MonoBehaviour
         iconImage.sprite = missionIcon;
 
         progressText.text = mission.ProgressText;
-        progressFillImage.fillAmount = mission.ProgressPercentage;
+        progressBar.SetProgress(mission.ProgressPercentage, false);
 
         claimButton.transform.localScale = Vector3.one;
 
@@ -54,7 +52,7 @@ public class MissionItemUI : MonoBehaviour
     {
         if (EventManager.Instance == null)
             return;
-        progressTween?.Kill();
+
         claimButton.transform.DOKill();
         claimButton.onClick.RemoveListener(OnClaimButtonClicked);
 
@@ -76,7 +74,7 @@ public class MissionItemUI : MonoBehaviour
         if (info.Mission != mission)
             return;
 
-        UpdateProgressUI(info.Mission);
+        UpdateProgressText(info.Mission);
     }
 
     private void ShowClaimButton()
@@ -86,21 +84,20 @@ public class MissionItemUI : MonoBehaviour
         claimButton.transform.DOScale(1.04f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
-    private void UpdateProgressUI(MissionRuntime missionRuntime)
+    private void UpdateProgressText(MissionRuntime missionRuntime)
     {
         progressText.text = missionRuntime.ProgressText;
 
-        progressTween?.Kill();
-
-        progressTween = progressFillImage
-            .DOFillAmount(missionRuntime.ProgressPercentage, 0.6f)
-            .SetEase(Ease.OutCubic)
-            .OnComplete(() =>
+        progressBar.SetProgress(
+            missionRuntime.ProgressPercentage,
+            true,
+            () =>
             {
                 if (missionRuntime.CanClaim)
                 {
                     ShowClaimButton();
                 }
-            });
+            }
+        );
     }
 }
