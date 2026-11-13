@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WorkerDefinition", menuName = "Game/Worker Definition")]
+[CreateAssetMenu(fileName = "WorkerDefinition", menuName = "Workers/Worker Definition")]
 public class WorkerDefinition : ScriptableObject
 {
     [Header("Identity")]

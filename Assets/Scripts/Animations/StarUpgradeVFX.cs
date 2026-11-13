@@ -6,13 +6,12 @@ public class StarUpgradeVFX : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject flyingStarPrefab;
+    [SerializeField] private RectTransform flyingCurrencyPrefabsContainer;
 
     [Header("Worker")]
-    [SerializeField] private RectTransform workerFlyingStarsContainer;
     [SerializeField] private Image[] workerStars;
 
     [Header("Building")]
-    [SerializeField] private RectTransform buildingFlyingStarsContainer;
     [SerializeField] private Image[] buildingStars;
 
     [Header("Fly Animation")]
@@ -29,18 +28,19 @@ public class StarUpgradeVFX : MonoBehaviour
     [SerializeField] private float targetBumpDuration = 0.15f;
 
     public void PlayWorkerUpgrade(
-        Vector3 startPosition,
-        Image targetStar,
-        Sprite flyingStarSprite,
-        Color targetColor)
+    Vector3 startPosition,
+    Image targetStar,
+    Sprite flyingStarSprite,
+    Color targetColor,
+    Color flyingStarColor)
     {
         Play(
             startPosition,
             targetStar,
             workerStars,
-            workerFlyingStarsContainer,
             flyingStarSprite,
-            targetColor
+            targetColor,
+            flyingStarColor
         );
     }
 
@@ -48,33 +48,37 @@ public class StarUpgradeVFX : MonoBehaviour
         Vector3 startPosition,
         Image targetStar,
         Sprite flyingStarSprite,
-        Color targetColor)
+        Color targetColor,
+        Color flyingStarColor)
     {
         Play(
             startPosition,
             targetStar,
             buildingStars,
-            buildingFlyingStarsContainer,
             flyingStarSprite,
-            targetColor
+            targetColor,
+            flyingStarColor
         );
     }
 
     private void Play(
-        Vector3 startPosition,
-        Image targetStar,
-        Image[] stars,
-        RectTransform flyingStarsContainer,
-        Sprite flyingStarSprite,
-        Color targetColor)
+    Vector3 startPosition,
+    Image targetStar,
+    Image[] stars,
+    Sprite flyingStarSprite,
+    Color targetColor,
+    Color flyingStarColor)
     {
-        GameObject starObject = Instantiate(flyingStarPrefab, flyingStarsContainer);
+        GameObject starObject = Instantiate(
+            flyingStarPrefab,
+            flyingCurrencyPrefabsContainer
+        );
 
         RectTransform starRect = starObject.GetComponent<RectTransform>();
-
         Image starImage = starObject.GetComponent<Image>();
 
         starImage.sprite = flyingStarSprite;
+        starImage.color = flyingStarColor;
 
         starRect.position = startPosition;
         starRect.localScale = Vector3.one * flyingStarStartScale;

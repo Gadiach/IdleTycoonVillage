@@ -19,7 +19,7 @@ MonoBehaviour:
     amount: 0
   buildingBlueprints:
   - currencyType: 2
-    amount: 2
+    amount: 10
   - currencyType: 3
     amount: 0
   - currencyType: 4

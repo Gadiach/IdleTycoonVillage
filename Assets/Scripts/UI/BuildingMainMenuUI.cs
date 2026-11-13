@@ -7,6 +7,10 @@ public class BuildingMainMenuUI : MonoBehaviour
 {
     public static BuildingMainMenuUI Instance;
 
+    [Header("Colors")]
+    [SerializeField] private ColorDatabase colorDatabase;
+
+
     [Header("Common UI Elements")]
         
     public GameObject buildingPanel;
@@ -87,7 +91,6 @@ public class BuildingMainMenuUI : MonoBehaviour
     [SerializeField] private float popDuration = 0.15f;
     [SerializeField] private float floatDistance = 30f;
     [SerializeField] private float floatDuration = 0.5f;
-    [SerializeField] private Color improvementColor = Color.green;
 
     private BuildingData currentBuilding;
     private WorkerData currentWorker;
@@ -435,6 +438,10 @@ public class BuildingMainMenuUI : MonoBehaviour
         Vector2 initialChangePosition,
         string change)
     {
+        Color improvementColor = colorDatabase.GetColor(
+        ColorCategory.ImprovementColor
+    );
+
         valueText.DOKill();
         valueText.rectTransform.DOKill();
 
@@ -660,33 +667,24 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     private void SetWorkerLevelTextMaxed()
     {
-        workerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " +
-                               $"{currentWorker.CurrentProgressionMaxLevel}</color>";
-    }
-
-    private Color GetColorByRarity(Rarities rarity)
-    {
-        return rarity switch
-        {
-            Rarities.Primitive => Color.blue,
-            Rarities.Developed => Color.green,
-            Rarities.Industrial => Color.yellow,
-            Rarities.Modern => new Color(0.5f, 0, 1),
-            Rarities.Futuristic => Color.red,
-            _ => Color.grey
-        };
+        workerLevelText.text = $"Lv: <color=red>{currentWorker.CurrentLevel} / " + $"{currentWorker.CurrentProgressionMaxLevel}</color>";
     }
 
     private void UpdateWorkerStarUI(WorkerData worker)
     {
         int tierValue = (int)worker.CurrentTier;
         int maxStars = colorStarsWorker.Length;
-        Color activeColor = GetColorByRarity(worker.CurrentRarity);
+
+        Color activeColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(worker.CurrentRarity)
+        );
+
         Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)
         {
-            colorStarsWorker[i].color = (i < tierValue) ? activeColor : inactiveColor;
+            colorStarsWorker[i].color =
+                i < tierValue ? activeColor : inactiveColor;
         }
     }
 
@@ -694,12 +692,17 @@ public class BuildingMainMenuUI : MonoBehaviour
     {
         int tierValue = (int)building.CurrentTier;
         int maxStars = colorStarsBuilding.Length;
-        Color activeColor = GetColorByRarity(building.CurrentRarity);
+
+        Color activeColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(building.CurrentRarity)
+        );
+
         Color inactiveColor = Color.grey;
 
         for (int i = 0; i < maxStars; i++)
         {
-            colorStarsBuilding[i].color = (i < tierValue) ? activeColor : inactiveColor;
+            colorStarsBuilding[i].color =
+                i < tierValue ? activeColor : inactiveColor;
         }
     }
 

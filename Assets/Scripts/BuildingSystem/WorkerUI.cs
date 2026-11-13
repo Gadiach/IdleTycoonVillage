@@ -6,18 +6,20 @@ public class WorkerUI : MonoBehaviour
 {
     public static WorkerUI Instance;
 
+    [Header("Colors")]
+    [SerializeField] private ColorDatabase colorDatabase;
+
     [Header("Upgrade Visual States")]
     [SerializeField] private GameObject workerCanUpgradeVisuals;
     [SerializeField] private GameObject workerNotEnoughCurrencyVisuals;
 
-    [SerializeField] private GameObject[] nextTierUpgradeStars;
-    [SerializeField] private GameObject[] nextTierUpgradeStarsInactive;
+    [SerializeField] private Image[] nextTierUpgradeStars;
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI currentRarityText;
 
-    [SerializeField] private Image[] currentTierRarityStarsColor;
-    [SerializeField] private Image[] nextTierRarityStarsColor;
+    [SerializeField] private Image[] currentTierStars;
+    [SerializeField] private Image[] nextTierStars;
     
     [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
@@ -200,11 +202,18 @@ public class WorkerUI : MonoBehaviour
         if (!currentWorker.CanUpgradeTierOrRarity)
             return;
 
-        GameObject sourceStar = GetActiveUpgradeStar();
+        Image sourceStar = GetActiveUpgradeStar();
         Image targetStar = GetUpgradeTargetStar();
 
+        if (sourceStar == null || targetStar == null)
+            return;
+
         Vector3 sourcePosition = sourceStar.transform.position;
-        Sprite sourceSprite = sourceStar.GetComponent<Image>().sprite;
+        Sprite sourceSprite = sourceStar.sprite;
+
+        Color flyingStarColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(currentWorker.CurrentRarity)
+        );
 
         Color previousStarColor = targetStar.color;
 
@@ -215,7 +224,13 @@ public class WorkerUI : MonoBehaviour
         Color upgradedStarColor = targetStar.color;
         targetStar.color = previousStarColor;
 
-        PlayStarUpgradeVFX(sourcePosition,sourceSprite,targetStar,upgradedStarColor);
+        PlayStarUpgradeVFX(
+            sourcePosition,
+            sourceSprite,
+            targetStar,
+            upgradedStarColor,
+            flyingStarColor
+        );
     }
 
     public void OnAddBPBtnClicked()
@@ -245,37 +260,45 @@ public class WorkerUI : MonoBehaviour
 
     private Image GetUpgradeTargetStar()
     {
-        int targetIndex = currentWorker.CurrentTier == Tiers.Tier5 ? 0 : (int)currentWorker.CurrentTier;
+        int targetIndex = currentWorker.CurrentTier == Tiers.Tier5
+            ? 0
+            : (int)currentWorker.CurrentTier;
 
-        return currentTierRarityStarsColor[targetIndex];
+        return currentTierStars[targetIndex];
     }
 
-    private GameObject GetActiveUpgradeStar()
+    private Image GetActiveUpgradeStar()
     {
-        foreach (GameObject star in nextTierUpgradeStars)
+        foreach (Image star in nextTierUpgradeStars)
         {
-            if (star.activeSelf)
+            if (star.gameObject.activeSelf)
                 return star;
         }
 
         return null;
     }
 
-    private void PlayStarUpgradeVFX(Vector3 sourcePosition,Sprite sourceSprite,Image targetStar,Color targetColor)
+    private void PlayStarUpgradeVFX(
+    Vector3 sourcePosition,
+    Sprite sourceSprite,
+    Image targetStar,
+    Color targetColor,
+    Color flyingStarColor)
     {
-        starUpgradeVFX.PlayWorkerUpgrade(sourcePosition,targetStar,sourceSprite,targetColor);
+        starUpgradeVFX.PlayWorkerUpgrade(
+            sourcePosition,
+            targetStar,
+            sourceSprite,
+            targetColor,
+            flyingStarColor
+        );
     }
 
     private void HideAllUpgradeStars()
     {
-        foreach (GameObject star in nextTierUpgradeStars)
+        foreach (Image star in nextTierUpgradeStars)
         {
-            star.SetActive(false);
-        }
-
-        foreach (GameObject star in nextTierUpgradeStarsInactive)
-        {
-            star.SetActive(false);
+            star.gameObject.SetActive(false);
         }
     }
 
@@ -286,44 +309,27 @@ public class WorkerUI : MonoBehaviour
         if (currentWorker.IsMaxProgression)
             return;
 
-        int upgradeStarIndex;
+        int upgradeStarIndex = currentWorker.CurrentTier == Tiers.Tier5
+            ? 0
+            : (int)currentWorker.NextTier - 1;
 
-        if (currentWorker.CurrentTier == Tiers.Tier5)
-        {
-            upgradeStarIndex = 0;
-        }
-        else
-        {
-            upgradeStarIndex = (int)currentWorker.NextTier - 1;
-        }
+        bool canAfford =
+            currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade;
 
-        if (currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade)
-        {
-            nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
-        }
-        else
-        {
-            nextTierUpgradeStarsInactive[upgradeStarIndex].SetActive(true);
-        }
+        ColorCategory category = canAfford
+            ? ColorCategory.ActiveUpgradeStarColor
+            : ColorCategory.InactiveStarColor;
+
+        Image upgradeStar = nextTierUpgradeStars[upgradeStarIndex];
+
+        upgradeStar.color = colorDatabase.GetColor(category);
+        upgradeStar.gameObject.SetActive(true);
     }
 
     public void ClosePanel()
     {
         workerPanel.SetActive(false);
         blackBackground.SetActive(false);
-    }
-
-    private Color GetColorByRarity(Rarities rarity)
-    {
-        return rarity switch
-        {
-            Rarities.Primitive => Color.blue,
-            Rarities.Developed => Color.green,
-            Rarities.Industrial => Color.yellow,
-            Rarities.Modern => new Color(0.5f, 0f, 1f),
-            Rarities.Futuristic => Color.red,
-            _ => Color.grey
-        };
     }
 
     private void UpdateStarUI(WorkerData worker)
@@ -333,22 +339,28 @@ public class WorkerUI : MonoBehaviour
         int currentTier = (int)info.CurrentTier;
         int nextTier = (int)info.NextTierValue;
 
-        int maxStars = currentTierRarityStarsColor.Length;
+        int maxStars = currentTierStars.Length;
 
-        Color activeColor = GetColorByRarity(info.CurrentRarity);
+        Color activeColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(info.CurrentRarity)
+        );
 
-        Color inactiveColor = Color.grey;
+        Color inactiveColor = colorDatabase.GetColor(
+            ColorCategory.InactiveStarColor
+        );
 
         for (int i = 0; i < maxStars; i++)
         {
-            currentTierRarityStarsColor[i].color = (i < currentTier) ? activeColor : inactiveColor;
+            currentTierStars[i].color =
+                i < currentTier ? activeColor : inactiveColor;
         }
 
         if (nextTier > currentTier)
         {
             for (int i = 0; i < maxStars; i++)
             {
-                nextTierRarityStarsColor[i].color = (i < nextTier) ? activeColor : inactiveColor;
+                nextTierStars[i].color =
+                    i < nextTier ? activeColor : inactiveColor;
             }
 
             return;
@@ -356,12 +368,22 @@ public class WorkerUI : MonoBehaviour
 
         if (info.NextRarity != info.CurrentRarity)
         {
-            Color nextColor = GetColorByRarity(info.NextRarity);
+            Color nextColor = colorDatabase.GetColor(
+                RaritySystem.GetColorCategory(info.NextRarity)
+            );
 
             for (int i = 0; i < maxStars; i++)
             {
-                nextTierRarityStarsColor[i].color = (i == 0) ? nextColor : inactiveColor;
+                nextTierStars[i].color =
+                    i == 0 ? nextColor : inactiveColor;
             }
+
+            return;
+        }
+
+        for (int i = 0; i < nextTierStars.Length; i++)
+        {
+            nextTierStars[i].color = inactiveColor;
         }
     }
 }

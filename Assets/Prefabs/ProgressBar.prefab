@@ -53,6 +53,8 @@ MonoBehaviour:
   fillMask: {fileID: 5075401262165214199}
   fill: {fileID: 920990099393730719}
   animationDuration: 0.6
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
+  fillImage: {fileID: 5729188489064407652}
 --- !u!1 &3896050680702025031
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.54509807, g: 0.48627454, b: 0.4431373, a: 1}
+  m_Color: {r: 0.70980394, g: 0.6509804, b: 0.62352943, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

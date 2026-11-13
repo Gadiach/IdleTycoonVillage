@@ -26,7 +26,9 @@ public class MissionItemUI : MonoBehaviour
         iconImage.sprite = missionIcon;
 
         progressText.text = mission.ProgressText;
+
         progressBar.SetProgress(mission.ProgressPercentage, false);
+        progressBar.SetColor(ColorCategory.MissionProgressColor);
 
         claimButton.transform.localScale = Vector3.one;
 

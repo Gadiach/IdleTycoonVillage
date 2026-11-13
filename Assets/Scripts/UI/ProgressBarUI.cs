@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class ProgressBarUI : MonoBehaviour
     private Tween progressTween;
     private float currentProgress;
     private float lastBackgroundWidth = -1f;
+
+    [SerializeField] private ColorDatabase colorDatabase;
+    [SerializeField] private Image fillImage;
 
     private void OnEnable()
     {
@@ -63,6 +67,11 @@ public class ProgressBarUI : MonoBehaviour
                 ApplyProgress(currentProgress);
                 onComplete?.Invoke();
             });
+    }
+
+    public void SetColor(ColorCategory category)
+    {
+        fillImage.color = colorDatabase.GetColor(category);
     }
 
     private void RefreshSize()

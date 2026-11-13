@@ -6,18 +6,20 @@ public class BuildingUI : MonoBehaviour
 {
     public static BuildingUI Instance;
 
+    [Header("Colors")]
+    [SerializeField] private ColorDatabase colorDatabase;
+
     [Header("Upgrade Visual States")]
     [SerializeField] private GameObject buildingCanUpgradeVisuals;
     [SerializeField] private GameObject buildingNotEnoughCurrencyVisuals;
 
-    [SerializeField] private GameObject[] nextTierUpgradeStars;
-    [SerializeField] private GameObject[] nextTierUpgradeStarsInactive;
+    [SerializeField] private Image[] nextTierUpgradeStars;
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI currentRarityText;
 
-    [SerializeField] private Image[] currentTierRarityStarsColor;
-    [SerializeField] private Image[] nextTierRarityStarsColor;
+    [SerializeField] private Image[] currentTierStars;
+    [SerializeField] private Image[] nextTierStars;
 
     [SerializeField] private StarUpgradeVFX starUpgradeVFX;
 
@@ -98,21 +100,6 @@ public class BuildingUI : MonoBehaviour
         buildingCanUpgradeVisuals.SetActive(canAfford);
         buildingNotEnoughCurrencyVisuals.SetActive(!canAfford);
     }
-
-    private Color GetColorByRarity(Rarities rarity)
-    {
-        return rarity switch
-        {
-            Rarities.Primitive => Color.blue,
-            Rarities.Developed => Color.green,
-            Rarities.Industrial => Color.yellow,
-            Rarities.Modern => new Color(0.5f, 0, 1),   
-            Rarities.Futuristic => Color.red, 
-            _ => Color.grey
-        };
-    }
-
-    
 
     private void UpdateCurrentRarityText()
     {
@@ -209,11 +196,18 @@ public class BuildingUI : MonoBehaviour
         if (!currentBuilding.CanUpgradeTierOrRarity)
             return;
 
-        GameObject sourceStar = GetActiveUpgradeStar();
+        Image sourceStar = GetActiveUpgradeStar();
         Image targetStar = GetUpgradeTargetStar();
 
+        if (sourceStar == null || targetStar == null)
+            return;
+
         Vector3 sourcePosition = sourceStar.transform.position;
-        Sprite sourceSprite = sourceStar.GetComponent<Image>().sprite;
+        Sprite sourceSprite = sourceStar.sprite;
+
+        Color flyingStarColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(currentBuilding.CurrentRarity)
+        );
 
         Color previousStarColor = targetStar.color;
 
@@ -228,7 +222,8 @@ public class BuildingUI : MonoBehaviour
             sourcePosition,
             sourceSprite,
             targetStar,
-            upgradedStarColor
+            upgradedStarColor,
+            flyingStarColor
         );
     }
 
@@ -236,14 +231,14 @@ public class BuildingUI : MonoBehaviour
     {
         int targetIndex = currentBuilding.CurrentTier == Tiers.Tier5 ? 0 : (int)currentBuilding.CurrentTier;
 
-        return currentTierRarityStarsColor[targetIndex];
+        return currentTierStars[targetIndex];
     }
 
-    private GameObject GetActiveUpgradeStar()
+    private Image GetActiveUpgradeStar()
     {
-        foreach (GameObject star in nextTierUpgradeStars)
+        foreach (Image star in nextTierUpgradeStars)
         {
-            if (star.activeSelf)
+            if (star.gameObject.activeSelf)
                 return star;
         }
 
@@ -251,29 +246,26 @@ public class BuildingUI : MonoBehaviour
     }
 
     private void PlayStarUpgradeVFX(
-        Vector3 sourcePosition,
-        Sprite sourceSprite,
-        Image targetStar,
-        Color targetColor)
+    Vector3 sourcePosition,
+    Sprite sourceSprite,
+    Image targetStar,
+    Color targetColor,
+    Color flyingStarColor)
     {
         starUpgradeVFX.PlayBuildingUpgrade(
             sourcePosition,
             targetStar,
             sourceSprite,
-            targetColor
+            targetColor,
+            flyingStarColor
         );
     }
 
     private void HideAllUpgradeStars()
     {
-        foreach (GameObject star in nextTierUpgradeStars)
+        foreach (Image star in nextTierUpgradeStars)
         {
-            star.SetActive(false);
-        }
-
-        foreach (GameObject star in nextTierUpgradeStarsInactive)
-        {
-            star.SetActive(false);
+            star.gameObject.SetActive(false);
         }
     }
 
@@ -284,25 +276,16 @@ public class BuildingUI : MonoBehaviour
         if (currentBuilding.IsMaxProgression)
             return;
 
-        int upgradeStarIndex;
+        int upgradeStarIndex = currentBuilding.CurrentTier == Tiers.Tier5 ? 0 : (int)currentBuilding.NextTier - 1;
 
-        if (currentBuilding.CurrentTier == Tiers.Tier5)
-        {
-            upgradeStarIndex = 0;
-        }
-        else
-        {
-            upgradeStarIndex = (int)currentBuilding.NextTier - 1;
-        }
+        bool canAfford = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade;
 
-        if (currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade)
-        {
-            nextTierUpgradeStars[upgradeStarIndex].SetActive(true);
-        }
-        else
-        {
-            nextTierUpgradeStarsInactive[upgradeStarIndex].SetActive(true);
-        }
+        ColorCategory category = canAfford ? ColorCategory.ActiveUpgradeStarColor : ColorCategory.InactiveStarColor;
+
+        Image upgradeStar = nextTierUpgradeStars[upgradeStarIndex];
+
+        upgradeStar.color = colorDatabase.GetColor(category);
+        upgradeStar.gameObject.SetActive(true);
     }
 
     private void SetAddStarButtonState(bool interactable)
@@ -324,28 +307,35 @@ public class BuildingUI : MonoBehaviour
         int currentTier = (int)info.CurrentTier;
         int nextTier = (int)info.NextTierValue;
 
-        int maxStars = currentTierRarityStarsColor.Length;
+        int maxStars = currentTierStars.Length;
 
-        Color activeColor = GetColorByRarity(info.CurrentRarity);
-        Color inactiveColor = Color.grey;
+        Color activeColor = colorDatabase.GetColor(RaritySystem.GetColorCategory(info.CurrentRarity));
+
+        Color inactiveColor = colorDatabase.GetColor(ColorCategory.InactiveStarColor);
 
         for (int i = 0; i < maxStars; i++)
-            currentTierRarityStarsColor[i].color = (i < currentTier) ? activeColor : inactiveColor;
+        {
+            currentTierStars[i].color = i < currentTier ? activeColor : inactiveColor;
+        }
 
         if (nextTier > currentTier)
         {
             for (int i = 0; i < maxStars; i++)
-                nextTierRarityStarsColor[i].color = (i < nextTier) ? activeColor : inactiveColor;
+            {
+                nextTierStars[i].color = i < nextTier ? activeColor : inactiveColor;
+            }
 
             return;
         }
 
         if (info.NextRarity != info.CurrentRarity)
         {
-            Color nextColor = GetColorByRarity(info.NextRarity);
+            Color nextColor = colorDatabase.GetColor(RaritySystem.GetColorCategory(info.NextRarity));
 
             for (int i = 0; i < maxStars; i++)
-                nextTierRarityStarsColor[i].color = (i == 0) ? nextColor : inactiveColor;
+            {
+                nextTierStars[i].color = i == 0 ? nextColor : inactiveColor;
+            }
 
             return;
         }

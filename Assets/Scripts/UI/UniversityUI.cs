@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UniversityUI : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class UniversityUI : MonoBehaviour
 
     [SerializeField] private TabGroup tabGroup;
 
+    [Header("University Building Icon")]
+    [SerializeField] private BuildingIconDatabase buildingIconDatabase;
+    [SerializeField] private Image universityBuildingImage;
+
     private void Awake()
     {
         Instance = this;
@@ -26,6 +31,9 @@ public class UniversityUI : MonoBehaviour
 
     public void CreateAndInitializeBlueprintItems(Dictionary<BuildShopCategory, List<BlueprintItem>> blueprintItems)
     {
+        if (tabGroup == null || blueprintItemPrefab == null)
+            return;
+
         foreach (var pair in blueprintItems)
         {
             CreateCategoryItems(pair.Value, pair.Key);
@@ -44,6 +52,20 @@ public class UniversityUI : MonoBehaviour
 
             itemUI.Initialize(item, currencyIconDatabase.GetIcon(item.Type));
         }
+    }
+
+    private void UpdateUniversityBuildingIcon()
+    {
+        BuildingData university =
+            EntityRegistry.Instance.GetBuilding(BusinessType.University);
+
+        if (university == null)
+            return;
+
+        universityBuildingImage.sprite = buildingIconDatabase.GetIcon(
+            university.BusinessType,
+            university.CurrentRarity
+        );
     }
 
 
@@ -99,6 +121,8 @@ public class UniversityUI : MonoBehaviour
 
     public void OpenUniversityPanel()
     {
+        UpdateUniversityBuildingIcon();
+
         universityPanel.SetActive(true);
         blackBackground.SetActive(true);
     }

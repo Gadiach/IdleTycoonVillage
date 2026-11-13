@@ -22,9 +22,9 @@ MonoBehaviour:
   - CurrencyType: 4
     Icon: {fileID: 21300000, guid: b9f5359a2706a6a49aea27e49a004131, type: 3}
   - CurrencyType: 5
-    Icon: {fileID: 21300000, guid: 206f6f29df5247548b4e8108c330d6e9, type: 3}
-  - CurrencyType: 6
     Icon: {fileID: 21300000, guid: a3426570ea9d66948ab52cf52d9eb44f, type: 3}
+  - CurrencyType: 6
+    Icon: {fileID: 21300000, guid: 206f6f29df5247548b4e8108c330d6e9, type: 3}
   - CurrencyType: 7
     Icon: {fileID: 21300000, guid: d625607cfac014e4bb363baa843d22f9, type: 3}
   - CurrencyType: 8
@@ -32,6 +32,6 @@ MonoBehaviour:
   - CurrencyType: 9
     Icon: {fileID: 21300000, guid: 0ff5316b4bdbe784994a19241a6275d3, type: 3}
   - CurrencyType: 10
-    Icon: {fileID: 21300000, guid: 8c805661763aaf044903bb4fda7a499c, type: 3}
-  - CurrencyType: 11
     Icon: {fileID: 21300000, guid: 978387454a7e184429ab96d9c8fe3c71, type: 3}
+  - CurrencyType: 11
+    Icon: {fileID: 21300000, guid: 8c805661763aaf044903bb4fda7a499c, type: 3}
