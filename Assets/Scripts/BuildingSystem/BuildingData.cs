@@ -7,7 +7,7 @@ public class BuildingData : MonoBehaviour
 
     [Header("Definition Data")]
     public CurrencyType LevelUpgradeCurrency;
-    public BuildShopCategory Type;
+    public BuildShopCategory ShopCategory;
     public BusinessType BusinessType;
     public Sprite Icon;
     public int PurchasePrice;
@@ -147,7 +147,7 @@ public class BuildingData : MonoBehaviour
     {
         PurchasePrice = item.PurchasePrice;
         LevelUpgradeCurrency = item.Currency;
-        Type = item.Type;
+        ShopCategory = item.Type;
         Icon = item.Icon;
     }
 

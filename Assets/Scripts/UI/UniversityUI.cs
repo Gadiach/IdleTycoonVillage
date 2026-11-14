@@ -20,6 +20,14 @@ public class UniversityUI : MonoBehaviour
     [SerializeField] private BuildingIconDatabase buildingIconDatabase;
     [SerializeField] private Image universityBuildingImage;
 
+    [Header("Worker Icon")]
+    [SerializeField] private WorkerIconDatabase workerIconDatabase;
+    [SerializeField] private Image universityWorkerImage;
+
+    [Header("Worker UI")]
+    [SerializeField] private GameObject OpenWorkerBPPanelButton;
+    [SerializeField] private GameObject AddWorkerBtn;
+
     private void Awake()
     {
         Instance = this;
@@ -66,6 +74,26 @@ public class UniversityUI : MonoBehaviour
             university.BusinessType,
             university.CurrentRarity
         );
+    }
+
+    private void UpdateUniversityWorkerUI()
+    {
+        BuildingData university =
+            EntityRegistry.Instance.GetBuilding(BusinessType.University);
+
+        WorkerData worker = university?.Placeable?.GetAssignedWorker();
+
+        bool hasWorker = worker != null;
+
+        OpenWorkerBPPanelButton.SetActive(hasWorker);
+        AddWorkerBtn.SetActive(!hasWorker);
+
+        universityWorkerImage.sprite = hasWorker
+            ? workerIconDatabase.GetFullBodyIcon(
+                worker.BusinessType,
+                worker.CurrentRarity
+            )
+            : workerIconDatabase.DefaultInactiveWorkerIcon;
     }
 
 
@@ -119,9 +147,33 @@ public class UniversityUI : MonoBehaviour
         BuildShopSystem.Instance.ScrollUp(1f);
     }
 
+    public void OpenWorkerShop()
+    {
+        BuildingData university =
+            EntityRegistry.Instance.GetBuilding(BusinessType.University);
+
+        if (university == null || university.Placeable == null)
+            return;
+
+        BusinessType workerType = university.Placeable.AcceptedBusinessType;
+
+        CloseUniversityPanel();
+
+        BuildShopSystem.Instance.OpenBuildShop(BuildShopCategory.Workers);
+
+        BuildShopItemUI targetItem =
+            BuildShopSystem.Instance.GetWorkerItem(workerType);
+
+        if (targetItem != null)
+        {
+            TutorialHighlightSystem.Instance.Highlight(targetItem.IconAndArrow);
+        }
+    }
+
     public void OpenUniversityPanel()
     {
         UpdateUniversityBuildingIcon();
+        UpdateUniversityWorkerUI();
 
         universityPanel.SetActive(true);
         blackBackground.SetActive(true);

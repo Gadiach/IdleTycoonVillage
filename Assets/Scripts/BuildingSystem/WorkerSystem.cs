@@ -1,38 +1,32 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorkerSystem : MonoBehaviour
 {
     public static WorkerSystem Instance;
 
+    [Header("Configs")]
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
-    [SerializeField] private WorkerRoundIconDatabase workerRoundIconDatabase;
-    [SerializeField] private WorkerDefinition[] workerDefinitions;
+    [SerializeField] private WorkerBaseEconomyConfig workerBaseEconomyConfig;
+
+    [Header("Databases")]
+    [SerializeField] private WorkerIconDatabase workerIconDatabase;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    private WorkerDefinition GetDefinition(BusinessType type)
-    {
-        foreach (var definition in workerDefinitions)
-        {
-            if (definition.Type == type)
-                return definition;
-        }
-
-        Debug.LogError($"WorkerDefinition for {type} not found.");
-        return null;
-    }
-
     public WorkerData CreateWorker(BusinessType type, bool register)
     {
-        WorkerDefinition definition = GetDefinition(type);
-
-        WorkerData worker = new WorkerData(definition,progressionConfig,upgradeCostConfig,economyConfig);
+        WorkerData worker = new WorkerData(
+            type,
+            progressionConfig,
+            upgradeCostConfig,
+            economyConfig,
+            workerBaseEconomyConfig
+        );
 
         if (register)
             EntityRegistry.Instance.AddWorker(worker);
@@ -40,8 +34,13 @@ public class WorkerSystem : MonoBehaviour
         return worker;
     }
 
-    public Sprite GetRoundIcon(BusinessType businessType)
+    public Sprite GetRoundIcon(BusinessType businessType, Rarities rarity)
     {
-        return workerRoundIconDatabase.GetIcon(businessType);
+        return workerIconDatabase.GetRoundIcon(businessType, rarity);
+    }
+
+    public Sprite GetFullBodyIcon(BusinessType businessType, Rarities rarity)
+    {
+        return workerIconDatabase.GetFullBodyIcon(businessType, rarity);
     }
 }

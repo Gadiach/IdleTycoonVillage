@@ -177,7 +177,7 @@ public class MissionSystem : MonoBehaviour
                 continue;
 
             if (mission.Data.NeedBusinessType &&
-                mission.Data.TargetBusinessType != worker.Type)
+                mission.Data.TargetBusinessType != worker.BusinessType)
                 continue;
 
             if (mission.Data.NeedRarity &&
@@ -230,7 +230,7 @@ public class MissionSystem : MonoBehaviour
             if (mission.Completed)
                 continue;
 
-            if (mission.Data.NeedBusinessType && mission.Data.TargetBusinessType != info.Worker.Type)
+            if (mission.Data.NeedBusinessType && mission.Data.TargetBusinessType != info.Worker.BusinessType)
                 continue;
 
             mission.AddProgress(1);

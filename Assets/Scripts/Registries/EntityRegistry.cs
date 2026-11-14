@@ -46,7 +46,7 @@ public class EntityRegistry : MonoBehaviour
     {
         foreach (WorkerData worker in workers)
         {
-            if (worker.Type == type)
+            if (worker.BusinessType == type)
                 return worker;
         }
 

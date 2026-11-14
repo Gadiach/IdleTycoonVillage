@@ -10,6 +10,8 @@ public class BuildingMainMenuUI : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private ColorDatabase colorDatabase;
 
+    [Header("Databases")]
+    [SerializeField] private WorkerIconDatabase workerIconDatabase;
 
     [Header("Common UI Elements")]
         
@@ -259,6 +261,7 @@ public class BuildingMainMenuUI : MonoBehaviour
 
         EvaluateWorkerUpgradeState();
         UpdateWorkerStarUI(currentWorker);
+        UpdateWorkerImage();
         UpdateUpgradeIndicators();
     }
 
@@ -389,7 +392,13 @@ public class BuildingMainMenuUI : MonoBehaviour
 
     private void UpdateWorkerImage()
     {
-        WorkerImage.sprite = currentWorker.Icon;
+        if (currentWorker == null)
+            return;
+
+        WorkerImage.sprite = workerIconDatabase.GetFullBodyIcon(
+            currentWorker.BusinessType,
+            currentWorker.CurrentRarity
+        );
     }
 
     private void UpdateWorkerUpgradePriceText()

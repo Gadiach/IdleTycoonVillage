@@ -54,6 +54,21 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         workerIconAnimation?.StartAnimation();
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.AddListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
+    }
+
+    private void OnDisable()
+    {
+        if (EventManager.Instance == null)
+            return;
+
+        EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+        EventManager.Instance.RemoveListener<WorkerTierOrRarityChangedEvent>(OnWorkerTierOrRarityChanged);
+    }
+
     private void Update()
     {
         CheckPlacementAndSetColor();
@@ -183,9 +198,7 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
     {
         assignedWorker = worker;
 
-        Sprite workerIcon = WorkerSystem.Instance.GetRoundIcon(worker.Type);
-
-        assignedWorkerImage.sprite = workerIcon;
+        UpdateAssignedWorkerIcon();
 
         addWorkerObject.SetActive(false);
         assignedWorkerObject.SetActive(true);
@@ -196,17 +209,23 @@ public class BuildingPlaceable : MonoBehaviour, IPlaceable
         productionController.StartProduction();
     }
 
-    private void OnEnable()
+    private void OnWorkerTierOrRarityChanged(WorkerTierOrRarityChangedEvent evt)
     {
-        EventManager.Instance.AddListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
-    }
-
-    private void OnDisable()
-    {
-        if (EventManager.Instance == null)
+        if (assignedWorker != evt.Worker)
             return;
 
-        EventManager.Instance.RemoveListener<BuildingAutomationChangedEvent>(OnAutomationChanged);
+        UpdateAssignedWorkerIcon();
+    }
+
+    private void UpdateAssignedWorkerIcon()
+    {
+        if (assignedWorker == null)
+            return;
+
+        assignedWorkerImage.sprite = WorkerSystem.Instance.GetRoundIcon(
+            assignedWorker.BusinessType,
+            assignedWorker.CurrentRarity
+        );
     }
 
     private void OnAutomationChanged(BuildingAutomationChangedEvent evt)

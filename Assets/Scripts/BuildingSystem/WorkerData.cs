@@ -1,24 +1,21 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class WorkerData
 {
     #region Definition Properties
-    public BusinessType Type => Definition.Type;
+    public BusinessType BusinessType { get; private set; }
 
-    public Sprite Icon => Definition.Icon;
+    private WorkerBaseEconomyConfig.WorkerEconomyEntry BaseEconomy => workerBaseEconomyConfig.GetWorkerEconomy(BusinessType);
 
-    public Sprite RoundIcon => Definition.RoundIcon;
+    public CurrencyType LevelUpgradeCurrency => BaseEconomy.LevelUpgradeCurrency;
 
-    public CurrencyType LevelUpgradeCurrency => Definition.Currency;
+    private float BaseProductionDuration => BaseEconomy.BaseProductionDuration;
 
-    private float BaseProductionDuration => Definition.BaseProductionDuration;
+    private float BaseUpgradePrice => BaseEconomy.BaseUpgradePrice;
 
-    private float BaseUpgradePrice => Definition.BaseUpgradePrice;
-
-    private float ProductionTimeReductionPerLevel => Definition.ProductionTimeReductionPerLevel;
+    private float ProductionTimeReductionPerLevel => BaseEconomy.ProductionTimeReductionPerLevel;
 
     public bool IsMaxProgression => CurrentRarity == Rarities.Futuristic && CurrentTier == Tiers.Tier5;
     public bool IsMaxLevel => CurrentLevel >= CurrentProgressionMaxLevel;
@@ -30,11 +27,11 @@ public class WorkerData
     [SerializeField] private ProgressionConfig progressionConfig;
     [SerializeField] private UpgradeCostConfig upgradeCostConfig;
     [SerializeField] private EconomyProgressionConfig economyConfig;
+    private WorkerBaseEconomyConfig workerBaseEconomyConfig;
 
     #endregion
 
     #region Runtime State
-    public WorkerDefinition Definition { get; private set; }
     public int CurrentLevel { get; private set; } = 1;
 
     public Rarities CurrentRarity { get; private set; } = Rarities.Primitive;
@@ -133,13 +130,19 @@ public class WorkerData
 
     #endregion
 
-    public WorkerData(WorkerDefinition definition, ProgressionConfig progressionConfig, UpgradeCostConfig upgradeCostConfig, EconomyProgressionConfig economyConfig)
+    public WorkerData(
+      BusinessType businessType,
+      ProgressionConfig progressionConfig,
+      UpgradeCostConfig upgradeCostConfig,
+      EconomyProgressionConfig economyConfig,
+      WorkerBaseEconomyConfig workerBaseEconomyConfig)
     {
-        Definition = definition;
+        BusinessType = businessType;
 
         this.progressionConfig = progressionConfig;
         this.upgradeCostConfig = upgradeCostConfig;
         this.economyConfig = economyConfig;
+        this.workerBaseEconomyConfig = workerBaseEconomyConfig;
     }
 
     public void UpgradeWorkerLvl()

@@ -29,21 +29,11 @@ public class BuildingPlaceableEditor : Editor
             return;
         }
 
-        if (worker.Definition == null)
-        {
-            EditorGUILayout.HelpBox(
-                "Worker exists, but WorkerDefinition is not initialized.",
-                MessageType.Warning
-            );
-
-            return;
-        }
-
         using (new EditorGUI.DisabledScope(true))
         {
             EditorGUILayout.LabelField(
                 "Type",
-                worker.Type.ToString()
+                worker.BusinessType.ToString()
             );
 
             EditorGUILayout.IntField(
@@ -51,14 +41,31 @@ public class BuildingPlaceableEditor : Editor
                 worker.CurrentLevel
             );
 
+            EditorGUILayout.LabelField(
+                "Rarity",
+                worker.CurrentRarity.ToString()
+            );
+
+            EditorGUILayout.LabelField(
+                "Tier",
+                worker.CurrentTier.ToString()
+            );
+
             EditorGUILayout.Toggle(
                 "Available",
                 worker.IsAvailable
             );
 
+            Sprite icon = WorkerSystem.Instance != null
+                ? WorkerSystem.Instance.GetRoundIcon(
+                    worker.BusinessType,
+                    worker.CurrentRarity
+                )
+                : null;
+
             EditorGUILayout.ObjectField(
-                "Icon",
-                worker.Icon,
+                "Round Icon",
+                icon,
                 typeof(Sprite),
                 false
             );

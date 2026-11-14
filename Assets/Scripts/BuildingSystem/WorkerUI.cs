@@ -9,6 +9,9 @@ public class WorkerUI : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private ColorDatabase colorDatabase;
 
+    [Header("Databases")]
+    [SerializeField] private WorkerIconDatabase workerIconDatabase;
+
     [Header("Upgrade Visual States")]
     [SerializeField] private GameObject workerCanUpgradeVisuals;
     [SerializeField] private GameObject workerNotEnoughCurrencyVisuals;
@@ -62,36 +65,36 @@ public class WorkerUI : MonoBehaviour
     {
         currentWorker = worker;
 
-        workerIcon.sprite = currentWorker.Icon;
-
         UpdateWorkerPanelUI();
 
         workerPanel.SetActive(true);
-
         blackBackground.SetActive(true);
+    }
 
+    private void UpdateWorkerIcon()
+    {
+        if (currentWorker == null)
+            return;
+
+        workerIcon.sprite = workerIconDatabase.GetFullBodyIcon(
+            currentWorker.BusinessType,
+            currentWorker.CurrentRarity
+        );
     }
 
     private void UpdateWorkerPanelUI()
     {
+        UpdateWorkerIcon();
+
         UpdateCurrentRarityText();
-
         UpdateUpgradeVisualState();
-
         UpdateStarUI(currentWorker);
-
         UpdateNextTierUpgradeStar();
-
         UpdateCurrentMaxLvlTxt();
-
         UpdateNextMaxLvlTxt();
-
         UpdateCurrentMinCycleDurationText();
-
         UpdateNextMinCycleDurationText();
-
         UpdateStarUpgradeButton();
-
         UpdateBlueprintPriceUI();
     }
 
