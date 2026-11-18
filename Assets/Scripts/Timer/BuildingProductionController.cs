@@ -12,6 +12,8 @@ public class BuildingProductionController : MonoBehaviour
     [SerializeField] private Image rewardIconImage;
     [SerializeField] private GameObject rewardObject;
 
+    private bool IsUniversity => buildingData.BusinessType == BusinessType.University;
+
     [SerializeField] private BlueprintItem currentBlueprint;
     public BlueprintItem CurrentBlueprint => currentBlueprint;
 
@@ -85,11 +87,15 @@ public class BuildingProductionController : MonoBehaviour
 
     public void StartProduction()
     {
+        if (IsUniversity)
+            return;
+
+        if (workerData == null)
+            return;
 
         finishTime = DateTime.Now.AddSeconds(workerData.CycleDuration);
 
         timer.Initialize(finishTime);
-
         timer.StartTimer();
 
         timerUI.Initialize(workerData.CycleDuration);
@@ -132,7 +138,10 @@ public class BuildingProductionController : MonoBehaviour
 
         timerUI.SetAutomationVisual(isBusinessAutomated);
 
-        StartProduction();
+        if (!IsUniversity)
+        {
+            StartProduction();
+        }
     }
 
     public void StartStudy(BlueprintItem item)
@@ -153,6 +162,13 @@ public class BuildingProductionController : MonoBehaviour
         SetIncomeButton(true);
 
         timerUI.SetCompleted();
+
+        if (IsUniversity)
+        {
+            // TODO: Blueprint research completed.
+            // Пізніше додамо логіку отримання Blueprint.
+            return;
+        }
 
         buildingData.AddIncomeCircle();
 

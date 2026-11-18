@@ -28,6 +28,11 @@ public class UniversityUI : MonoBehaviour
     [SerializeField] private GameObject OpenWorkerBPPanelButton;
     [SerializeField] private GameObject AddWorkerBtn;
 
+    [Header("Building Blueprint Button")]
+    [SerializeField] private Button AddBuildingBPButton;
+    [SerializeField] private Sprite addBuildingBPButtonActiveSprite;
+    [SerializeField] private Sprite addBuildingBPButtonInactiveSprite;
+
     private void Awake()
     {
         Instance = this;
@@ -88,6 +93,8 @@ public class UniversityUI : MonoBehaviour
         OpenWorkerBPPanelButton.SetActive(hasWorker);
         AddWorkerBtn.SetActive(!hasWorker);
 
+        UpdateAddBuildingBPButton(hasWorker);
+
         universityWorkerImage.sprite = hasWorker
             ? workerIconDatabase.GetFullBodyIcon(
                 worker.BusinessType,
@@ -122,6 +129,15 @@ public class UniversityUI : MonoBehaviour
                 itemUI.UpdateOwnedText();
             }
         }
+    }
+
+    private void UpdateAddBuildingBPButton(bool hasWorker)
+    {
+        AddBuildingBPButton.interactable = hasWorker;
+
+        AddBuildingBPButton.image.sprite = hasWorker
+            ? addBuildingBPButtonActiveSprite
+            : addBuildingBPButtonInactiveSprite;
     }
 
     public void TryOpenUniversity()
