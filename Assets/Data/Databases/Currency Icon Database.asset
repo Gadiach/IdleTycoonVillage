@@ -12,26 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7667094e674ee44a7e44f67aa7661a, type: 3}
   m_Name: Currency Icon Database
   m_EditorClassIdentifier: 
-  currencyIcons:
-  - CurrencyType: 0
+  icons:
+  - Category: 0
     Icon: {fileID: 21300000, guid: 521b2191ad8c5ab499d5d86302d2f12f, type: 3}
-  - CurrencyType: 2
-    Icon: {fileID: 21300000, guid: 4feead7acdc23754f93204e01c5ee2cc, type: 3}
-  - CurrencyType: 3
-    Icon: {fileID: 21300000, guid: 8ba3a99ca6531b141b5f4fc3e65a0f3a, type: 3}
-  - CurrencyType: 4
-    Icon: {fileID: 21300000, guid: b9f5359a2706a6a49aea27e49a004131, type: 3}
-  - CurrencyType: 5
-    Icon: {fileID: 21300000, guid: a3426570ea9d66948ab52cf52d9eb44f, type: 3}
-  - CurrencyType: 6
-    Icon: {fileID: 21300000, guid: 206f6f29df5247548b4e8108c330d6e9, type: 3}
-  - CurrencyType: 7
-    Icon: {fileID: 21300000, guid: d625607cfac014e4bb363baa843d22f9, type: 3}
-  - CurrencyType: 8
-    Icon: {fileID: 21300000, guid: 0ddab23d8a0d3934085aa0669b17b766, type: 3}
-  - CurrencyType: 9
-    Icon: {fileID: 21300000, guid: 0ff5316b4bdbe784994a19241a6275d3, type: 3}
-  - CurrencyType: 10
-    Icon: {fileID: 21300000, guid: 978387454a7e184429ab96d9c8fe3c71, type: 3}
-  - CurrencyType: 11
-    Icon: {fileID: 21300000, guid: 8c805661763aaf044903bb4fda7a499c, type: 3}
+  - Category: 1
+    Icon: {fileID: 21300000, guid: 32eb7108e23b2bc418a5099864af4491, type: 3}
+  - Category: 2
+    Icon: {fileID: 21300000, guid: 12234f240eda99844bdd309a8a7f2f2a, type: 3}

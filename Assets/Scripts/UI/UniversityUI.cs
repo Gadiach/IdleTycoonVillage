@@ -14,6 +14,8 @@ public class UniversityUI : MonoBehaviour
 
     private readonly List<BlueprintItemUI> blueprintItemUIs = new();
 
+    [SerializeField] private ColorDatabase colorDatabase;
+
     [SerializeField] private TabGroup tabGroup;
 
     [Header("University Building Icon")]
@@ -32,6 +34,7 @@ public class UniversityUI : MonoBehaviour
     [SerializeField] private Button AddBuildingBPButton;
     [SerializeField] private Sprite addBuildingBPButtonActiveSprite;
     [SerializeField] private Sprite addBuildingBPButtonInactiveSprite;
+    [SerializeField] private Image buildingBlueprintIcon;
 
     private void Awake()
     {
@@ -63,8 +66,17 @@ public class UniversityUI : MonoBehaviour
 
             blueprintItemUIs.Add(itemUI);
 
-            itemUI.Initialize(item, currencyIconDatabase.GetIcon(item.Type));
+            itemUI.Initialize(item, currencyIconDatabase.GetIcon(item.CurrencyCategory));
         }
+    }
+
+    private void UpdateBlueprintIconColor(Image icon, bool isActive)
+    {
+        icon.color = colorDatabase.GetColor(
+            isActive
+                ? ColorCategory.ActiveUpgradeColor
+                : ColorCategory.InactiveUpgradeColor
+        );
     }
 
     private void UpdateUniversityBuildingIcon()
@@ -124,7 +136,7 @@ public class UniversityUI : MonoBehaviour
                 itemUI.UpdateStudyButtonState();
             }
 
-            if (itemUI.Item.Type == currencyType)
+            if (itemUI.Item.CurrencyType == currencyType)
             {
                 itemUI.UpdateOwnedText();
             }
@@ -138,6 +150,8 @@ public class UniversityUI : MonoBehaviour
         AddBuildingBPButton.image.sprite = hasWorker
             ? addBuildingBPButtonActiveSprite
             : addBuildingBPButtonInactiveSprite;
+
+        UpdateBlueprintIconColor(buildingBlueprintIcon, hasWorker);
     }
 
     public void TryOpenUniversity()

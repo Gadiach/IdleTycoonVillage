@@ -10,6 +10,7 @@ public class CurrencyVFXSystem : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
+    [SerializeField] private ColorDatabase colorDatabase;
     [SerializeField] private RectTransform flyingCurrencyPrefabsContainer;
     [SerializeField] private GameObject flyingCurrencyIconPrefab;
     [SerializeField] private CurrencyVFXTarget[] currencyTargets;
@@ -70,11 +71,10 @@ public class CurrencyVFXSystem : MonoBehaviour
     int amount,
     Vector3 sourcePosition)
     {
-        Sprite currencyIcon =
-            currencyIconDatabase.GetIcon(currencyType);
+        CurrencyCategory category = GetTargetType(currencyType);
 
-        RectTransform targetIcon =
-            GetTargetIcon(currencyType);
+        Sprite currencyIcon = currencyIconDatabase.GetIcon(category);
+        RectTransform targetIcon = GetTargetIcon(category);
 
         if (currencyIcon == null || targetIcon == null)
             return;
@@ -83,14 +83,17 @@ public class CurrencyVFXSystem : MonoBehaviour
             ? amount
             : flyingIconCount;
 
+        if (iconCount <= 0)
+            return;
+
         Play(
-     sourcePosition,
-     currencyIcon,
-     targetIcon,
-     currencyType,
-     amount,
-     iconCount
- );
+            sourcePosition,
+            currencyIcon,
+            targetIcon,
+            currencyType,
+            amount,
+            iconCount
+        );
     }
 
     private bool IsBlueprint(CurrencyType currencyType)
@@ -145,6 +148,7 @@ public class CurrencyVFXSystem : MonoBehaviour
         Image currencyImage = currencyObject.GetComponent<Image>();
 
         currencyImage.sprite = currencyIcon;
+        currencyImage.color = GetCurrencyColor(currencyType);
 
         currencyRect.position = startPosition;
         currencyRect.localScale = Vector3.zero;
@@ -207,26 +211,26 @@ public class CurrencyVFXSystem : MonoBehaviour
         });
     }
 
-    private CurrencyVFXTargetType GetTargetType(CurrencyType currencyType)
+    private CurrencyCategory GetTargetType(CurrencyType currencyType)
     {
         switch (currencyType)
         {
             case CurrencyType.Coins:
-                return CurrencyVFXTargetType.Coin;
+                return CurrencyCategory.Coin;
 
             case CurrencyType.BuildingBlueprint_Primitive:
             case CurrencyType.BuildingBlueprint_Developed:
             case CurrencyType.BuildingBlueprint_Industrial:
             case CurrencyType.BuildingBlueprint_Modern:
             case CurrencyType.BuildingBlueprint_Futuristic:
-                return CurrencyVFXTargetType.BuildingBlueprints;
+                return CurrencyCategory.BuildingBlueprints;
 
             case CurrencyType.WorkerBlueprint_Primitive:
             case CurrencyType.WorkerBlueprint_Developed:
             case CurrencyType.WorkerBlueprint_Industrial:
             case CurrencyType.WorkerBlueprint_Modern:
             case CurrencyType.WorkerBlueprint_Futuristic:
-                return CurrencyVFXTargetType.WorkerBlueprints;
+                return CurrencyCategory.WorkerBlueprints;
 
             default:
                 throw new ArgumentOutOfRangeException(
@@ -237,22 +241,34 @@ public class CurrencyVFXSystem : MonoBehaviour
         }
     }
 
-    private RectTransform GetTargetIcon(CurrencyType currencyType)
+    private RectTransform GetTargetIcon(CurrencyCategory category)
     {
-        CurrencyVFXTargetType targetType =
-            GetTargetType(currencyType);
-
         foreach (CurrencyVFXTarget target in currencyTargets)
         {
-            if (target.targetType == targetType)
+            if (target.targetType == category)
                 return target.targetIcon;
         }
 
-        Debug.LogWarning(
-            $"No VFX target found for: {targetType}"
-        );
+        Debug.LogWarning($"No VFX target found for: {category}");
 
         return null;
+    }
+
+    private Color GetCurrencyColor(CurrencyType currencyType)
+    {
+        if (!IsBlueprint(currencyType))
+            return Color.white;
+
+        string rarityName = currencyType.ToString().Split('_')[1];
+
+        if (Enum.TryParse(rarityName, out Rarities rarity))
+        {
+            return colorDatabase.GetColor(
+                RaritySystem.GetColorCategory(rarity)
+            );
+        }
+
+        return Color.white;
     }
 
     private void PulseTarget(RectTransform targetIcon)
@@ -275,6 +291,6 @@ public class CurrencyVFXSystem : MonoBehaviour
 [Serializable]
 public class CurrencyVFXTarget
 {
-    public CurrencyVFXTargetType targetType;
+    public CurrencyCategory targetType;
     public RectTransform targetIcon;
 }

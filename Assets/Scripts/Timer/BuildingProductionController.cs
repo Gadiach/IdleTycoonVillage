@@ -12,6 +12,8 @@ public class BuildingProductionController : MonoBehaviour
     [SerializeField] private Image rewardIconImage;
     [SerializeField] private GameObject rewardObject;
 
+    [SerializeField] private ColorDatabase colorDatabase;
+
     private bool IsUniversity => buildingData.BusinessType == BusinessType.University;
 
     [SerializeField] private BlueprintItem currentBlueprint;
@@ -101,11 +103,21 @@ public class BuildingProductionController : MonoBehaviour
         timerUI.Initialize(workerData.CycleDuration);
     }
 
+    private void UpdateRewardIcon(BlueprintItem item)
+    {
+        rewardIconImage.sprite =
+            currencyIconDatabase.GetIcon(item.CurrencyCategory);
+
+        rewardIconImage.color = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(item.CurrentRarity)
+        );
+    }
+
     public void StartProduction(BlueprintItem blueprintItem)
     {
         currentBlueprint = blueprintItem;
 
-        rewardIconImage.sprite = currencyIconDatabase.GetIcon(blueprintItem.Type);
+        UpdateRewardIcon(blueprintItem);
 
         StartProduction();
     }
@@ -114,7 +126,7 @@ public class BuildingProductionController : MonoBehaviour
     {
         currentBlueprint = item;
 
-        rewardIconImage.sprite = currencyIconDatabase.GetIcon(item.Type);
+        UpdateRewardIcon(item);
 
         finishTime = DateTime.Now.AddSeconds(item.StudyTime);
 

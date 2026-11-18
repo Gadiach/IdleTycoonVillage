@@ -12,7 +12,7 @@ public class BlueprintRewardCollect : MonoBehaviour
 
         BlueprintItem blueprint = productionController.CurrentBlueprint;
 
-        CurrencySystem.Instance.AddCurrency(blueprint.Type, 1);
+        CurrencySystem.Instance.AddCurrency(blueprint.CurrencyType, 1);
 
         productionController.ClearCurrentBlueprint();
 

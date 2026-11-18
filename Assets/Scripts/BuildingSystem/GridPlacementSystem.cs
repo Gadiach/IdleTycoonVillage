@@ -91,7 +91,7 @@ public class GridPlacementSystem : MonoBehaviour
                 Debug.LogError("Building prefab missing BuildingData!");
             }
 
-            placeable.Initialize(item.PurchasePrice, item.Currency);
+            placeable.Initialize(item.PurchasePrice, item.CurrencyType);
             //PanZoom.current.FollowObject(obj.transform);
             return;
         }

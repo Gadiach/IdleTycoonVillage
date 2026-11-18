@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Technician
   PurchasePrice: 0
-  Currency: 0
-  Type: 1
+  CurrencyType: 0
+  CurrencyCategory: 0
+  BuildShopCategory: 1
   Icon: {fileID: 21300000, guid: 15e239bdcdb4a14478be3174d5dc91c8, type: 3}
   Prefab: {fileID: 3867574059373334789, guid: c806e288ba8fdee449c7ba4979bc5e51, type: 3}
   BusinessType: 1

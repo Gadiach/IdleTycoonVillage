@@ -61,7 +61,7 @@ public class BuildShopUI : MonoBehaviour
 
                 shopItemUIs.Add(itemUI);
 
-                Sprite currencyIcon = currencyIconDatabase.GetIcon(item.Currency);
+                Sprite currencyIcon = currencyIconDatabase.GetIcon(item.CurrencyCategory);
 
                 itemUI.Initialize(item, currencyIcon, itemView);
             }
@@ -80,7 +80,7 @@ public class BuildShopUI : MonoBehaviour
         {
             BuildShopItem item = itemUI.ShopItem;
 
-            if (item.Type != BuildShopCategory.Workers)
+            if (item.BuildShopCategory != BuildShopCategory.Workers)
                 continue;
 
             if (item.BusinessType != businessType)
@@ -99,7 +99,7 @@ public class BuildShopUI : MonoBehaviour
         {
             BuildShopItem item = itemUI.ShopItem;
 
-            if (item.Type != BuildShopCategory.Buildings)
+            if (item.BuildShopCategory != BuildShopCategory.Buildings)
             {
                 continue;
             }

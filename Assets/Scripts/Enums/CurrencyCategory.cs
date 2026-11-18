@@ -1,4 +1,4 @@
-public enum CurrencyVFXTargetType
+public enum CurrencyCategory
 {
     Coin,
     BuildingBlueprints,

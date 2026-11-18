@@ -366,7 +366,7 @@ public class TutorialSystem : MonoBehaviour
     {
         if (currentStep == TutorialStep.BuildFarm)
         {
-            if (info.ShopItem.Type != BuildShopCategory.Buildings)
+            if (info.ShopItem.BuildShopCategory != BuildShopCategory.Buildings)
                 return;
 
             if (info.ShopItem.BusinessType != BusinessType.AnimalFarm)
@@ -378,7 +378,7 @@ public class TutorialSystem : MonoBehaviour
 
         if (currentStep == TutorialStep.HireWorker)
         {
-            if (info.ShopItem.Type != BuildShopCategory.Workers)
+            if (info.ShopItem.BuildShopCategory != BuildShopCategory.Workers)
                 return;
 
             if (info.ShopItem.BusinessType != BusinessType.AnimalFarm)

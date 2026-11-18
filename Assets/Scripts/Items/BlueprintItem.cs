@@ -8,14 +8,17 @@ public class BlueprintItem : ScriptableObject
     [SerializeField] private int studyCost;
     private CurrencyType studyCurrency = CurrencyType.Coins;
     [SerializeField] private float studyTime;
-    [SerializeField] private CurrencyType type;
-    [SerializeField] private BuildShopCategory category;
+    [SerializeField] private CurrencyType currencyType;
+    [SerializeField] private CurrencyCategory currencyCategory;
+    [SerializeField] private BuildShopCategory buildShopCategory;
 
-    public BuildShopCategory Category => category;
+    public BuildShopCategory BuildShopCategory => buildShopCategory;
 
-    public CurrencyType Type => type;
+    public CurrencyType CurrencyType => currencyType;
+    public CurrencyCategory CurrencyCategory => currencyCategory;
     public int StudyCost => studyCost;
     public CurrencyType StudyCurrency => studyCurrency;
     public float StudyTime => studyTime;
     public string BlueprintName => blueprintName;
+    public Rarities CurrentRarity => Rarity;
 }

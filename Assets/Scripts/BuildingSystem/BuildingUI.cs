@@ -141,7 +141,7 @@ public class BuildingUI : MonoBehaviour
     {
         int ownedAmount = CurrencySystem.GetCurrencyAmount(currencyType);
 
-        UpdateBlueprintIcon(currencyType);
+        UpdateBlueprintIcon();
         UpdateUpgradePriceText(ownedAmount, requiredAmount);
         UpdateUpgradePriceTextColor();
 
@@ -157,12 +157,21 @@ public class BuildingUI : MonoBehaviour
         inactiveUpgradePriceText.gameObject.SetActive(visible);
     }
 
-    private void UpdateBlueprintIcon(CurrencyType currencyType)
+    private void UpdateBlueprintIcon()
     {
-        Sprite icon = currencyIconDatabase.GetIcon(currencyType);
+        Sprite icon = currencyIconDatabase.GetIcon(
+            CurrencyCategory.BuildingBlueprints
+        );
 
         activeBlueprintImage.sprite = icon;
         inactiveBlueprintImage.sprite = icon;
+
+        Color rarityColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(currentBuilding.CurrentRarity)
+        );
+
+        activeBlueprintImage.color = rarityColor;
+        inactiveBlueprintImage.color = rarityColor;
     }
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
@@ -280,7 +289,7 @@ public class BuildingUI : MonoBehaviour
 
         bool canAfford = currentBuilding.HasEnoughCurrencyForTierOrRarityUpgrade;
 
-        ColorCategory category = canAfford ? ColorCategory.ActiveUpgradeStarColor : ColorCategory.InactiveStarColor;
+        ColorCategory category = canAfford ? ColorCategory.ActiveUpgradeColor : ColorCategory.InactiveUpgradeColor;
 
         Image upgradeStar = nextTierUpgradeStars[upgradeStarIndex];
 
@@ -311,7 +320,7 @@ public class BuildingUI : MonoBehaviour
 
         Color activeColor = colorDatabase.GetColor(RaritySystem.GetColorCategory(info.CurrentRarity));
 
-        Color inactiveColor = colorDatabase.GetColor(ColorCategory.InactiveStarColor);
+        Color inactiveColor = colorDatabase.GetColor(ColorCategory.InactiveUpgradeColor);
 
         for (int i = 0; i < maxStars; i++)
         {

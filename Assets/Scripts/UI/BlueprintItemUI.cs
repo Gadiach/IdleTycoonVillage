@@ -43,7 +43,7 @@ public class BlueprintItemUI : MonoBehaviour
 
     public void UpdateOwnedText()
     {
-        int owned = CurrencySystem.GetCurrencyAmount(item.Type);
+        int owned = CurrencySystem.GetCurrencyAmount(item.CurrencyType);
 
         ownedText.text = "Owned: " + owned;
     }

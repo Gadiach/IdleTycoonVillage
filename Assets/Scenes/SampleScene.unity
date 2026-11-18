@@ -2797,7 +2797,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &233590809
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49381,20 +49381,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropdownPanel: {fileID: 1685485363}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   blueprintBindings:
   - CurrencyType: 7
+    CurrencyCategory: 2
+    Rarity: 0
     Icon: {fileID: 1480138569}
     AmountText: {fileID: 870652437}
   - CurrencyType: 8
+    CurrencyCategory: 2
+    Rarity: 1
     Icon: {fileID: 336785782}
     AmountText: {fileID: 121926520}
   - CurrencyType: 9
+    CurrencyCategory: 2
+    Rarity: 2
     Icon: {fileID: 1897092254}
     AmountText: {fileID: 1897580878}
   - CurrencyType: 10
+    CurrencyCategory: 2
+    Rarity: 3
     Icon: {fileID: 1387802543}
     AmountText: {fileID: 1851988050}
   - CurrencyType: 11
+    CurrencyCategory: 2
+    Rarity: 4
     Icon: {fileID: 1914589931}
     AmountText: {fileID: 1580185053}
   animationTime: 0.15
@@ -50638,8 +50649,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5165c11cd60fd7741b1f9e55aed404b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   workerIconDatabase: {fileID: 11400000, guid: e5940030e4dd5c94f8cd49f69d98be71, type: 2}
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   workerCanUpgradeVisuals: {fileID: 1488407363}
   workerNotEnoughCurrencyVisuals: {fileID: 1124079421}
   nextTierUpgradeStars:
@@ -58712,20 +58723,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropdownPanel: {fileID: 1189106738}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   blueprintBindings:
   - CurrencyType: 2
+    CurrencyCategory: 1
+    Rarity: 0
     Icon: {fileID: 985817860}
     AmountText: {fileID: 1038458714}
   - CurrencyType: 3
+    CurrencyCategory: 1
+    Rarity: 1
     Icon: {fileID: 825724235}
     AmountText: {fileID: 1665636307}
   - CurrencyType: 4
+    CurrencyCategory: 1
+    Rarity: 2
     Icon: {fileID: 528012447}
     AmountText: {fileID: 2013141978}
   - CurrencyType: 5
+    CurrencyCategory: 1
+    Rarity: 3
     Icon: {fileID: 1681151851}
     AmountText: {fileID: 1125266965}
   - CurrencyType: 6
+    CurrencyCategory: 1
+    Rarity: 4
     Icon: {fileID: 1116980404}
     AmountText: {fileID: 1069214365}
   animationTime: 0.15
@@ -60532,7 +60554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1531447101
 RectTransform:
   m_ObjectHideFlags: 0
@@ -70754,6 +70776,7 @@ MonoBehaviour:
   blackBackground: {fileID: 1014033000}
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
   blueprintItemPrefab: {fileID: 258202953110945211, guid: 029a077c43519cd49bf58728433f1f4a, type: 3}
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   tabGroup: {fileID: 0}
   buildingIconDatabase: {fileID: 11400000, guid: c274d723862c34c49bc2d900e4ea3dd6, type: 2}
   universityBuildingImage: {fileID: 112550883}
@@ -70764,6 +70787,7 @@ MonoBehaviour:
   AddBuildingBPButton: {fileID: 21699213}
   addBuildingBPButtonActiveSprite: {fileID: 21300000, guid: 96a3b42e97468834eb1c66fbb759e092, type: 3}
   addBuildingBPButtonInactiveSprite: {fileID: 21300000, guid: 9b9a57381fdfe8146a1f957332595848, type: 3}
+  buildingBlueprintIcon: {fileID: 1378651233}
 --- !u!1 &1831794938
 GameObject:
   m_ObjectHideFlags: 0
@@ -71360,6 +71384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currencyIconDatabase: {fileID: 11400000, guid: a4bca184a076dec4a902aaae77342fcd, type: 2}
+  colorDatabase: {fileID: 11400000, guid: 9609f98199755e44e863f7050b68617b, type: 2}
   flyingCurrencyPrefabsContainer: {fileID: 655796525}
   flyingCurrencyIconPrefab: {fileID: 7295858580462979251, guid: 312e06c3e261b0a4e85acec75dd76561, type: 3}
   currencyTargets:

@@ -6,8 +6,9 @@ public class BuildShopItem : ScriptableObject
 {
     public string Name = "Default";
     public int PurchasePrice;
-    public CurrencyType Currency;
-    public BuildShopCategory Type;
+    public CurrencyType CurrencyType;
+    public CurrencyCategory CurrencyCategory;
+    public BuildShopCategory BuildShopCategory;
     public Sprite Icon;
     public GameObject Prefab;
     public BusinessType BusinessType;

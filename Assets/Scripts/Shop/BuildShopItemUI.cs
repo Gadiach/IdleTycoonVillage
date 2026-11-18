@@ -68,7 +68,7 @@ public class BuildShopItemUI : MonoBehaviour
 
     public void UpdateItemState()
     {
-        bool canAfford = CurrencySystem.Instance.HasEnoughCurrency(shopItem.Currency,shopItem.PurchasePrice);
+        bool canAfford = CurrencySystem.Instance.HasEnoughCurrency(shopItem.CurrencyType,shopItem.PurchasePrice);
 
         UpdatePriceColor(canAfford);
         UpdateDragState(canAfford);

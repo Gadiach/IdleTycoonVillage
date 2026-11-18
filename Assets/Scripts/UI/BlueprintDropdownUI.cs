@@ -9,6 +9,7 @@ public class BlueprintDropdownUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private RectTransform dropdownPanel;
     [SerializeField] private CurrencyIconDatabase currencyIconDatabase;
+    [SerializeField] private ColorDatabase colorDatabase;
 
     [Header("Blueprints")]
     [SerializeField] private BlueprintIconBinding[] blueprintBindings;
@@ -80,8 +81,11 @@ public class BlueprintDropdownUI : MonoBehaviour
             if (binding.Icon == null)
                 continue;
 
-            binding.Icon.sprite =
-                currencyIconDatabase.GetIcon(binding.CurrencyType);
+            binding.Icon.sprite = currencyIconDatabase.GetIcon(binding.CurrencyCategory);
+
+            binding.Icon.color = colorDatabase.GetColor(
+                RaritySystem.GetColorCategory(binding.Rarity)
+            );
         }
     }
 
@@ -183,6 +187,8 @@ public class BlueprintDropdownUI : MonoBehaviour
 public class BlueprintIconBinding
 {
     public CurrencyType CurrencyType;
+    public CurrencyCategory CurrencyCategory;
+    public Rarities Rarity;
     public Image Icon;
     public TextMeshProUGUI AmountText;
 }

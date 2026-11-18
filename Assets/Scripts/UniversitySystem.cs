@@ -65,7 +65,7 @@ public class UniversitySystem : MonoBehaviour
 
         foreach (var item in items)
         {
-            blueprintItems[item.Category].Add(item);
+            blueprintItems[item.BuildShopCategory].Add(item);
         }
     }
 

@@ -64,9 +64,10 @@ public class BuildShopSystem : MonoBehaviour
 
         foreach (var item in items)
         {
-            buildShopItems[item.Type].Add(item);
+            buildShopItems[item.BuildShopCategory].Add(item);
         }
     }
+
 
     private void OnCurrencyChanged(CurrencyAddedEvent info) 
     {

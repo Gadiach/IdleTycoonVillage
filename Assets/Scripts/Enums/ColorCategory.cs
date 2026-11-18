@@ -7,6 +7,6 @@ public enum ColorCategory
     FuturisticColor,
     MissionProgressColor,
     ImprovementColor,
-    InactiveStarColor,
-    ActiveUpgradeStarColor
+    InactiveUpgradeColor,
+    ActiveUpgradeColor
 }

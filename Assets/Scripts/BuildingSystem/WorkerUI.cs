@@ -6,11 +6,9 @@ public class WorkerUI : MonoBehaviour
 {
     public static WorkerUI Instance;
 
-    [Header("Colors")]
-    [SerializeField] private ColorDatabase colorDatabase;
-
     [Header("Databases")]
     [SerializeField] private WorkerIconDatabase workerIconDatabase;
+    [SerializeField] private ColorDatabase colorDatabase;
 
     [Header("Upgrade Visual States")]
     [SerializeField] private GameObject workerCanUpgradeVisuals;
@@ -181,10 +179,19 @@ public class WorkerUI : MonoBehaviour
 
     private void UpdateBlueprintIcon(CurrencyType currencyType)
     {
-        Sprite icon = currencyIconDatabase.GetIcon(currencyType);
+        Sprite icon = currencyIconDatabase.GetIcon(
+            CurrencyCategory.WorkerBlueprints
+        );
 
         activeBlueprintImage.sprite = icon;
         inactiveBlueprintImage.sprite = icon;
+
+        Color rarityColor = colorDatabase.GetColor(
+            RaritySystem.GetColorCategory(currentWorker.CurrentRarity)
+        );
+
+        activeBlueprintImage.color = rarityColor;
+        inactiveBlueprintImage.color = rarityColor;
     }
 
     private void UpdateUpgradePriceText(int ownedAmount, int requiredAmount)
@@ -320,8 +327,8 @@ public class WorkerUI : MonoBehaviour
             currentWorker.HasEnoughCurrencyForTierOrRarityUpgrade;
 
         ColorCategory category = canAfford
-            ? ColorCategory.ActiveUpgradeStarColor
-            : ColorCategory.InactiveStarColor;
+            ? ColorCategory.ActiveUpgradeColor
+            : ColorCategory.InactiveUpgradeColor;
 
         Image upgradeStar = nextTierUpgradeStars[upgradeStarIndex];
 
@@ -349,7 +356,7 @@ public class WorkerUI : MonoBehaviour
         );
 
         Color inactiveColor = colorDatabase.GetColor(
-            ColorCategory.InactiveStarColor
+            ColorCategory.InactiveUpgradeColor
         );
 
         for (int i = 0; i < maxStars; i++)

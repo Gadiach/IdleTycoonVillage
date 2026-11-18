@@ -146,8 +146,8 @@ public class BuildingData : MonoBehaviour
     public void Initialize(BuildShopItem item)
     {
         PurchasePrice = item.PurchasePrice;
-        LevelUpgradeCurrency = item.Currency;
-        ShopCategory = item.Type;
+        LevelUpgradeCurrency = item.CurrencyType;
+        ShopCategory = item.BuildShopCategory;
         Icon = item.Icon;
     }
 
